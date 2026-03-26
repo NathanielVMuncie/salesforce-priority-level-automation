@@ -217,5 +217,7 @@ Three live Lead Records confirm territorial routing executed correctly across al
 | Next Document | docs/02-architecture/routing-architecture.md |
 
 ---
+Note: Regional ownership is implemented via Queue-based simulation due to Salesforce Developer Edition user-license constraints. See `docs/02-architecture/devorg-constraints-and-ownership-model.md`.
 
+---
 *Salesforce Case Study — Céleste Vineyards | Built by Nathaniel Muncie*
