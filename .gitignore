@@ -1,4 +1,20 @@
-``` Add: ```
-# Salesforce CLI output files
-*.json
-lead-schema.json
+# Claude Project Instructions — excluded from repo
+notes/claude-project-instructions.md
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Editor artifacts
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# SFDX / Salesforce DX
+.sfdx/
+.sf/
+*.scratch
+
+# Node (if any tooling is added later)
+node_modules/
