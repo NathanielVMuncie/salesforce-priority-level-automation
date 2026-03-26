@@ -1,0 +1,4 @@
+``` Add: ```
+# Salesforce CLI output files
+*.json
+lead-schema.json
