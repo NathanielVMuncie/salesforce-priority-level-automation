@@ -1,175 +1,263 @@
-Lead Priority & Routing Automation (Salesforce Case Study)
-Overview
-This project implements a deterministic Lead intake and prioritization system for Céleste Vineyards, designed to simulate enterprise-grade automation within Salesforce Developer Edition constraints.
+# Salesforce Lead Priority Level Automation
 
-The system functions as an authoritative Lead intake control layer, enforcing qualification, calculating priority, and enabling controlled escalation at the point of record creation.
+Salesforce Lead scoring and priority automation — Wix → Make.com → Salesforce | Flow, Assignment Rules, and escalation logic
 
-The architecture explicitly separates:
+**Repository:** [github.com/NathanielVMuncie/salesforce-priority-level-automation](https://github.com/NathanielVMuncie/salesforce-priority-level-automation)
+**Author:** Nathaniel Muncie — Salesforce Administrator candidate
 
-Territorial routing (Lead Assignment Rules)
-Priority classification and escalation (Record-Triggered Flow)
-This separation ensures deterministic behavior, clear ownership boundaries, and predictable automation execution.
+---
 
-Core Architecture
-System Flow
-Wix Form → Make (Webhook) → Salesforce Lead Creation
-↓
-Lead Assignment Rules (Territorial Routing → Queue Owner Set)
-↓
-After-Save Flow (Qualification → Scoring → Priority → Conditional Escalation)
-↓
-Final Owner State (Queue preserved OR overridden to Sophia Delgado)
+## Table of Contents
 
-Design Principles
-1. Separation of Concerns
-Layer	Responsibility
-Assignment Rules	Territorial routing (Queue ownership)
-Flow	Qualification, scoring, priority, escalation
-Flow does not perform routing
-Assignment Rules do not perform prioritization
-2. Deterministic Priority Engine
-The Flow evaluates Leads using a structured, bounded scoring model:
+- [Project Overview](#project-overview)
+- [Business Objective](#business-objective)
+- [Stack](#stack)
+- [Core Design Principles](#core-design-principles)
+- [System Architecture](#system-architecture)
+- [Scoring Model](#scoring-model)
+- [Repository Structure](#repository-structure)
+- [Documentation Index](#documentation-index)
+  - [Overview](#overview)
+  - [Architecture](#architecture)
+  - [Data Model](#data-model)
+  - [Automation Logic](#automation-logic)
+  - [Integration](#integration)
+  - [Validation and Evidence](#validation-and-evidence)
+  - [Metadata](#metadata)
+  - [Portfolio](#portfolio)
+- [Build Status](#build-status)
 
-Dimension	Example Values	Points
-Business Type	Premium Wine Distributor	+5
-Role	Owner / Decision Maker	+5
-Purchasing Timeline	Immediate Need	+5
-Total Score → Priority Level
+---
 
-Priority	Condition
-High	≥ 12
-Medium	≥ 8
-Low	< 8
-This model ensures:
+## Project Overview
 
-consistent classification
-explainable outcomes
-no reliance on subjective input
-3. Qualification Gate (Gatekeeper Pattern)
-Qualification is enforced as a binary control layer independent of scoring:
+This repository documents the design, logic, and build of a Lead scoring and priority automation system built on Salesforce for Céleste Vineyards, a fictional winery used as a portfolio case study.
 
-Non-business inquiries are disqualified immediately
-Flow execution short-circuits
-No scoring or escalation occurs
-This prevents invalid records from entering the sales pipeline and preserves system integrity.
+The system ingests Leads from a Wix web form, routes them through Make.com middleware, and processes them in Salesforce using a combination of custom Fields, weighted scoring logic, a Record-Triggered After-Save Flow, and Assignment Rules to automatically assign a Priority Level and route each Lead to the correct owner or Queue.
 
-4. Territorial Routing (Assignment Rules)
-Territorial ownership is established using Lead Assignment Rules:
+The system is fully operational. All automation logic, routing rules, and integration components are built and live in a Salesforce Developer Edition org. Documentation is produced in reverse documentation mode from the operational system.
 
-Region-based evaluation (driven by Region__c)
-Assignment to Queue representing territory owner
-Example:
+---
 
-Region	Queue
-East Coast	Inava Queue
-West Coast	West Queue
-Central	Central Queue
-Assignment Rules:
+## Business Objective
 
-execute at record creation
-define initial OwnerId
-establish ownership context before Flow execution
-5. Escalation Model (Flow-Controlled Override)
-The Flow introduces a conditional ownership override layer on top of Assignment Rule routing:
+Eliminate manual Lead triage by automatically scoring and prioritizing incoming Leads at the point of creation, ensuring high-value Leads are routed immediately and no Lead enters the pipeline without a priority designation.
 
-Default: preserve Assignment Rule owner (Queue)
-High Priority: override Owner → Sophia Delgado
-Implementation pattern:
+---
 
-varOwnerID = $Record.OwnerId
+## Stack
 
-IF Priority = High:
-    varOwnerID = Sophia Delgado
+| Layer | Technology |
+|---|---|
+| Lead Capture | Wix (web form) |
+| Middleware | Make.com |
+| CRM | Salesforce (Sales Cloud) |
+| Automation | Salesforce Flow — Record-Triggered, After-Save |
+| Routing | Assignment Rules, Queues |
 
-Update Lead.OwnerId = varOwnerID
-This ensures:
+---
 
-escalation is explicit and controlled
-territorial routing remains intact for non-critical Leads
-The Flow does not determine territorial ownership. It reads the OwnerId assigned by Lead Assignment Rules and preserves that value unless a High-priority condition triggers an escalation override.
+## Core Design Principles
 
-Key Components
-Flow: Lead Scoring and Priority Assignment
-Responsibilities:
+- **Qualification is separate from scoring.** A Lead must meet minimum criteria before scoring logic runs. This is enforced at the Flow level via a gatekeeper Decision that terminates non-qualified Leads before any score is calculated.
+- **Single-DML pattern.** All Field writes occur in one Update Records element to avoid recursive trigger cycles and contain governor limit exposure within predictable bounds.
+- **Bulk-safe design.** Flow logic is structured to handle batch Lead creation without violating Salesforce governor limits.
+- **Deterministic priority assignment.** Priority Levels are assigned by fixed numeric thresholds. Given identical inputs, the system always produces identical output.
 
-qualification gate enforcement
-score calculation (bounded 3–15)
-priority classification
-escalation decision
-single DML update
-Assignment Rules
-Responsibilities:
+---
 
-geographic routing
-Queue ownership assignment
-initial OwnerId determination
-Make (Middleware)
-Responsibilities:
+## System Architecture
 
-ingest Wix webhook payload
-normalize field structure
-create Lead record in Salesforce
-Developer Edition Constraint Strategy
-Salesforce DevOrg limitation:
+```
+Wix Form → Make.com → Salesforce Lead (Created)
+                              |
+                     After-Save Flow Fires
+                              |
+                    Gatekeeper Check (Qualification)
+                         |                |
+                     Qualified        Not Qualified
+                         |                |
+                   Weighted Scoring    Flag and Exit
+                   Business Type
+                   + Role
+                   + Purchasing Timeline
+                         |
+                  Priority Assignment
+                  High / Medium / Low
+                         |
+                  Escalation Check
+                  (High → Sophia Delgado)
+                         |
+                  Update Records (Single DML)
+                         |
+                 Assignment Rule → Queue Routing
+                 East Coast | West Coast | Central
+```
 
-only one additional fully-permissioned User
-Solution:
+---
 
-use Queues to simulate multi-user ownership
-represent territorial reps as Queue ownership
-reserve Sophia Delgado as escalation user
-This preserves realistic routing behavior without requiring additional licenses.
+## Scoring Model
 
-Data Flow Examples
-High Priority Lead
-Premium Distributor (+5)
-Owner Role (+5)
-Immediate Need (+5)
-→ Score = 15 → High
+Lead scoring operates across three dimensions. Each dimension contributes a weighted point value to `varTotalScore`. The cumulative score determines the Priority Level.
 
-Assignment Rules → West Queue
-Flow → overrides → Sophia Delgado
-Low Priority Lead
-Specialty Grocer (+2)
-Manager (+2)
-Future Planning (+2)
-→ Score = 6 → Low
+| Dimension | Field | Max Points |
+|---|---|---|
+| Business Type | `Business_Type__c` | 5 |
+| Role | `Role__c` | 5 |
+| Purchasing Timeline | `Purchasing_Timeline__c` | 5 |
+| **Total Possible** | | **15** |
 
-Assignment Rules → East Queue
-Flow → preserves owner
-Architecture Characteristics
-Deterministic
-same input → same output
-no race conditions between automation layers
-Layered Responsibility
-routing ≠ prioritization
-escalation is conditional, not global
-Single Commit Pattern
-Flow performs one Update Records operation
-avoids multiple DML operations
-reduces governor limit risk
-Debuggable
-Flow decisions are traceable via debug logs
-ownership changes are explicit and explainable
-Known Constraints / Tradeoffs
-Constraint	Impact	Mitigation
-DevOrg user limits	Cannot assign real users per territory	Use Queues
-Assignment Rules + Flow sequencing	Potential ownership conflicts	Flow preserves owner unless High
-No ownership audit field	Reduced traceability	Document behavior
-Future Enhancements
-Introduce Ownership_Source__c for ownership audit tracking
-Externalize scoring logic using Custom Metadata
-Implement async processing for high-volume ingestion
-Integrate Data Cloud for enrichment and segmentation
-Extend escalation to SLA-driven multi-tier routing
-Summary
-This system demonstrates a scalable architectural pattern:
+### Priority Level Thresholds
 
-Assignment Rules establish ownership context; Flow classifies priority and conditionally overrides ownership for high-value Leads.
+| Priority Level | Score Condition |
+|---|---|
+| High | `varTotalScore` ≥ 12 |
+| Medium | `varTotalScore` ≥ 8 |
+| Low | Default (below 8) |
 
-The result is a clean separation between:
+---
 
-intake routing
-business prioritization
-escalation control
-This mirrors enterprise CRM design principles while operating within Developer Edition constraints.
+## Repository Structure
+
+```
+salesforce-priority-level-automation/
+├── README.md
+├── docs/
+│   ├── 01-overview/
+│   ├── 02-architecture/
+│   ├── 03-data-model/
+│   ├── 04-automation-logic/
+│   ├── 05-integration/
+│   ├── 06-build-assets/
+│   └── 07-portfolio/
+├── metadata/
+│   ├── custom-fields/
+│   ├── formulas/
+│   ├── queues/
+│   ├── assignment-rules/
+│   └── flow-notes/
+├── test-artifacts/
+│   ├── scenario-inputs/
+│   ├── expected-results/
+│   ├── uat-evidence/
+│   └── defect-log/
+├── assets/
+│   ├── screenshots/
+│   └── exports/
+├── portfolio/
+│   ├── case-study-snippets/
+│   ├── resume-bullets/
+│   ├── recruiter-summary/
+│   └── website-copy/
+└── notes/
+```
+
+---
+
+## Documentation Index
+
+### Overview
+
+| File | Description |
+|---|---|
+| `docs/01-overview/project-overview.md` | Full project identity, context, and system summary |
+| `docs/01-overview/business-objective.md` | Business problem, objective, and success criteria |
+| `docs/01-overview/scope-boundaries.md` | Explicit in-scope and out-of-scope definitions |
+
+---
+
+### Architecture
+
+| File | Description |
+|---|---|
+| `docs/02-architecture/system-architecture.md` | Layer definitions, execution sequence, and architectural constraints |
+| `docs/02-architecture/automation-architecture.md` | Flow segment structure, element responsibilities, and governor limit analysis |
+| `docs/02-architecture/routing-architecture.md` | Assignment Rule and Flow escalation interaction, ownership determination sequence |
+| `docs/02-architecture/state-management-risk.md` | State risks, failure modes, and resolutions across all paths |
+
+---
+
+### Data Model
+
+| File | Description |
+|---|---|
+| `docs/03-data-model/field-inventory.md` | Complete custom Field inventory on the Lead Object |
+| `docs/03-data-model/field-dictionary.md` | Field-level definitions, types, and purpose documentation |
+| `docs/03-data-model/scoring-model.md` | Scoring dimension design and weighted point values |
+| `docs/03-data-model/priority-thresholds.md` | Threshold definitions and Priority Level mapping |
+
+---
+
+### Automation Logic
+
+| File | Description |
+|---|---|
+| `docs/04-automation-logic/gatekeeper-logic.md` | Dual-purpose gatekeeper Decision design and qualification criteria |
+| `docs/04-automation-logic/scoring-logic.md` | Role and Purchasing Timeline scoring Decision element logic |
+| `docs/04-automation-logic/priority-assignment-logic.md` | Priority Level threshold evaluation and assignment |
+| `docs/04-automation-logic/escalation-logic.md` | High priority escalation path and OwnerId override sequence |
+| `docs/04-automation-logic/territorial-routing-logic.md` | Assignment Rule configuration, state-to-region mapping, and routing behavior |
+
+---
+
+### Integration
+
+| File | Description |
+|---|---|
+| `docs/05-integration/wix-form-and-submission-automation.md` | Wix form structure, key/value mapping, and Wix Automation configuration |
+| `docs/05-integration/key-value-mapping.md` | Form field key/value reference — Wix to Make.com payload contract |
+| `docs/05-integration/make-com-integration.md` | Make.com scenario architecture and module configuration |
+| `docs/05-integration/salesforce-integration.md` | Salesforce connection, API ingestion, and integration behavior |
+| `docs/05-integration/wix-make-salesforce-ingestion.md` | End-to-end ingestion path from form submission to Lead Record creation |
+| `docs/05-integration/source-to-lead-mapping.md` | Complete field-level mapping — Wix payload to Salesforce Lead Object |
+| `docs/05-integration/middleware-responsibilities.md` | Make.com responsibility boundary and explicit non-responsibilities |
+
+---
+
+### Validation and Evidence
+
+| File | Description |
+|---|---|
+| `docs/06-build-assets/configuration-checklist.md` | Complete configuration checklist across Wix, Make.com, and Salesforce |
+| `docs/06-build-assets/test-scenarios.md` | Input values, expected behavior, and expected Record state for all three test paths |
+| `docs/06-build-assets/uat-matrix.md` | UAT acceptance criteria, actual results, and pass/fail status |
+| `docs/06-build-assets/screenshots-index.md` | Index of all screenshots captured during build and validation |
+| `test-artifacts/scenario-inputs/lead-test-records.md` | Exact input values submitted for each test Lead |
+| `test-artifacts/expected-results/priority-routing-results.md` | Expected vs. actual output values across all three scenarios |
+| `test-artifacts/uat-evidence/uat-session-log.md` | Session log with observations, defects identified, and sign-off |
+| `test-artifacts/defect-log/defects.md` | Defect register — D-01 root cause, resolution, and verification |
+
+---
+
+### Metadata
+
+| File | Description |
+|---|---|
+| `metadata/custom-fields/lead-fields.md` | Custom field metadata reference — API names, types, and defaults |
+| `metadata/formulas/priority-formulas.md` | Formula Field definitions — `Qualification_Status__c` |
+| `metadata/queues/queue-definitions.md` | Queue identities, API names, and supported objects |
+| `metadata/assignment-rules/lead-assignment-rules.md` | Assignment Rule entries, conditions, and complete state-to-queue reference |
+| `metadata/flow-notes/lead-scoring-and-priority-assignment.md` | Element-level configuration notes for the Flow |
+
+---
+
+### Portfolio
+
+| File | Description |
+|---|---|
+| `docs/07-portfolio/case-study-summary.md` | Full case study narrative — problem, solution, design decisions, and validation |
+| `docs/07-portfolio/recruiter-readable-summary.md` | Non-technical plain-English summary for recruiters |
+| `docs/07-portfolio/design-insight-gatekeeper-sequencing.md` | Design decision rationale — dual-purpose gatekeeper vs. two-element alternative |
+| `portfolio/resume-bullets/resume-bullets.md` | Resume-ready bullets organized by Salesforce Administrator competency area |
+| `portfolio/recruiter-summary/recruiter-summary.md` | Recruiter-facing project summary with competency evidence table |
+| `portfolio/website-copy/project-page-copy.md` | Portfolio website copy for the project page |
+
+---
+
+The system is fully operational. Documentation is produced from a live Salesforce Developer Edition org with confirmed working automation, routing, escalation, and integration across Wix, Make.com, and Salesforce.
+
+**Data Model blocker:** Four files require `.field-meta.xml` exports from the SFDX project to complete. Upload files from `force-app/main/default/objects/Lead/fields/` to unblock.
+
+---
+
+*Built by Nathaniel Muncie — Salesforce Administrator candidate*
