@@ -1,7 +1,7 @@
 # Routing Architecture
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 3 — Routing, Escalation, and Ownership
+Céleste Vineyards
 
 ---
 
@@ -151,7 +151,6 @@ All three routing paths — qualified Low, disqualified, and qualified High with
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 3 — Routing, Escalation, and Ownership |
 | File Path | docs/02-architecture/routing-architecture.md |
 | Date Produced | 2026-03-22 |
 | Next Document | docs/02-architecture/automation-architecture.md |

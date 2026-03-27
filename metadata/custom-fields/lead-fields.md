@@ -1,7 +1,7 @@
 # Lead Custom Fields — Metadata Reference
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 1 — Data Authority
+Céleste Vineyards
 
 ---
 
@@ -9,7 +9,7 @@ Céleste Vineyards | Phase 1 — Data Authority
 
 This document provides the raw metadata reference for all nine custom fields on the Salesforce Lead Object used in the Céleste Vineyards Lead Priority Level Automation system. Content is derived directly from `.field-meta.xml` files retrieved from the live Salesforce Developer Edition org via SFDX CLI.
 
-This document serves as the metadata source of record for Phase 1. It is intended for technical reviewers who require direct traceability between the live org configuration and the documentation set.
+This document serves as the metadata source of record for this project. It is intended for technical reviewers who require direct traceability between the live org configuration and the documentation set.
 
 ---
 
@@ -427,8 +427,7 @@ This document serves as the metadata source of record for Phase 1. It is intende
 
 | Attribute | Value |
 |---|---|
-| Status | Final — Phase 1 |
-| Phase | 1 — Data Authority |
+| Status | Final |
 | File Path | `metadata/custom-fields/lead-fields.md` |
 | Date Produced | 2026-03-26 |
 | Next Document | `metadata/formulas/priority-formulas.md` |

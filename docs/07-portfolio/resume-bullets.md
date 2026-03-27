@@ -1,7 +1,7 @@
 # Resume Bullets
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 6 — Portfolio
+Céleste Vineyards
 
 ---
 
@@ -53,7 +53,6 @@ This document provides resume-ready bullet points derived from the Céleste Vine
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 6 — Portfolio |
 | File Path | portfolio/resume-bullets/resume-bullets.md |
 | Date Produced | 2026-03-23 |
 | Next Document | portfolio/recruiter-summary/recruiter-summary.md |

@@ -1,7 +1,7 @@
 # Business Objective
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 0 — Root Control Plane
+Céleste Vineyards
 
 ---
 
@@ -73,8 +73,7 @@ Post-conversion activity — Opportunities, Accounts, Contacts — is outside th
 
 | Attribute | Value |
 |---|---|
-| Status | Final — Phase 0 |
-| Phase | 0 — Root Control Plane |
+| Status | Final |
 | File Path | `docs/01-overview/business-objective.md` |
 | Date Produced | 2026-03-22 |
 

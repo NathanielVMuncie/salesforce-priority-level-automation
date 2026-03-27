@@ -1,7 +1,7 @@
 # Case Study Summary
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 6 — Portfolio
+Céleste Vineyards
 
 ---
 
@@ -92,7 +92,6 @@ One defect was identified and resolved during UAT: `Qualified__c` was defaulting
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 6 — Portfolio |
 | File Path | docs/07-portfolio/case-study-summary.md |
 | Date Produced | 2026-03-23 |
 | Next Document | docs/07-portfolio/recruiter-readable-summary.md |

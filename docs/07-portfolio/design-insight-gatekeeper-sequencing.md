@@ -1,7 +1,7 @@
 # Design Insight — Gatekeeper Sequencing
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 6 — Portfolio
+Céleste Vineyards
 
 ---
 
@@ -86,7 +86,6 @@ The ability to identify when two concerns can be collapsed into one without sacr
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 6 — Portfolio |
 | File Path | docs/07-portfolio/design-insight-gatekeeper-sequencing.md |
 | Date Produced | 2026-03-23 |
 | Next Document | portfolio/resume-bullets/resume-bullets.md |

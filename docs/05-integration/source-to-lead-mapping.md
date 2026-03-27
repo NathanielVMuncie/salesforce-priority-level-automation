@@ -1,7 +1,7 @@
 # Source to Lead Mapping
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 4 — Integration Boundary
+Céleste Vineyards
 
 ---
 
@@ -110,7 +110,6 @@ The `LeadSource` Field is not sourced from the Wix payload. It is hardcoded in b
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 4 — Integration Boundary |
 | File Path | docs/05-integration/source-to-lead-mapping.md |
 | Date Produced | 2026-03-23 |
 | Next Document | docs/05-integration/middleware-responsibilities.md |

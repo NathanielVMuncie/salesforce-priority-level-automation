@@ -1,7 +1,7 @@
 # Test Scenarios
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 5 — Validation and Evidence
+Céleste Vineyards
 
 ---
 
@@ -178,7 +178,6 @@ Three scenarios cover all major paths through the system: qualified Low priority
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 5 — Validation and Evidence |
 | File Path | docs/06-build-assets/test-scenarios.md |
 | Date Produced | 2026-03-23 |
 | Next Document | docs/06-build-assets/uat-matrix.md |

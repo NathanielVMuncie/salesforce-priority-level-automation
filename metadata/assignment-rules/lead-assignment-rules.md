@@ -220,7 +220,6 @@ Queue labels in this org — Inava, jchen, pdesa — are proof-of-concept placeh
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 3 — Routing, Escalation, and Ownership |
 | File Path | `metadata/assignment-rules/lead-assignment-rules.md` |
 | Date Produced | 2026-03-26 |
 

@@ -1,7 +1,7 @@
 # Lead Test Records
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 5 — Validation and Evidence
+Céleste Vineyards
 
 ---
 
@@ -78,7 +78,6 @@ This document records the input values used for each test Lead Record submitted 
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 5 — Validation and Evidence |
 | File Path | test-artifacts/scenario-inputs/lead-test-records.md |
 | Date Produced | 2026-03-23 |
 | Next Document | test-artifacts/expected-results/priority-routing-results.md |

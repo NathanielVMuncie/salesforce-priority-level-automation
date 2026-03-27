@@ -1,7 +1,7 @@
 # Field Inventory
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 1 — Data Authority
+Céleste Vineyards
 
 ---
 
@@ -9,7 +9,7 @@ Céleste Vineyards | Phase 1 — Data Authority
 
 This document provides a complete inventory of every custom field on the Salesforce Lead Object used in the Céleste Vineyards Lead Priority Level Automation system. It establishes the field name, API name, type, source, and role in the pipeline for each custom field. All entries are derived from retrieved `.field-meta.xml` metadata from the live Salesforce Developer Edition org.
 
-This document is the authoritative field reference for Phase 1. Detailed definitions, picklist values, and formula logic are documented in `field-dictionary.md`.
+This document is the authoritative field reference for this data model. Detailed definitions, picklist values, and formula logic are documented in `field-dictionary.md`.
 
 ---
 
@@ -109,8 +109,7 @@ Every field on the Lead Record originates from one of three sources. The table b
 
 | Attribute | Value |
 |---|---|
-| Status | Final — Phase 1 |
-| Phase | 1 — Data Authority |
+| Status | Final |
 | File Path | `docs/03-data-model/field-inventory.md` |
 | Date Produced | 2026-03-26 |
 | Next Document | `docs/03-data-model/field-dictionary.md` |

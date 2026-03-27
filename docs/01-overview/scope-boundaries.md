@@ -1,7 +1,7 @@
 # Scope Boundaries
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 0 — Root Control Plane
+Céleste Vineyards
 
 ---
 
@@ -113,8 +113,7 @@ the website                                                 Management
 
 | Attribute | Value |
 |---|---|
-| Status | Final — Phase 0 |
-| Phase | 0 — Root Control Plane |
+| Status | Final |
 | File Path | `docs/01-overview/scope-boundaries.md` |
 | Date Produced | 2026-03-22 |
 

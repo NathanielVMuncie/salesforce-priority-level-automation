@@ -1,7 +1,7 @@
 # Recruiter-Readable Summary
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 6 — Portfolio
+Céleste Vineyards
 
 ---
 
@@ -71,7 +71,6 @@ This project covers the core Salesforce Administrator competency areas that appe
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 6 — Portfolio |
 | File Path | docs/07-portfolio/recruiter-readable-summary.md |
 | Date Produced | 2026-03-23 |
 | Next Document | docs/07-portfolio/design-insight-gatekeeper-sequencing.md |

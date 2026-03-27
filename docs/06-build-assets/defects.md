@@ -1,7 +1,7 @@
 # Defect Log
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 5 — Validation and Evidence
+Céleste Vineyards
 
 ---
 
@@ -72,7 +72,6 @@ The resolution does not require any additional Assignment element in the Flow. T
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 5 — Validation and Evidence |
 | File Path | test-artifacts/defect-log/defects.md |
 | Date Produced | 2026-03-23 |
 | Next Document | docs/06-build-assets/screenshots-index.md |

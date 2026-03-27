@@ -1,15 +1,15 @@
 # System Architecture
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 0 — Root Control Plane
+Céleste Vineyards
 
 ---
 
 ## 1. Document Purpose
 
-This document describes the architecture of the Céleste Vineyards Lead Priority Level Automation system. It defines each layer of the system, the responsibilities of each layer, the boundaries between them, and the sequence in which they execute. It establishes the structural decisions that all Phase 1 through Phase 4 documentation is required to operate within.
+This document describes the architecture of the Céleste Vineyards Lead Priority Level Automation system. It defines each layer of the system, the responsibilities of each layer, the boundaries between them, and the sequence in which they execute. It establishes the structural decisions that all downstream documentation is required to operate within.
 
-This document does not define Field-level logic, scoring weights, threshold values, or Flow configuration details. Those are Phase 1 and Phase 2 concerns. This document establishes the shape of the system — the layers, the sequence, and the handoff points — not the internal logic of any individual component.
+This document does not define Field-level logic, scoring weights, threshold values, or Flow configuration details. Those concerns are covered in the data model and core logic documentation. This document establishes the shape of the system — the layers, the sequence, and the handoff points — not the internal logic of any individual component.
 
 ---
 
@@ -149,10 +149,10 @@ The following sequence defines the order in which every component of the system 
 |---|---|---|---|
 | Wix inquiry form | External | Lead capture | Out of scope |
 | Make.com scenario | External | Field normalization and API ingestion | Integration Layer |
-| Salesforce Lead Object | Salesforce | Record storage and Field container | Phase 1 |
-| After-Save Flow | Salesforce | Qualification, scoring, priority assignment, and escalation | Phase 2, Phase 3 |
-| Assignment Rules | Salesforce | Territory-based routing to owner or Queue | Phase 3 |
-| Queues | Salesforce | Lead holding by regional territory | Phase 3 |
+| Salesforce Lead Object | Salesforce | Record storage and Field container | See documentation index |
+| After-Save Flow | Salesforce | Qualification, scoring, priority assignment, and escalation | See documentation index |
+| Assignment Rules | Salesforce | Territory-based routing to owner or Queue | See documentation index |
+| Queues | Salesforce | Lead holding by regional territory | See documentation index |
 
 ---
 
@@ -182,8 +182,7 @@ Routing is handled by native Salesforce Assignment Rules, not by Flow-based Fiel
 
 | Attribute | Value |
 |---|---|
-| Status | Final — Phase 0 |
-| Phase | 0 — Root Control Plane |
+| Status | Final |
 | File Path | docs/02-architecture/system-architecture.md |
 | Date Produced | 2026-03-19 |
 | Next Document | docs/03-data-model/field-inventory.md |

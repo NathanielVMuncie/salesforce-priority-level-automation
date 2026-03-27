@@ -1,7 +1,7 @@
 # Recruiter Summary
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 6 — Portfolio
+Céleste Vineyards
 
 ---
 
@@ -68,7 +68,6 @@ Three live Lead Records in a Salesforce Developer Edition org confirm the system
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 6 — Portfolio |
 | File Path | portfolio/recruiter-summary/recruiter-summary.md |
 | Date Produced | 2026-03-23 |
 | Next Document | portfolio/website-copy/project-page-copy.md |

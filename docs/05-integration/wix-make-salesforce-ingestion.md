@@ -1,7 +1,7 @@
 # Wix to Salesforce Ingestion
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 4 — Integration Boundary
+Céleste Vineyards
 
 ---
 
@@ -9,7 +9,7 @@ Céleste Vineyards | Phase 4 — Integration Boundary
 
 This document describes the end-to-end data ingestion path from the Wix inquiry form submission to the creation of a Lead Record in Salesforce. It establishes how data moves across the three-layer pipeline — Wix, Make.com, and Salesforce — what transformations occur at each layer, and what the Lead Record looks like upon arrival in Salesforce before the Flow fires.
 
-This document covers the ingestion path only. Flow execution, scoring logic, and routing behavior are documented in Phase 2 and Phase 3. This document terminates at Lead Record creation.
+This document covers the ingestion path only. Flow execution, scoring logic, and routing behavior are documented in the core logic and routing documentation. This document terminates at Lead Record creation.
 
 ---
 
@@ -190,7 +190,6 @@ The ingestion path is complete when the Lead Record exists in Salesforce with al
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 4 — Integration Boundary |
 | File Path | docs/05-integration/wix-make-salesforce-ingestion.md |
 | Date Produced | 2026-03-23 |
 | Next Document | docs/05-integration/source-to-lead-mapping.md |

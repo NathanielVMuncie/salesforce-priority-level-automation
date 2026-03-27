@@ -131,7 +131,7 @@ salesforce-priority-level-automation/
 
 ## Documentation Index
 
-### Phase 0 — Overview ✅ Complete
+
 - `docs/01-overview/project-overview.md` ✅
 - `docs/01-overview/scope-boundaries.md` ✅
 - `docs/01-overview/business-objective.md` ✅
@@ -143,20 +143,20 @@ salesforce-priority-level-automation/
 - `docs/05-integration/make-com-integration.md` ✅
 - `docs/05-integration/salesforce-integration.md` ✅
 
-### Phase 1 — Data Model 🔒 Pending CLI Access
+
 - `docs/03-data-model/field-inventory.md`
 - `docs/03-data-model/field-dictionary.md`
 - `metadata/custom-fields/lead-fields.md`
 - `metadata/formulas/priority-formulas.md`
 
-### Phase 2 — Core Logic ✅ Complete
+
 - `docs/03-data-model/scoring-model.md` ✅
 - `docs/03-data-model/priority-thresholds.md` ✅
 - `docs/04-automation-logic/gatekeeper-logic.md` ✅
 - `docs/04-automation-logic/scoring-logic.md` ✅
 - `docs/04-automation-logic/priority-assignment-logic.md` ✅
 
-### Phase 3 — Routing, Escalation, and Ownership ✅ Complete
+
 - `docs/04-automation-logic/escalation-logic.md` ✅
 - `docs/04-automation-logic/territorial-routing-logic.md` ✅
 - `docs/02-architecture/routing-architecture.md` ✅
@@ -166,12 +166,12 @@ salesforce-priority-level-automation/
 - `metadata/assignment-rules/lead-assignment-rules.md` ✅
 - `metadata/flow-notes/lead-scoring-and-priority-assignment.md` ✅
 
-### Phase 4 — Integration Boundary ✅ Complete
+
 - `docs/05-integration/wix-make-salesforce-ingestion.md` ✅
 - `docs/05-integration/source-to-lead-mapping.md` ✅
 - `docs/05-integration/middleware-responsibilities.md` ✅
 
-### Phase 5 — Validation and Evidence ✅ Complete
+
 - `docs/06-build-assets/configuration-checklist.md` ✅
 - `docs/06-build-assets/test-scenarios.md` ✅
 - `docs/06-build-assets/uat-matrix.md` ✅
@@ -181,7 +181,7 @@ salesforce-priority-level-automation/
 - `test-artifacts/uat-evidence/uat-session-log.md` ✅
 - `test-artifacts/defect-log/defects.md` ✅
 
-### Phase 6 — Portfolio ✅ Complete
+
 - `docs/07-portfolio/case-study-summary.md` ✅
 - `docs/07-portfolio/recruiter-readable-summary.md` ✅
 - `docs/07-portfolio/design-insight-gatekeeper-sequencing.md` ✅
@@ -193,14 +193,14 @@ salesforce-priority-level-automation/
 
 ## Status
 
-✅ Phase 0 — Complete and committed
+
 ✅ Integration Layer — Complete and committed
-🔒 Phase 1 — Data Model — Pending CLI access
-✅ Phase 2 — Core Logic — Complete and committed
-✅ Phase 3 — Routing, Escalation, and Ownership — Complete and committed
-✅ Phase 4 — Integration Boundary — Complete and committed
-✅ Phase 5 — Validation and Evidence — Complete and committed
-✅ Phase 6 — Portfolio — Complete and committed
+— Pending CLI access
+— Complete and committed
+— Complete and committed
+— Complete and committed
+— Complete and committed
+— Complete and committed
 
 The system is fully operational. Documentation is produced from a live Salesforce Developer Edition org with confirmed working automation, routing, escalation, and integration across Wix, Make.com, and Salesforce.
 

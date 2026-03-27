@@ -1,7 +1,7 @@
 # Automation Architecture
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 3 — Routing, Escalation, and Ownership
+Céleste Vineyards
 
 ---
 
@@ -9,7 +9,7 @@ Céleste Vineyards | Phase 3 — Routing, Escalation, and Ownership
 
 This document defines the automation architecture of the Céleste Vineyards Lead Priority Level Automation system. It establishes the structural design of the After-Save Record-Triggered Flow — how it is organized, what each segment is responsible for, how the segments connect, and why the architecture is designed the way it is.
 
-This document covers architecture — the segments, connections, and design decisions of the Flow as a whole. Element-level configuration details are documented in `lead-scoring-and-priority-assignment.md`. Logic-level documentation for individual components is in the Phase 2 automation logic documents.
+This document covers architecture — the segments, connections, and design decisions of the Flow as a whole. Element-level configuration details are documented in `lead-scoring-and-priority-assignment.md`. Logic-level documentation for individual components is in the automation logic documents.
 
 ---
 
@@ -248,7 +248,6 @@ The Single-DML pattern keeps this Flow well within governor limits under any vol
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 3 — Routing, Escalation, and Ownership |
 | File Path | docs/02-architecture/automation-architecture.md |
 | Date Produced | 2026-03-22 |
 | Next Document | docs/06-build-assets/test-scenarios.md |

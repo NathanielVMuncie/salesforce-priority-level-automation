@@ -1,7 +1,7 @@
 # UAT Matrix
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 5 — Validation and Evidence
+Céleste Vineyards
 
 ---
 
@@ -90,7 +90,6 @@ During initial testing, S-01 and S-02 failed criterion 9 (Qualification_Status__
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 5 — Validation and Evidence |
 | File Path | docs/06-build-assets/uat-matrix.md |
 | Date Produced | 2026-03-23 |
 | Next Document | test-artifacts/scenario-inputs/lead-test-records.md |

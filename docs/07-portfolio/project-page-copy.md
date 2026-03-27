@@ -1,7 +1,7 @@
 # Project Page Copy
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 6 — Portfolio
+Céleste Vineyards
 
 ---
 
@@ -83,7 +83,6 @@ The system is live in a Salesforce Developer Edition org. Three test Records con
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 6 — Portfolio |
 | File Path | portfolio/website-copy/project-page-copy.md |
 | Date Produced | 2026-03-24 |
 

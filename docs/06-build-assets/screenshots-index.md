@@ -1,7 +1,7 @@
 # Screenshots Index
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 5 — Validation and Evidence
+Céleste Vineyards
 
 ---
 
@@ -79,7 +79,6 @@ Screenshots are captured from the live Salesforce Developer Edition org and the 
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 5 — Validation and Evidence |
 | File Path | docs/06-build-assets/screenshots-index.md |
 | Date Produced | 2026-03-23 |
 | Next Document | docs/07-portfolio/case-study-summary.md |

@@ -1,7 +1,7 @@
 # Configuration Checklist
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 5 — Validation and Evidence
+Céleste Vineyards
 
 ---
 
@@ -110,7 +110,6 @@ This document provides a complete configuration checklist for the Céleste Viney
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 5 — Validation and Evidence |
 | File Path | docs/06-build-assets/configuration-checklist.md |
 | Date Produced | 2026-03-23 |
 | Next Document | docs/06-build-assets/test-scenarios.md |

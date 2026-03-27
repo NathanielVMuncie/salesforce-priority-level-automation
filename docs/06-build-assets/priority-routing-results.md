@@ -1,7 +1,7 @@
 # Priority and Routing Results
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 5 — Validation and Evidence
+Céleste Vineyards
 
 ---
 
@@ -80,7 +80,6 @@ All 30 Field-level assertions passed. The system produced correct outputs across
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 5 — Validation and Evidence |
 | File Path | test-artifacts/expected-results/priority-routing-results.md |
 | Date Produced | 2026-03-23 |
 | Next Document | test-artifacts/uat-evidence/uat-session-log.md |

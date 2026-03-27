@@ -1,7 +1,7 @@
 # Territorial Routing Logic
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 3 — Routing, Escalation, and Ownership
+Céleste Vineyards
 
 ---
 
@@ -211,7 +211,6 @@ Three live Lead Records confirm territorial routing executed correctly across al
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 3 — Routing, Escalation, and Ownership |
 | File Path | docs/04-automation-logic/territorial-routing-logic.md |
 | Date Produced | 2026-03-22 |
 | Next Document | docs/02-architecture/routing-architecture.md |

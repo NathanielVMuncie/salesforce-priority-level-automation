@@ -1,7 +1,7 @@
 # Project Overview
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 0 — Root Control Plane
+Céleste Vineyards
 
 ---
 
@@ -161,11 +161,10 @@ Lead scoring is calculated across three independent dimensions. Each dimension i
 
 ---
 
-## 9. Documentation Phase Map
+## 9. Documentation Map
 
 Documentation is organized into phases. Each phase produces a set of files that are required inputs for the subsequent phase.
 
-| Phase | Name | Key Deliverables |
 |---|---|---|
 | 0 | Root Control Plane | README, project overview, scope boundaries, business objective, system architecture |
 | Integration Layer | Integration Boundary | Wix form and automation, key/value mapping, Make.com integration, Salesforce integration |
@@ -187,8 +186,7 @@ This system is fully operational. All automation logic, routing rules, and integ
 
 | Attribute | Value |
 |---|---|
-| Status | Final — Phase 0 |
-| Phase | 0 — Root Control Plane |
+| Status | Final |
 | File Path | `docs/01-overview/project-overview.md` |
 | Date Produced | 2026-03-22 |
 

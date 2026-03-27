@@ -1,7 +1,7 @@
 # Middleware Responsibilities
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 4 — Integration Boundary
+Céleste Vineyards
 
 ---
 
@@ -106,7 +106,6 @@ The Make.com layer ensures the correct placeholder values are written before the
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 4 — Integration Boundary |
 | File Path | docs/05-integration/middleware-responsibilities.md |
 | Date Produced | 2026-03-23 |
 | Next Document | docs/06-build-assets/configuration-checklist.md |

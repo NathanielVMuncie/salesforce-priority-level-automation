@@ -1,7 +1,7 @@
 # UAT Session Log
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 5 — Validation and Evidence
+Céleste Vineyards
 
 ---
 
@@ -89,7 +89,6 @@ All three scenarios executed and confirmed passing after D-01 resolution.
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| Phase | 5 — Validation and Evidence |
 | File Path | test-artifacts/uat-evidence/uat-session-log.md |
 | Date Produced | 2026-03-23 |
 | Next Document | test-artifacts/defect-log/defects.md |

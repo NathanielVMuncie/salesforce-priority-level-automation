@@ -1,7 +1,7 @@
 # Priority Formulas
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 1 — Data Authority
+Céleste Vineyards
 
 ---
 
@@ -183,11 +183,10 @@ Utility display field. Not part of the qualification, scoring, or routing pipeli
 
 | Attribute | Value |
 |---|---|
-| Status | Final — Phase 1 |
-| Phase | 1 — Data Authority |
+| Status | Final |
 | File Path | `metadata/formulas/priority-formulas.md` |
 | Date Produced | 2026-03-26 |
-| Next Document | Phase 1 complete — all files produced |
+| Next Document | — |
 
 ---
 
