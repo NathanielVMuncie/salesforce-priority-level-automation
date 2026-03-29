@@ -1,0 +1,13 @@
+{
+  "name": "salesforce-priority-level-automation",
+  "version": "1.0.0",
+  "description": "Salesforce Lead scoring and priority automation — Céleste Vineyards case study",
+  "private": true,
+  "scripts": {
+    "lint": "markdownlint '**/*.md' --ignore node_modules",
+    "test": "markdownlint '**/*.md' --ignore node_modules"
+  },
+  "devDependencies": {
+    "markdownlint-cli": "^0.43.0"
+  }
+}
