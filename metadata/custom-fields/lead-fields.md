@@ -1,15 +1,15 @@
 # Lead Custom Fields — Metadata Reference
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards
+Céleste Vineyards | Phase 1 — Data Authority
 
 ---
 
 ## 1. Document Purpose
 
-This document provides the raw metadata reference for all nine custom fields on the Salesforce Lead Object used in the Céleste Vineyards Lead Priority Level Automation system. Content is derived directly from `.field-meta.xml` files retrieved from the live Salesforce Developer Edition org via SFDX CLI.
+This document records the SFDX field metadata for all custom Fields on the Lead Object used in the Céleste Vineyards Lead Priority Level Automation system. All definitions are sourced directly from `.field-meta.xml` files retrieved from the live Salesforce Developer Edition org at API version 66.0.
 
-This document serves as the metadata source of record for this project. It is intended for technical reviewers who require direct traceability between the live org configuration and the documentation set.
+This document serves as the raw metadata reference. Field-level documentation and automation context are in `docs/03-data-model/field-dictionary.md`.
 
 ---
 
@@ -17,31 +17,29 @@ This document serves as the metadata source of record for this project. It is in
 
 | Attribute | Value |
 |---|---|
-| Retrieval Command | `sf project retrieve start --metadata "CustomField:Lead.[API Name]"` |
+| Retrieval Method | `sf project retrieve start` |
+| API Version | 66.0 |
 | Org | `celeste-vineyards-dev-ed.develop.my.salesforce.com` |
-| API Version | v66.0 |
-| Retrieval Status | Succeeded |
-| Retrieval Path | `force-app/main/default/objects/Lead/fields/` |
+| Object | Lead |
+| Date Retrieved | 2026-04-01 |
 | Files Retrieved | 9 |
-| Retrieval Date | 2026-03-26 |
 
 ---
 
 ## 3. Business_Type__c
-
-**File:** `Business_Type__c.field-meta.xml`
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Business_Type__c</fullName>
     <description>Primary B2B gatekeeper and scoring input. Originates from LeadSource
-    Céleste Vineyards - Business Inquiry Form. 'Personal/Individual' selections trigger
-    frontend disqualification. Valid business types contribute point values to varTotalScore
-    for Priority_Level__c calculation.</description>
-    <inlineHelpText>Identifies organizational category. Originates from LeadSource Céleste
-    Vineyards - Business Inquiry Form. 'Personal/Individual' selections are disqualified per
-    B2B model requirements. Valid entries contribute to automated Priority_Level__c.</inlineHelpText>
+    Céleste Vineyards - Business Inquiry Form. Personal/Individual selections trigger
+    frontend disqualification. Valid business types contribute point values to
+    varTotalScore for Priority_Level__c calculation.</description>
+    <inlineHelpText>Identifies organizational category. Originates from LeadSource
+    Céleste Vineyards - Business Inquiry Form. Personal/Individual selections are
+    disqualified per B2B model requirements. Valid entries contribute to automated
+    Priority_Level__c.</inlineHelpText>
     <label>Business Type</label>
     <required>true</required>
     <trackFeedHistory>false</trackFeedHistory>
@@ -88,18 +86,16 @@ This document serves as the metadata source of record for this project. It is in
 
 ## 4. Role__c
 
-**File:** `Role__c.field-meta.xml`
-
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Role__c</fullName>
-    <description>Captures purchasing authority and organizational position. Originates from
-    LeadSource Céleste Vineyards - Business Inquiry Form. Primary input for Priority_Level__c
-    calculation logic and Lead scoring.</description>
-    <inlineHelpText>Indicate Lead's purchasing authority or position. Originates from LeadSource
-    Céleste Vineyards - Business Inquiry Form. This value determines the automated
-    Priority_Level__c calculation.</inlineHelpText>
+    <description>Captures purchasing authority and organizational position. Originates
+    from LeadSource Céleste Vineyards - Business Inquiry Form. Primary input for
+    Priority_Level__c calculation logic and Lead scoring.</description>
+    <inlineHelpText>Indicate Lead's purchasing authority or position. Originates from
+    LeadSource Céleste Vineyards - Business Inquiry Form. This value determines the
+    automated Priority_Level__c calculation.</inlineHelpText>
     <label>Role</label>
     <required>true</required>
     <trackFeedHistory>false</trackFeedHistory>
@@ -141,18 +137,16 @@ This document serves as the metadata source of record for this project. It is in
 
 ## 5. Purchasing_Timeline__c
 
-**File:** `Purchasing_Timeline__c.field-meta.xml`
-
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Purchasing_Timeline__c</fullName>
-    <description>Captures the Lead's expected procurement window. Originates from LeadSource
-    Céleste Vineyards - Business Inquiry Form. Primary input for Priority_Level__c calculation
-    logic and Lead scoring.</description>
-    <inlineHelpText>Indicate Lead's expected procurement window. Originates from LeadSource
-    Céleste Vineyards - Business Inquiry Form. This value determines the automated
-    Priority_Level__c calculation and Lead scoring.</inlineHelpText>
+    <description>Captures the Lead's expected procurement window. Originates from
+    LeadSource Céleste Vineyards - Business Inquiry Form. Primary input for
+    Priority_Level__c calculation logic and Lead scoring.</description>
+    <inlineHelpText>Indicate Lead's expected procurement window. Originates from
+    LeadSource Céleste Vineyards - Business Inquiry Form. This value determines the
+    automated Priority_Level__c calculation and Lead scoring.</inlineHelpText>
     <label>Purchasing Timeline</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
@@ -199,19 +193,17 @@ This document serves as the metadata source of record for this project. It is in
 
 ## 6. Priority_Level__c
 
-**File:** `Priority_Level__c.field-meta.xml`
-
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Priority_Level__c</fullName>
-    <description>Reflects the point sum (varTotalScore) from LeadSource Céleste Vineyards -
-    Business Inquiry Form. Lead Scoring and Priority Automation flow assigns Levels
-    (High ≥ 12, Medium ≥ 8, Low &lt; 8). High Priority escalated to National Sales
-    Director.</description>
-    <inlineHelpText>Calculated via varTotalScore from the Céleste Vineyards - Business Inquiry
-    Form. Defines Priority Level: High (≥ 12), Medium (≥ 8), or Low (&lt; 8). High Priority
-    triggers escalation to the National Sales Director.</inlineHelpText>
+    <description>Reflects the point sum (varTotalScore) from LeadSource Céleste
+    Vineyards - Business Inquiry Form. Lead Scoring and Priority Automation flow
+    assigns Levels (High ≥ 12, Medium ≥ 8, Low &lt; 8). High Priority escalated
+    to National Sales Director.</description>
+    <inlineHelpText>Calculated via varTotalScore from the Céleste Vineyards - Business
+    Inquiry Form. Defines Priority Level: High (≥ 12), Medium (≥ 8), or Low (&lt; 8).
+    High Priority triggers escalation to the National Sales Director.</inlineHelpText>
     <label>Priority Level</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
@@ -254,17 +246,16 @@ This document serves as the metadata source of record for this project. It is in
 
 ## 7. Qualified__c
 
-**File:** `Qualified__c.field-meta.xml`
-
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Qualified__c</fullName>
     <defaultValue>true</defaultValue>
-    <description>Authoritative qualification flag used by automation to indicate whether the
-    lead meets baseline B2B eligibility criteria for sales engagement.</description>
-    <inlineHelpText>Checked = Lead qualifies as a valid business prospect. Unchecked = Lead
-    is disqualified from sales qualification logic.</inlineHelpText>
+    <description>Authoritative qualification flag used by automation to indicate
+    whether the lead meets baseline B2B eligibility criteria for sales
+    engagement.</description>
+    <inlineHelpText>Checked = Lead qualifies as a valid business prospect. Unchecked
+    = Lead is disqualified from sales qualification logic.</inlineHelpText>
     <label>Qualified</label>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Checkbox</type>
@@ -275,14 +266,13 @@ This document serves as the metadata source of record for this project. It is in
 
 ## 8. Qualification_Status__c
 
-**File:** `Qualification_Status__c.field-meta.xml`
-
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Qualification_Status__c</fullName>
-    <description>Visual formula field derived from Qualified__c. Displays a qualification
-    indicator for sales users based on the lead's current qualification state.</description>
+    <description>Visual formula field derived from Qualified__c. Displays a
+    qualification indicator for sales users based on the lead's current
+    qualification state.</description>
     <externalId>false</externalId>
     <formula>IF(
     Qualified__c,
@@ -290,8 +280,8 @@ This document serves as the metadata source of record for this project. It is in
     "❌ Not Qualified"
 )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <inlineHelpText>Visual qualification indicator. ✅ = Qualified for sales engagement.
-    ❌ = Disqualified based on lead intake criteria.</inlineHelpText>
+    <inlineHelpText>Visual qualification indicator. ✅ = Qualified for sales
+    engagement. ❌ = Disqualified based on lead intake criteria.</inlineHelpText>
     <label>Qualification Status</label>
     <required>false</required>
     <type>Text</type>
@@ -303,17 +293,17 @@ This document serves as the metadata source of record for this project. It is in
 
 ## 9. Customer_Note__c
 
-**File:** `Customer_Note__c.field-meta.xml`
-
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Customer_Note__c</fullName>
-    <description>Long text field capturing Lead-specific questions and unique inquiries.
-    Originates at the base of LeadSource Céleste Vineyards - Business Inquiry Form. Provides
-    unstructured context to supplement automated Priority_Level__c scoring.</description>
-    <inlineHelpText>Long text field for unique Lead questions and specific case inquiries.
-    Originates from the Céleste Vineyards - Business Inquiry Form.</inlineHelpText>
+    <description>Long text field capturing Lead-specific questions and unique
+    inquiries. Originates at the base of LeadSource Céleste Vineyards - Business
+    Inquiry Form. Provides unstructured context to supplement automated
+    Priority_Level__c scoring.</description>
+    <inlineHelpText>Long text field for unique Lead questions and specific case
+    inquiries. Originates from the Céleste Vineyards - Business Inquiry
+    Form.</inlineHelpText>
     <label>Customer Note</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
@@ -325,15 +315,14 @@ This document serves as the metadata source of record for this project. It is in
 
 ## 10. Region__c
 
-**File:** `Region__c.field-meta.xml`
-
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Region__c</fullName>
-    <description>Identifies Lead geographic assignment (West Coast, East Coast, Central) based
-    on State. Primary driver for Lead Assignment Rules Céleste - Regional Sales Representatives
-    and Queue distribution for Céleste Vineyards Pipeline.</description>
+    <description>Identifies Lead geographic assignment (West Coast, East Coast,
+    Central) based on State. Primary driver for Lead Assignment Rules Céleste -
+    Regional Sales Representatives and Queue distribution for Céleste Vineyards
+    Pipeline.</description>
     <externalId>false</externalId>
     <formula>CASE(State,
 "Alabama", "East Coast",
@@ -389,9 +378,9 @@ This document serves as the metadata source of record for this project. It is in
 "Wyoming", "West Coast",
 "International")</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <inlineHelpText>Identifies Lead geographic assignment (West Coast, East Coast, Central)
-    based on State. Primary driver for Lead Assignment Rules and Queue distribution for
-    Céleste Vineyards Pipeline.</inlineHelpText>
+    <inlineHelpText>Identifies Lead geographic assignment (West Coast, East Coast,
+    Central) based on State. Primary driver for Lead Assignment Rules and Queue
+    distribution for Céleste Vineyards Pipeline.</inlineHelpText>
     <label>Region</label>
     <required>false</required>
     <type>Text</type>
@@ -403,18 +392,17 @@ This document serves as the metadata source of record for this project. It is in
 
 ## 11. Lead_Created__c
 
-**File:** `Lead_Created__c.field-meta.xml`
-
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Lead_Created__c</fullName>
-    <description>Date-only formula field derived from the standard Lead CreatedDate field.
-    Used to display and report on record creation as a date without time.</description>
+    <description>Date-only formula field derived from the standard Lead CreatedDate
+    field. Used to display and report on record creation as a date without
+    time.</description>
     <formula>DATEVALUE(CreatedDate)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <inlineHelpText>Displays the date this lead was created. This is a formula field based
-    on the standard CreatedDate field and does not include time.</inlineHelpText>
+    <inlineHelpText>Displays the date this lead was created. This is a formula field
+    based on the standard CreatedDate field and does not include time.</inlineHelpText>
     <label>Lead Created</label>
     <required>false</required>
     <type>Date</type>
@@ -428,9 +416,10 @@ This document serves as the metadata source of record for this project. It is in
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| File Path | `metadata/custom-fields/lead-fields.md` |
-| Date Produced | 2026-03-26 |
-| Next Document | `metadata/formulas/priority-formulas.md` |
+| Phase | 1 — Data Authority |
+| File Path | metadata/custom-fields/lead-fields.md |
+| Date Produced | 2026-04-01 |
+| Next Document | metadata/formulas/priority-formulas.md |
 
 ---
 

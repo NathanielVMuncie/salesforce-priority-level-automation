@@ -1,33 +1,46 @@
 # Priority Formulas
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards
+Céleste Vineyards | Phase 1 — Data Authority
 
 ---
 
 ## 1. Document Purpose
 
-This document defines every formula field on the Salesforce Lead Object used in the Céleste Vineyards Lead Priority Level Automation system. It records the formula syntax, the fields each formula evaluates, the outputs it produces, and the role each formula plays in the pipeline.
+This document defines all Formula Fields and Flow formula resources used in the Céleste Vineyards Lead Priority Level Automation system. It records the formula expressions, their source Fields, their return types, and their role in the automation pipeline.
 
-All formulas are sourced directly from `.field-meta.xml` metadata retrieved from the live Salesforce Developer Edition org.
+All Formula Field definitions are sourced directly from SFDX metadata retrieved at API version 66.0. The Flow formula resource is sourced from the live Flow configuration.
 
 ---
 
-## 2. Formula Field Inventory
+## 2. Formula Overview
 
-Three formula fields are present on the Lead Object in this system.
+The system uses three Formula Fields on the Lead Object and one Flow formula resource. None of these are written by the Flow or Make.com — they self-resolve from other Field values.
 
-| Field Label | API Name | Return Type | Evaluates | Purpose |
+| Name | Type | Location | Source Field(s) | Returns |
 |---|---|---|---|---|
-| Qualification Status | `Qualification_Status__c` | Text | `Qualified__c` | Display — qualification state indicator |
-| Region | `Region__c` | Text | `State` (standard) | Classification — geographic territory |
-| Lead Created | `Lead_Created__c` | Date | `CreatedDate` (standard) | Display — date without timestamp |
+| `Qualification_Status__c` | Formula Field (Text) | Lead Object | `Qualified__c` | Qualification display string |
+| `Region__c` | Formula Field (Text) | Lead Object | `State` | Geographic region string |
+| `Lead_Created__c` | Formula Field (Date) | Lead Object | `CreatedDate` | Date without time |
+| `Qualification_Status_Aesthetic` | Flow Formula Resource (Text) | Flow — `Lead_Scoring_and_Priority_Level_Assignment` | `{!$Record.Qualified__c}` | Qualification display string |
 
 ---
 
-## 3. Qualification_Status__c
+## 3. Qualification_Status__c — Formula Field
 
-### 3.1 Formula
+### 3.1 Field Configuration
+
+| Attribute | Value |
+|---|---|
+| Field Label | Qualification Status |
+| API Name | `Qualification_Status__c` |
+| Field Type | Formula (Text) |
+| Source Field | `Qualified__c` |
+| Treat Blanks As | Blank as Zero |
+| External ID | No |
+| Unique | No |
+
+### 3.2 Formula Expression
 
 ```
 IF(
@@ -37,37 +50,36 @@ IF(
 )
 ```
 
-### 3.2 Configuration
+### 3.3 Behavior
 
-| Attribute | Value |
+| `Qualified__c` Value | `Qualification_Status__c` Output |
 |---|---|
-| Field Type | Formula (Text) |
-| Formula Treat Blanks As | BlankAsZero |
-| External ID | No |
-| Unique | No |
+| True | ✅ Qualified |
+| False | ❌ Not Qualified |
 
-### 3.3 Logic
+### 3.4 Automation Role
 
-The formula evaluates the boolean `Qualified__c` checkbox field. If `Qualified__c` is True, the formula returns `✅ Qualified`. If `Qualified__c` is False, the formula returns `❌ Not Qualified`.
+This Formula Field is the visible qualification indicator on the Lead Record. It is evaluated directly from `Qualified__c` without any Flow intervention. When the `Qualified__c` Field default was incorrectly set to False (Defect D-01), this Formula Field surfaced the incorrect state by displaying `❌ Not Qualified` on qualified Leads. After the default was corrected to True, this Field resolved correctly for all Leads.
 
-| `Qualified__c` Value | Output |
-|---|---|
-| True (checked) | `✅ Qualified` |
-| False (unchecked) | `❌ Not Qualified` |
-
-### 3.4 Pipeline Role
-
-This field provides a human-readable qualification indicator on the Lead Record for sales users. It requires no explicit write — it evaluates automatically whenever the Record is loaded. Because `Qualified__c` defaults to True at the field level, this formula displays `✅ Qualified` on every new Lead Record at creation, including disqualified records until the Flow processes them.
-
-### 3.5 Note on Display Labels
-
-The formula text retrieved from the org displays `❌ Not Qualified` for disqualified records. Earlier portfolio documentation references `❌ Disqualified` as the display value. The formula as retrieved from the live org is the authoritative value. The functional behavior — indicating non-qualification — is identical in both representations.
+**Note:** The live org returns `❌ Not Qualified` as the disqualified display value. Earlier documentation referenced `❌ Disqualified` — the Formula Field metadata is authoritative.
 
 ---
 
-## 4. Region__c
+## 4. Region__c — Formula Field
 
-### 4.1 Formula
+### 4.1 Field Configuration
+
+| Attribute | Value |
+|---|---|
+| Field Label | Region |
+| API Name | `Region__c` |
+| Field Type | Formula (Text) |
+| Source Field | `State` |
+| Treat Blanks As | Blank as Zero |
+| External ID | No |
+| Unique | No |
+
+### 4.2 Formula Expression
 
 ```
 CASE(State,
@@ -125,68 +137,82 @@ CASE(State,
 "International")
 ```
 
-### 4.2 Configuration
+### 4.3 Behavior
 
-| Attribute | Value |
+| `State` Value | `Region__c` Output |
 |---|---|
-| Field Type | Formula (Text) |
-| Formula Treat Blanks As | BlankAsZero |
-| External ID | No |
-| Unique | No |
+| Any East Coast state | East Coast |
+| Any Central state | Central |
+| Any West Coast state | West Coast |
+| Any unmatched value | International |
 
-### 4.3 Logic
+### 4.4 Automation Role
 
-The formula uses a CASE expression evaluating the standard `State` field against all 50 US states and the District of Columbia. It returns one of three region values — `East Coast`, `Central`, or `West Coast` — based on the state match. The else clause returns `International` for any unmatched value.
-
-| Region | State Count | States |
-|---|---|---|
-| East Coast | 20 | Alabama, Connecticut, Delaware, District of Columbia, Florida, Georgia, Maine, Maryland, Massachusetts, New Hampshire, New Jersey, New York, North Carolina, Pennsylvania, Rhode Island, South Carolina, Tennessee, Vermont, Virginia, West Virginia |
-| Central | 18 | Arkansas, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana, Michigan, Minnesota, Mississippi, Missouri, Nebraska, North Dakota, Ohio, Oklahoma, South Dakota, Texas, Wisconsin |
-| West Coast | 13 | Alaska, Arizona, California, Colorado, Hawaii, Idaho, Montana, Nevada, New Mexico, Oregon, Utah, Washington, Wyoming |
-
-### 4.4 Pipeline Role
-
-`Region__c` provides geographic classification for every Lead Record. It is used by the Assignment Rule as a secondary reference and by reporting to classify pipeline by territory. Critically, this field is never written or modified by the Flow — it self-resolves at all times, including on High priority records where the Flow escalation overrides `OwnerId` to Sophia Delgado. The territorial classification is preserved regardless of ownership state.
+`Region__c` provides the territorial classification for every Lead Record. It self-resolves from `State` and is not written by the Flow or Assignment Rule. This means the regional classification is always accurate regardless of OwnerId — including on High priority Leads where the Flow escalation override has replaced the Queue OwnerId with Sophia Delgado's User ID. The region is preserved for pipeline reporting and visibility across all paths.
 
 ---
 
-## 5. Lead_Created__c
+## 5. Lead_Created__c — Formula Field
 
-### 5.1 Formula
+### 5.1 Field Configuration
+
+| Attribute | Value |
+|---|---|
+| Field Label | Lead Created |
+| API Name | `Lead_Created__c` |
+| Field Type | Formula (Date) |
+| Source Field | `CreatedDate` |
+| Treat Blanks As | Blank as Zero |
+
+### 5.2 Formula Expression
 
 ```
 DATEVALUE(CreatedDate)
 ```
 
-### 5.2 Configuration
+### 5.3 Behavior
 
-| Attribute | Value |
-|---|---|
-| Field Type | Formula (Date) |
-| Formula Treat Blanks As | BlankAsZero |
+Returns the date portion of `CreatedDate` without the time component.
 
-### 5.3 Logic
+### 5.4 Automation Role
 
-The formula wraps the standard `CreatedDate` datetime field in the `DATEVALUE()` function, which strips the time component and returns a date-only value.
-
-| Input | Output |
-|---|---|
-| `2026-03-21T19:34:22.000Z` | `2026-03-21` |
-
-### 5.4 Pipeline Role
-
-Utility display field. Not part of the qualification, scoring, or routing pipeline. Provides a clean date value for reporting and Lead Record display without the timestamp component of `CreatedDate`.
+Reporting and display convenience Field. Not evaluated by any Flow logic or scoring calculation. Provides a clean date-only Field for pipeline reporting without requiring users to parse the full DateTime value of `CreatedDate`.
 
 ---
 
-## 6. Document Status
+## 6. Qualification_Status_Aesthetic — Flow Formula Resource
+
+### 6.1 Resource Configuration
+
+| Attribute | Value |
+|---|---|
+| Resource Name | Qualification Status Aesthetic |
+| API Name | `Qualification_Status_Aesthetic` |
+| Resource Type | Formula |
+| Data Type | Text |
+| Location | Flow — `Lead_Scoring_and_Priority_Level_Assignment` |
+
+### 6.2 Formula Expression
+
+```
+IF({!$Record.Qualified__c}, '✅ Qualified', '❌ Not Qualified')
+```
+
+### 6.3 Automation Role
+
+This Flow formula resource mirrors the logic of `Qualification_Status__c` within the Flow context. It is available as a reference within the Flow interview but is not written to any Field. The `Qualification_Status__c` Formula Field on the Lead Object is the authoritative display value — this resource exists as a Flow-level reference for any future Flow logic that may need to evaluate or display the qualification state string.
+
+---
+
+## 7. Document Status
 
 | Attribute | Value |
 |---|---|
 | Status | Final |
-| File Path | `metadata/formulas/priority-formulas.md` |
-| Date Produced | 2026-03-26 |
-| Next Document | — |
+| Phase | 1 — Data Authority |
+| File Path | metadata/formulas/priority-formulas.md |
+| Date Produced | 2026-04-01 |
+| Next Document | docs/03-data-model/scoring-model.md |
 
 ---
 
