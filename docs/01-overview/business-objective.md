@@ -19,7 +19,7 @@ Prior to this system, every inbound Lead required manual review to determine thr
 
 - Whether the Lead represented a viable B2B prospect
 - How urgently the Lead should be contacted
-- Which sales representative should receive the assignment
+- Which Regional Sales Manage will be Owner of Lead
 
 This manual triage process created three structural failures:
 
@@ -75,10 +75,10 @@ Post-conversion activity — Opportunities, Accounts, Contacts — is outside th
 
 | Attribute | Value |
 |---|---|
-| Status | Final |
 | File Path | `docs/01-overview/business-objective.md` |
-| Date Produced | 2026-03-22 |
+| Date Produced | TBD
 
 ---
 
-*Salesforce Case Study — Céleste Vineyards | Built by Nathaniel Muncie*
+*Salesforce Case Study: Lead - Priority Level Automation   
+Built by Nathaniel V. Muncie*
