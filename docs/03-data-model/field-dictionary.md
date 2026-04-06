@@ -174,7 +174,7 @@ Checked = Lead qualifies as a valid business prospect. Unchecked = Lead is disqu
 Lead score determining priority status.
 
 **Help Text:**
-⚠️ **Missing from XML** — `<inlineHelpText>` not present in local metadata. Do not fabricate. Add Help Text in org and re-retrieve to resolve.
+Numerical sum of points (varTotalScore) from the Céleste Vineyards - Business Inquiry Form. Determines the automated Priority_Level__c based on Role__c, Purchasing_Timeline__c, and Business_Type__c.
 
 ---
 

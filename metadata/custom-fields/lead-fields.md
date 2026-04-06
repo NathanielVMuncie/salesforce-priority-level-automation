@@ -85,16 +85,10 @@ The Flow `Lead_Scoring_and_Priority_Level_Assignment` writes exactly **4 fields*
 | `Customer_Note__c` | ✅ | ✅ | Complete |
 | `Priority_Level__c` | ✅ | ✅ | Complete |
 | `Qualified__c` | ✅ | ✅ | Complete |
-| `Lead_Score__c` | ✅ | ❌ | **Help Text missing — update in org** |
+| `Lead_Score__c` | ✅ | ✅ | Complete |
 | `Region__c` | ✅ | ✅ | Complete |
 | `Qualification_Status__c` | ✅ | ✅ | Complete |
 | `Lead_Created__c` | ✅ | ✅ | Complete |
-
-### Action Required
-- `Lead_Score__c`: Add `<inlineHelpText>` in the org Field Editor, then re-retrieve:
-  ```
-  sf project retrieve start --metadata "CustomField:Lead.Lead_Score__c" --target-org celeste-dev
-  ```
 
 ---
 

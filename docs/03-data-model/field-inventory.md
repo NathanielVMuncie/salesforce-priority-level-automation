@@ -17,7 +17,7 @@
 | `Customer_Note__c` | Customer Note | Text Area (255) | Make.com | ✅ Both |
 | `Priority_Level__c` | Priority Level | Picklist (Restricted) | Flow | ✅ Both |
 | `Qualified__c` | Qualified | Checkbox (default: True) | Flow | ✅ Both |
-| `Lead_Score__c` | Lead Score | Number | Flow | ⚠️ Description only — Help Text missing |
+| `Lead_Score__c` | Lead Score | Number | Flow | ✅ Both |
 | `Region__c` | Region | Formula (Text) | Formula | ✅ Both |
 | `Qualification_Status__c` | Qualification Status | Formula (Text) | Formula | ✅ Both |
 | `Lead_Created__c` | Lead Created | Formula (Date) | Formula | ✅ Both |
@@ -28,8 +28,8 @@
 
 | Category | Count |
 |---|---|
-| Fields with Description + Help Text | 9 of 10 |
-| Fields missing Help Text | 1 (`Lead_Score__c`) |
+| Fields with Description + Help Text | 10 of 10 |
+| Fields missing Help Text | 0 |
 | Fields missing Description | 0 |
 
 ---
@@ -46,5 +46,4 @@
 
 ## Notes
 
-- `Lead_Score__c` — Help Text (`<inlineHelpText>`) is absent from local XML. Description is present. Do not fabricate — update in org and re-retrieve to resolve.
 - `Lead_Created_c__c` — A duplicate-named artifact exists in local source with no description or help text. This is not one of the 10 confirmed fields. Review and delete if confirmed stale.
