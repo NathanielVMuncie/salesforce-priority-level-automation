@@ -1,4 +1,4 @@
-# Salesforce Lead Priority Level Automation
+# Salesforce Case Study: Lead — Priority Level Automation
 
 Salesforce Lead scoring and priority automation — Wix → Make.com → Salesforce | Flow, Assignment Rules, and escalation logic
 
@@ -131,79 +131,74 @@ salesforce-priority-level-automation/
 
 ## Documentation Index
 
-### Phase 0 — Overview ✅ Complete
-- `docs/01-overview/project-overview.md` ✅
-- `docs/01-overview/scope-boundaries.md` ✅
-- `docs/01-overview/business-objective.md` ✅
-- `docs/02-architecture/system-architecture.md` ✅
+### Overview
+- `docs/01-overview/project-overview.md`
+- `docs/01-overview/scope-boundaries.md`
+- `docs/01-overview/business-objective.md`
+- `docs/01-overview/devorg-constraints-and-ownership-model.md`
+- `docs/02-architecture/system-architecture.md`
 
-### Integration Layer ✅ Complete
-- `docs/05-integration/wix-form-and-submission-automation.md` ✅
-- `docs/05-integration/key-value-mapping.md` ✅
-- `docs/05-integration/make-com-integration.md` ✅
-- `docs/05-integration/salesforce-integration.md` ✅
+### Integration
+- `docs/05-integration/wix-form-and-submission-automation.md`
+- `docs/05-integration/key-value-mapping.md`
+- `docs/05-integration/make-com-integration.md`
+- `docs/05-integration/salesforce-integration.md`
 
-### Phase 1 — Data Model ✅ Complete
+### Data Model
 - `docs/03-data-model/field-inventory.md`
 - `docs/03-data-model/field-dictionary.md`
 - `metadata/custom-fields/lead-fields.md`
 - `metadata/formulas/priority-formulas.md`
 
-### Phase 2 — Core Logic ✅ Complete
-- `docs/03-data-model/scoring-model.md` ✅
-- `docs/03-data-model/priority-thresholds.md` ✅
-- `docs/04-automation-logic/gatekeeper-logic.md` ✅
-- `docs/04-automation-logic/scoring-logic.md` ✅
-- `docs/04-automation-logic/priority-assignment-logic.md` ✅
+### Core Logic
+- `docs/03-data-model/scoring-model.md`
+- `docs/03-data-model/priority-thresholds.md`
+- `docs/04-automation-logic/gatekeeper-logic.md`
+- `docs/04-automation-logic/scoring-logic.md`
+- `docs/04-automation-logic/priority-assignment-logic.md`
 
-### Phase 3 — Routing, Escalation, and Ownership ✅ Complete
-- `docs/04-automation-logic/escalation-logic.md` ✅
-- `docs/04-automation-logic/territorial-routing-logic.md` ✅
-- `docs/02-architecture/routing-architecture.md` ✅
-- `docs/02-architecture/automation-architecture.md` ✅
-- `docs/02-architecture/state-management-risk.md` ✅
-- `metadata/queues/queue-definitions.md` ✅
-- `metadata/assignment-rules/lead-assignment-rules.md` ✅
-- `metadata/flow-notes/lead-scoring-and-priority-assignment.md` ✅
+### Routing, Escalation, and Ownership
+- `docs/04-automation-logic/escalation-logic.md`
+- `docs/04-automation-logic/territorial-routing-logic.md`
+- `docs/02-architecture/routing-architecture.md`
+- `docs/02-architecture/automation-architecture.md`
+- `docs/02-architecture/state-management-risk.md`
+- `metadata/queues/queue-definitions.md`
+- `metadata/assignment-rules/lead-assignment-rules.md`
+- `metadata/flow-notes/lead-scoring-and-priority-assignment.md`
 
-### Phase 4 — Integration Boundary ✅ Complete
-- `docs/05-integration/wix-make-salesforce-ingestion.md` ✅
-- `docs/05-integration/source-to-lead-mapping.md` ✅
-- `docs/05-integration/middleware-responsibilities.md` ✅
+### Integration Boundary
+- `docs/05-integration/wix-make-salesforce-ingestion.md`
+- `docs/05-integration/source-to-lead-mapping.md`
+- `docs/05-integration/middleware-responsibilities.md`
 
-### Phase 5 — Validation and Evidence ✅ Complete
-- `docs/06-build-assets/configuration-checklist.md` ✅
-- `docs/06-build-assets/test-scenarios.md` ✅
-- `docs/06-build-assets/uat-matrix.md` ✅
-- `docs/06-build-assets/screenshots-index.md` ✅
-- `test-artifacts/scenario-inputs/lead-test-records.md` ✅
-- `test-artifacts/expected-results/priority-routing-results.md` ✅
-- `test-artifacts/uat-evidence/uat-session-log.md` ✅
-- `test-artifacts/defect-log/defects.md` ✅
+### Validation and Evidence
+- `docs/06-build-assets/configuration-checklist.md`
+- `docs/06-build-assets/test-scenarios.md`
+- `docs/06-build-assets/uat-matrix.md`
+- `docs/06-build-assets/screenshots-index.md`
+- `test-artifacts/scenario-inputs/lead-test-records.md`
+- `test-artifacts/expected-results/priority-routing-results.md`
+- `test-artifacts/uat-evidence/uat-session-log.md`
+- `test-artifacts/defect-log/defects.md`
 
-### Phase 6 — Portfolio ✅ Complete
-- `docs/07-portfolio/case-study-summary.md` ✅
-- `docs/07-portfolio/recruiter-readable-summary.md` ✅
-- `docs/07-portfolio/design-insight-gatekeeper-sequencing.md` ✅
-- `portfolio/resume-bullets/resume-bullets.md` ✅
-- `portfolio/recruiter-summary/recruiter-summary.md` ✅
-- `portfolio/website-copy/project-page-copy.md` ✅
-
----
-
-## Status
-
-✅ Phase 0 — Complete and committed
-✅ Integration Layer — Complete and committed
-✅ Phase 1 — Data Model — Complete and committed
-✅ Phase 2 — Core Logic — Complete and committed
-✅ Phase 3 — Routing, Escalation, and Ownership — Complete and committed
-✅ Phase 4 — Integration Boundary — Complete and committed
-✅ Phase 5 — Validation and Evidence — Complete and committed
-✅ Phase 6 — Portfolio — Complete and committed
-
-The system is fully operational. Documentation is produced from a live Salesforce Developer Edition org with confirmed working automation, routing, escalation, and integration across Wix, Make.com, and Salesforce.
+### Portfolio
+- `docs/07-portfolio/case-study-summary.md`
+- `docs/07-portfolio/recruiter-readable-summary.md`
+- `docs/07-portfolio/design-insight-gatekeeper-sequencing.md`
+- `portfolio/resume-bullets/resume-bullets.md`
+- `portfolio/recruiter-summary/recruiter-summary.md`
+- `portfolio/website-copy/project-page-copy.md`
 
 ---
 
-*Built by Nathaniel Muncie — Salesforce Administrator candidate*
+## Document Status
+
+| Attribute | Value |
+|---|---|
+| File Path | `README.md` |
+| Date Produced | TBD |
+
+---
+
+*Salesforce Case Study: Lead - Priority Level Automation / Built by Nathaniel V. Muncie*
