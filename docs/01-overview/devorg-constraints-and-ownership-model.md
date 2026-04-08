@@ -1,7 +1,7 @@
-# DevOrg Constraints and Ownership Model
+ # DevOrg Constraints and Ownership Model
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Phase 0 — Root Control Plane
+Céleste Vineyards | Overview — DevOrg Constraints
 
 ---
 
@@ -35,7 +35,7 @@ Regional Queue members — `East_Coast_Region` (Inava), `West_Coast_Region` (jch
 
 ### 3.2 Alternate Configuration
 
-Occasionally the Standard User license is reassigned to a non-Queue named sales representative to demonstrate what named user ownership looks like on a Lead Record in practice. In this configuration, that representative holds the license and can appear as a Lead owner in place of Sophia Delgado.
+Occasionally the Standard User license is reassigned to a non-Queue named sales representative to demonstrate what named user ownership looks like on a Lead Record in practice. In this configuration, that representative holds the license and appears as a Lead owner in place of Sophia Delgado.
 
 This alternate configuration does not change the automation logic, routing rules, or scoring behavior. It is a demonstration-only state used to illustrate production-equivalent ownership appearance.
 
