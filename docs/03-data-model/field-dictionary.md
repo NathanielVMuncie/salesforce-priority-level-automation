@@ -1,233 +1,267 @@
-# Lead Custom Field Dictionary — Phase 1
+# Field Dictionary
 
-**Project:** Céleste Vineyards: Sales Cloud Pipeline
-**Phase:** 1 — Lead Priority Level Automation
-**Object:** Lead
-**Source:** XML retrieved from `celeste-dev` org
-
-All values below are sourced directly from field XML metadata. Nothing fabricated.
+**Salesforce Case Study: Lead — Priority Level Automation**
+Céleste Vineyards | Data Model
 
 ---
 
-## Make.com Input Fields
+## 1. Document Purpose
 
-### `Business_Type__c` — Business Type
+This document provides field-level definitions for every field active in the Céleste Vineyards Lead Priority Level Automation pipeline. Each entry records the field label, API name, data type, who writes it, its default value if applicable, and its precise role in the pipeline.
+
+The authoritative source for all custom field metadata is the live SFDX retrieval from org `celeste-vineyards-dev-ed.develop.my.salesforce.com` at API v66.0.
+
+---
+
+## 2. Standard Fields
+
+### FirstName
 
 | Attribute | Value |
 |---|---|
+| Field Label | First Name |
+| API Name | `FirstName` |
+| Field Type | Text |
+| Written By | Make.com — passed from Wix payload key `first_name` |
+| Default | None |
+| Pipeline Role | Identity — prospect's given name |
+
+---
+
+### LastName
+
+| Attribute | Value |
+|---|---|
+| Field Label | Last Name |
+| API Name | `LastName` |
+| Field Type | Text |
+| Written By | Make.com — passed from Wix payload key `last_name` |
+| Default | None |
+| Pipeline Role | Identity — prospect's surname. Required field on Lead Object |
+
+---
+
+### Company
+
+| Attribute | Value |
+|---|---|
+| Field Label | Company |
+| API Name | `Company` |
+| Field Type | Text |
+| Written By | Make.com — passed from Wix payload key `company` |
+| Default | None |
+| Pipeline Role | Identity — prospect's organization name. May be null on the non-qualified path; the Wix conditional rule hides this field when `Personal/Individual (Non-Business)` is selected |
+
+---
+
+### Email
+
+| Attribute | Value |
+|---|---|
+| Field Label | Email |
+| API Name | `Email` |
+| Field Type | Email |
+| Written By | Make.com — passed from Wix payload key `email` |
+| Default | None |
+| Pipeline Role | Contact — primary prospect email address |
+
+---
+
+### Phone
+
+| Attribute | Value |
+|---|---|
+| Field Label | Phone |
+| API Name | `Phone` |
+| Field Type | Phone |
+| Written By | Make.com — normalized from Wix payload key `phone` |
+| Default | None |
+| Transformation | Regex formula applied in Make.com: `replace(trim(2. data: phone); /^\+?1?(\d{3})(\d{3})(\d{4})$/; +1 ($1) $2-$3)` |
+| Output Format | `+1 (xxx) xxx-xxxx` |
+| Pipeline Role | Contact — prospect phone number, standardized format |
+
+---
+
+### State
+
+| Attribute | Value |
+|---|---|
+| Field Label | State/Province |
+| API Name | `State` |
+| Field Type | Text |
+| Written By | Make.com — passed from Wix payload key `state` |
+| Default | None |
+| Pipeline Role | Routing — evaluated by the Lead Assignment Rule to determine regional Queue assignment. Also input to the `Region__c` formula field |
+
+---
+
+### LeadSource
+
+| Attribute | Value |
+|---|---|
+| Field Label | Lead Source |
+| API Name | `LeadSource` |
+| Field Type | Picklist |
+| Written By | Make.com — hardcoded in both Module 12 and Module 13 |
+| Hardcoded Value | `Céleste Vineyards - Business Inquiry Form` |
+| Default | None |
+| Pipeline Role | Flow entry condition. The After-Save Flow fires only on Lead Records where `LeadSource` equals this exact value. Records created through any other mechanism do not trigger the automation |
+
+---
+
+### OwnerId
+
+| Attribute | Value |
+|---|---|
+| Field Label | Owner ID |
+| API Name | `OwnerId` |
+| Field Type | Lookup (User or Queue) |
+| Written By | Assignment Rule (Queue assignment at Record creation) — then Flow Update Records element (escalation override for Priority Level High) |
+| Default | None |
+| Pipeline Role | Routing — final owner of the Lead Record. For Priority Level High Leads, overridden to Sophia Delgado's User ID by the Flow escalation logic. For Priority Level Medium and Low Leads, retains the regional Queue ID set by the Assignment Rule. For Not Qualified Leads, retains the regional Queue ID — the Flow exits before Update Records |
+
+---
+
+## 3. Custom Fields
+
+### Business_Type__c
+
+| Attribute | Value |
+|---|---|
+| Field Label | Business Type |
 | API Name | `Business_Type__c` |
-| Label | Business Type |
-| Type | Picklist |
-| Written By | Make.com |
-| Required | No |
-
-**Description:**
-Primary B2B gatekeeper and scoring input. Originates from LeadSource Céleste Vineyards - Business Inquiry Form. 'Personal/Individual' selections trigger frontend disqualification. Valid business types contribute point values to varTotalScore for Priority_Level__c calculation.
-
-**Help Text:**
-Identifies organizational category. Originates from LeadSource Céleste Vineyards - Business Inquiry Form. 'Personal/Individual' selections are disqualified per B2B model requirements. Valid entries contribute to automated Priority_Level__c.
-
-**Picklist Values:**
-- Specialty Gourmet Grocer
-- Upscale Restaurant
-- High-End Wine Store
-- Catering & Event Company
-- Premium Wine Distributor
-- Personal/Individual (Non-Business)
+| Field Type | Picklist |
+| Written By | Make.com — passed from Wix payload key `business_type` |
+| Default | None |
+| Pipeline Role | Dual purpose. First: gatekeeper input — if value is `Personal/Individual (Non-Business)`, the Gatekeeper Fail outcome fires and the Flow exits. Second: scoring dimension 1 — all other qualified values contribute 1–5 points to `varTotalScore`. Also the input field for `Qualification_Status__c` formula resolution |
+| Picklist Values | Premium Wine Distributor (5 pts), High-End Wine Store (4 pts), Upscale Restaurant (3 pts), Specialty Gourmet Grocer (2 pts), Catering & Event Company (1 pt), Personal/Individual (Non-Business) (disqualifies), Not Applicable (Module 13 placeholder) |
 
 ---
 
-### `Role__c` — Role
+### Role__c
 
 | Attribute | Value |
 |---|---|
+| Field Label | Role |
 | API Name | `Role__c` |
-| Label | Role |
-| Type | Picklist |
-| Written By | Make.com |
-| Required | No |
-
-**Description:**
-Captures purchasing authority and organizational position. Originates from LeadSource Céleste Vineyards - Business Inquiry Form. Primary input for Priority_Level__c calculation logic and Lead scoring.
-
-**Help Text:**
-Indicate Lead's purchasing authority or position. Originates from LeadSource Céleste Vineyards - Business Inquiry Form. This value determines the automated Priority_Level__c calculation.
-
-**Picklist Values:**
-- Owner
-- Purchasing Manager
-- General Manager
-- Sales Manager
-- Event Coordinator
+| Field Type | Picklist |
+| Written By | Make.com — passed from Wix payload key `role` (qualified path) or hardcoded as `Not Applicable` (Module 13 — non-qualified path) |
+| Default | None |
+| Pipeline Role | Scoring dimension 2 — contributes 1–5 points to `varTotalScore` via the `Determine Role Score` Decision element. Not evaluated on the non-qualified path |
+| Picklist Values | Owner (5 pts), Purchasing Manager (4 pts), General Manager (3 pts), Sales Manager (2 pts), Event Coordinator (1 pt), Not Applicable (placeholder) |
 
 ---
 
-### `Purchasing_Timeline__c` — Purchasing Timeline
+### Purchasing_Timeline__c
 
 | Attribute | Value |
 |---|---|
+| Field Label | Purchasing Timeline |
 | API Name | `Purchasing_Timeline__c` |
-| Label | Purchasing Timeline |
-| Type | Picklist |
-| Written By | Make.com |
-| Required | No |
-
-**Description:**
-Captures the Lead's expected procurement window. Originates from LeadSource Céleste Vineyards - Business Inquiry Form. Primary input for Priority_Level__c calculation logic and Lead scoring.
-
-**Help Text:**
-Indicate Lead's expected procurement window. Originates from LeadSource Céleste Vineyards - Business Inquiry Form. This value determines the automated Priority_Level__c calculation and Lead scoring.
-
-**Picklist Values:**
-- Immediate Need (Contracting)
-- Short-Term (Within 30 Days)
-- Evaluating Vendors (Next 90 Days)
-- Budget Planning (Future Quarter)
-- Information Gathering
-- Not Applicable
+| Field Type | Picklist |
+| Written By | Make.com — passed from Wix payload key `purchasing_timeline` (qualified path) or hardcoded as `Not Applicable` (Module 13 — non-qualified path) |
+| Default | None |
+| Pipeline Role | Scoring dimension 3 — contributes 1–5 points to `varTotalScore` via the `Determine Purchasing Timeline Score` Decision element. Not evaluated on the non-qualified path |
+| Picklist Values | Immediate Need (Contracting) (5 pts), Short-Term / Within 30 Days (4 pts), Evaluating Vendors (Next 90 Days) (3 pts), Budget Planning (Future Quarter) (2 pts), Information Gathering (1 pt), Not Applicable (placeholder) |
 
 ---
 
-### `Customer_Note__c` — Customer Note
+### Priority_Level__c
 
 | Attribute | Value |
 |---|---|
-| API Name | `Customer_Note__c` |
-| Label | Customer Note |
-| Type | Text Area (255) |
-| Written By | Make.com |
-| Required | No |
-
-**Description:**
-Long text field capturing Lead-specific questions and unique inquiries. Originates at the base of LeadSource Céleste Vineyards - Business Inquiry Form. Provides unstructured context to supplement automated Priority_Level__c scoring.
-
-**Help Text:**
-Long text field for unique Lead questions and specific case inquiries. Originates from the Céleste Vineyards - Business Inquiry Form.
-
----
-
-## Flow-Written Fields
-
-### `Priority_Level__c` — Priority Level
-
-| Attribute | Value |
-|---|---|
+| Field Label | Priority Level |
 | API Name | `Priority_Level__c` |
-| Label | Priority Level |
-| Type | Picklist (Restricted) |
-| Written By | Flow (`Lead_Scoring_and_Priority_Level_Assignment`) |
-| Required | No |
-
-**Description:**
-Reflects the point sum (varTotalScore) from LeadSource Céleste Vineyards - Business Inquiry Form. Lead Scoring and Priority Automation flow assigns Levels (High ≥ 12, Medium ≥ 8, Low < 8). High Priority escalated to National Sales Director.
-
-**Help Text:**
-Calculated via varTotalScore from the Céleste Vineyards - Business Inquiry Form. Defines Priority Level: High (≥ 12), Medium (≥ 8), or Low (< 8). High Priority triggers escalation to the National Sales Director.
-
-**Picklist Values:**
-- High
-- Medium
-- Low
-- Disqualified
-- Not Applicable
-
-**Scoring Thresholds:**
-
-| Level | Threshold |
-|---|---|
-| High | varTotalScore ≥ 12 |
-| Medium | varTotalScore ≥ 8 |
-| Low | varTotalScore < 8 |
-| Maximum possible score | 15 |
+| Field Type | Picklist |
+| Written By | Flow Update Records element — qualified path only. Make.com Module 13 writes `Not Applicable` on the non-qualified path before Record creation |
+| Default | None |
+| Pipeline Role | Priority output — the final assigned Priority Level for the Lead Record. Written from `varPriorityLevel` by the single Update Records element |
+| Picklist Values | High (`varTotalScore` ≥ 12), Medium (`varTotalScore` ≥ 8), Low (default outcome), Not Applicable (Module 13 placeholder) |
 
 ---
 
-### `Qualified__c` — Qualified
+### Lead_Score__c
 
 | Attribute | Value |
 |---|---|
-| API Name | `Qualified__c` |
-| Label | Qualified |
-| Type | Checkbox (default: True) |
-| Written By | Flow (`Lead_Scoring_and_Priority_Level_Assignment`) |
-| Required | No |
-
-**Description:**
-Authoritative qualification flag used by automation to indicate whether the lead meets baseline B2B eligibility criteria for sales engagement.
-
-**Help Text:**
-Checked = Lead qualifies as a valid business prospect. Unchecked = Lead is disqualified from sales qualification logic.
-
----
-
-### `Lead_Score__c` — Lead Score
-
-| Attribute | Value |
-|---|---|
+| Field Label | Lead Score |
 | API Name | `Lead_Score__c` |
-| Label | Lead Score |
-| Type | Number |
-| Written By | Flow (`Lead_Scoring_and_Priority_Level_Assignment`) |
-| Required | No |
-
-**Description:**
-Lead score determining priority status.
-
-**Help Text:**
-Numerical sum of points (varTotalScore) from the Céleste Vineyards - Business Inquiry Form. Determines the automated Priority_Level__c based on Role__c, Purchasing_Timeline__c, and Business_Type__c.
+| Field Type | Number |
+| Written By | Flow Update Records element — qualified path only |
+| Default | None |
+| Pipeline Role | Composite score output — the numeric sum of all three dimension scores. Written from `varTotalScore` by the single Update Records element. Range: 3–15 for qualified Leads. Not written on the Not Qualified path |
 
 ---
 
-## Formula Fields
-
-### `Region__c` — Region
+### Qualified__c
 
 | Attribute | Value |
 |---|---|
-| API Name | `Region__c` |
-| Label | Region |
-| Type | Formula (Text) |
-| Written By | Formula (read-only) |
-| Required | No |
-
-**Description:**
-Identifies Lead geographic assignment (West Coast, East Coast, Central) based on State. Primary driver for Lead Assignment Rules Céleste - Regional Sales Representatives and Queue distribution for Céleste Vineyards Pipeline.
-
-**Help Text:**
-Identifies Lead geographic assignment (West Coast, East Coast, Central) based on State. Primary driver for Lead Assignment Rules Céleste - Regional Sales Representatives and Queue distribution for Céleste Vineyards Pipeline.
+| Field Label | Qualified |
+| API Name | `Qualified__c` |
+| Field Type | Checkbox |
+| Written By | Flow Update Records element — qualified path only |
+| Field Default | True (Checked) — set in Object Manager |
+| Pipeline Role | Qualification state storage. Field default of True ensures all Records begin as qualified. The Flow writes this field explicitly on the qualified path via Update Records. On the Not Qualified path, the Flow exits before Update Records — the field retains the True default. `Qualification_Status__c` does not read from this field — it reads from `Business_Type__c` directly |
+| Defect History | D-01 — field default was initially unset (False). Corrected to True in Object Manager during UAT |
 
 ---
 
-### `Qualification_Status__c` — Qualification Status
+### Qualification_Status__c
 
 | Attribute | Value |
 |---|---|
+| Field Label | Qualification Status |
 | API Name | `Qualification_Status__c` |
-| Label | Qualification Status |
-| Type | Formula (Text) |
-| Written By | Formula (read-only) |
-| Required | No |
-
-**Description:**
-Visual formula field derived from Qualified__c. Displays a qualification indicator for sales users based on the lead's current qualification state.
-
-**Help Text:**
-Visual qualification indicator. ✅ = Qualified for sales engagement. ❌ = Disqualified based on lead intake criteria.
+| Field Type | Formula (Text) |
+| Written By | Self-resolving — evaluates at read time |
+| Formula | `IF(ISPICKVAL(Business_Type__c, "Personal/Individual (Non-Business)"), "❌ Not Qualified", "✅ Qualified")` |
+| Reads From | `Business_Type__c` via `ISPICKVAL` |
+| Default | None — formula field |
+| Pipeline Role | Display field — renders the Lead's qualification state as a human-readable indicator on the Record. Resolves correctly on all Records regardless of Flow execution path |
+| Display Values | `✅ Qualified` (all qualified Business Type values) / `❌ Not Qualified` (`Personal/Individual (Non-Business)`) |
+| Design Note | Formula reads from `Business_Type__c`, not from `Qualified__c`. This ensures the display is accurate on Not Qualified Records even though the Flow exits before writing `Qualified__c` to False on that path |
 
 ---
 
-### `Lead_Created__c` — Lead Created
+### Customer_Note__c
 
 | Attribute | Value |
 |---|---|
+| Field Label | Customer Note |
+| API Name | `Customer_Note__c` |
+| Field Type | Text Area |
+| Written By | Make.com — passed from Wix payload key `customer_note` |
+| Default | None |
+| Pipeline Role | Prospect-submitted free text. Optional field — may be null. Not evaluated by any scoring or routing logic |
+
+---
+
+### Region__c
+
+| Attribute | Value |
+|---|---|
+| Field Label | Region |
+| API Name | `Region__c` |
+| Field Type | Formula (Text) |
+| Written By | Self-resolving — evaluates at read time from `State` via CASE statement |
+| Default | None — formula field |
+| Pipeline Role | Territorial classification — derives the Lead's geographic region from `State/Province`. Populated on all Records regardless of qualification status or Priority Level. Preserved on Priority Level High Records even after Flow escalation overrides `OwnerId` to Sophia Delgado. Used for regional pipeline reporting |
+| Possible Values | `East Coast`, `West Coast`, `Central` |
+
+---
+
+### Lead_Created__c
+
+| Attribute | Value |
+|---|---|
+| Field Label | Lead Created |
 | API Name | `Lead_Created__c` |
-| Label | Lead Created |
-| Type | Formula (Date) |
-| Written By | Formula (read-only) |
-| Required | No |
+| Field Type | Formula (Date) |
+| Written By | Self-resolving — evaluates at read time from `CreatedDate` |
+| Default | None — formula field |
+| Pipeline Role | Audit timestamp — records the date the Lead Record was created in Salesforce |
 
-**Description:**
-Date-only formula field derived from the standard Lead CreatedDate field. Used to display and report on record creation as a date without time.
+---
 
-**Help Text:**
-Displays the date this lead was created. This is a formula field based on the standard CreatedDate field and does not include time.
+*Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*
