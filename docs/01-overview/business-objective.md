@@ -1,7 +1,7 @@
 # Business Objective
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards
+Céleste Vineyards | Overview
 
 ---
 
@@ -17,9 +17,9 @@ Céleste Vineyards is a B2B winery operating in the premium wine distribution ma
 
 Prior to this system, every inbound Lead required manual review to determine three things:
 
-- Whether the Lead represented a viable B2B prospect
+- Whether the Lead represented a viable B2B contact
 - How urgently the Lead should be contacted
-- Which Regional Sales Manage will be Owner of Lead
+- Which sales representative should receive the assignment
 
 This manual triage process created three structural failures:
 
@@ -27,7 +27,7 @@ This manual triage process created three structural failures:
 
 **Failure 2 — Lead routing was inconsistent.** Assignment depended on individual judgment rather than documented criteria. Different representatives applied different standards. The same Lead profile could receive different treatment on different days.
 
-**Failure 3 — No Lead entered the pipeline with a standardized priority designation.** Without a consistent priority structure, queue management was unreliable and pipeline forecasting was impossible.
+**Failure 3 — No Lead entered the pipeline with a standardized priority designation.** Without a consistent priority structure, Queue management was unreliable and pipeline forecasting was impossible.
 
 ---
 
@@ -38,9 +38,9 @@ Eliminate manual Lead triage by automatically scoring and prioritizing every inb
 The system must ensure that:
 
 - Every Lead that meets minimum B2B qualification criteria receives a numeric priority score and a designated Priority Level — High, Medium, or Low — upon creation
-- High priority Leads are routed immediately to the National Sales Director without manual intervention
-- Medium and Low priority Leads are routed to the designated Regional Sales Managers based on geographic territory
-- Leads that do not meet minimum qualification criteria are flagged, excluded from scoring, and routed appropriately without disrupting the qualified pipeline
+- Priority Level High Leads are routed immediately to the National Sales Director without manual intervention
+- Priority Level Medium and Low Leads are routed to the correct regional sales Queue based on geographic territory
+- Leads that do not meet minimum qualification criteria are flagged, excluded from scoring, and routed to the correct regional Queue without disrupting the qualified pipeline
 - The scoring and routing logic is deterministic, auditable, and reproducible under any volume of simultaneous Lead creation
 
 ---
@@ -54,31 +54,19 @@ The system is considered successful when the following conditions are met for ev
 | Qualification gate | Non-business Leads are identified and excluded from scoring before any priority logic executes |
 | Scoring completeness | Every qualified Lead receives a numeric score across all three dimensions — Business Type, Role, and Purchasing Timeline |
 | Priority assignment | Every qualified Lead receives a Priority Level of High, Medium, or Low based on fixed thresholds |
-| Routing accuracy | Every Lead is assigned to the correct Owner or Queue based on Priority Level and State/Province |
-| Escalation | Every High Priority Lead is assigned directly to the National Sales Director |
-| No manual intervention | The complete automation — from form submission to owner assignment — requires zero manual steps |
-| Determinism | Identical input values always produce identical output — Priority Level, Owner, and Qualification Status |
+| Routing accuracy | Every Lead is assigned to the correct owner or Queue based on Priority Level and State/Province |
+| Escalation | Every Priority Level High Lead is assigned directly to the National Sales Director |
+| No manual intervention | The complete pipeline — from form submission to owner assignment — requires zero manual steps |
+| Determinism | Identical input values always produce identical output — Priority Level, owner, and Qualification Status |
 
 ---
 
 ## 5. Scope Constraint
 
-This objective applies exclusively to inbound Leads originating from the Céleste Vineyards inquiry form hosted on Wix. The system does not apply to Leads created through any other mechanism — manual entry, data import, or other integrations. This constraint is enforced at the Salesforce layer by the `LeadSource` entry condition on the Record-Triggered Flow. Only Lead Records where `LeadSource` equals `Céleste Vineyards - Business Inquiry Form` trigger the Flow.
-
-Within this pipeline, a qualification gate operates across three layers. At the Wix form layer, selecting a non-business contact type hides scoring-relevant fields and surfaces a disqualification message. At the Make.com layer, the Router directs non-qualified submissions to a separate module that writes placeholder values before the Record is created. At the Salesforce Flow layer, the Gatekeeper Decision element is the first element the Flow encounters — all Lead Records enter the Flow, but non-qualified Records are flagged and exit immediately before any scoring logic executes.
+This objective applies exclusively to inbound Leads originating from the Céleste Vineyards Wix inquiry form. The system does not apply to Leads created through any other mechanism. The `LeadSource` entry condition on the Record-Triggered Flow enforces this constraint at the Salesforce layer.
 
 Post-conversion activity — Opportunities, Accounts, Contacts — is outside the scope of this objective. The system terminates at Lead owner assignment.
 
 ---
 
-## 6. Document Status
-
-| Attribute | Value |
-|---|---|
-| File Path | `docs/01-overview/business-objective.md` |
-| Date Produced | TBD
-
----
-
-*Salesforce Case Study: Lead - Priority Level Automation   
-Built by Nathaniel V. Muncie*
+*Salesforce Case Study: Lead - Priority Level Automation | Built by Nathaniel V. Muncie*
