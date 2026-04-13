@@ -44,8 +44,8 @@ These custom fields were created on the Lead Object to support the scoring model
 | Qualified | `Qualified__c` | Checkbox | Field default (True) / Flow Update Records element | Qualification state — written by Flow on qualified path |
 | Qualification Status | `Qualification_Status__c` | Formula (Text) | Self-resolving — reads `Business_Type__c` via ISPICKVAL | Display field — renders qualification state |
 | Customer Note | `Customer_Note__c` | Text Area | Make.com (payload — optional) | Prospect-submitted free text |
-| Region | `Region__c` | Formula (Text) | Formula — derives from `State` via CASE statement | Territorial classification — populated for all Records |
-| Lead Created | `Lead_Created__c` | Date/Time | System — auto-populated at Record creation | Audit timestamp |
+| Region | `Region__c` | Formula (Text) | Self-resolving — derives from `State` via CASE statement | Territorial classification — populated for all Records |
+| Lead Created | `Lead_Created__c` | Formula (Date) | Self-resolving — derives from `CreatedDate` | Audit timestamp |
 
 ---
 
@@ -80,7 +80,7 @@ These custom fields were created on the Lead Object to support the scoring model
 | `Qualification_Status__c` | | | | | ✅ Formula — self-resolving |
 | `Customer_Note__c` | ✅ Collected | ✅ Written | | | |
 | `Region__c` | | | | | ✅ Formula — self-resolving |
-| `Lead_Created__c` | | | | | ✅ System auto-populated |
+| `Lead_Created__c` | | | | | ✅ Formula — self-resolving |
 
 ---
 
@@ -133,7 +133,7 @@ IF(
 | Picklist Value | Scoring Role | Points |
 |---|---|---|
 | Immediate Need (Contracting) | Highest urgency | 5 |
-| Short-Term (Within 30 Days) | High urgency | 4 |
+| Short-Term / Within 30 Days | High urgency | 4 |
 | Evaluating Vendors (Next 90 Days) | Mid urgency | 3 |
 | Budget Planning (Future Quarter) | Low urgency | 2 |
 | Information Gathering | No urgency | 1 |
@@ -141,4 +141,4 @@ IF(
 
 ---
 
-*Salesforce Case Study — Céleste Vineyards | Built by Nathaniel Muncie*
+*Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*
