@@ -1,7 +1,7 @@
 # Automation Architecture
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards
+**Céleste Vineyards | Architecture**
 
 ---
 
@@ -18,7 +18,6 @@ This document covers architecture — the segments, connections, and design deci
 | Attribute | Value |
 |---|---|
 | Flow Name | Lead Scoring and Priority Level Assignment |
-| Version | V7 |
 | API Name | `Lead_Scoring_and_Priority_Level_Assignment` |
 | Flow Type | Record-Triggered — After-Save |
 | Object | Lead |
@@ -73,7 +72,8 @@ Entry Condition Check
 │  Escalate High Priority to Sophia       │
 │  (Decision)                             │
 │                                         │
-│  High → varOwnerID = Sophia Delgado     │
+│  Priority Level High → varOwnerID =     │
+│                        Sophia Delgado   │
 │  Medium / Low → varOwnerID retained     │
 └─────────────────────────────────────────┘
         |
@@ -100,7 +100,7 @@ Entry Condition Check
 
 **Responsibility:** Determine whether the Lead Record meets minimum qualification criteria before any scoring logic executes.
 
-**Elements:** `Determine Business Type Score` (Decision), `Set Qualification State Disqualified` (Assignment)
+**Elements:** `Determine Business Type Score` (Decision), `Set_Qualification_State_Disqualified` (Assignment)
 
 The Qualification Gate is the first element in the Flow. It is implemented as a dual-purpose Decision element that simultaneously enforces the qualification gate and assigns the Business Type dimension score for qualified Leads. This design eliminates the need for a separate pre-screening element and keeps the gate and scoring logic in one auditable location.
 
@@ -140,7 +140,7 @@ At the conclusion of Segment 2, `varTotalScore` holds the complete composite sco
 
 **Responsibility:** Map the composite `varTotalScore` to a Priority Level and store it in `varPriorityLevel`.
 
-**Elements:** `Determine Priority Level` (Decision), `High` (Assignment), `Medium Priority` (Assignment), `Low` (Assignment)
+**Elements:** `Determine Priority Level` (Decision), `High` (Assignment), `Medium` (Assignment), `Low` (Assignment)
 
 The `Determine Priority Level` Decision evaluates `varTotalScore` against two fixed thresholds. Outcomes are evaluated in order — High first, then Medium, then Low as the Default Outcome. This ordering ensures a score of 12 always resolves to High before the Medium condition is evaluated.
 
@@ -162,7 +162,7 @@ All three Assignment elements converge at Segment 4.
 
 Segment 4 begins with the `Initialize OwnerId (Default)` Assignment element, which captures `{!$Record.OwnerId}` into `varOwnerID`. At this point in execution, the Lead Assignment Rule has already fired and the Record's OwnerId holds the regional Queue ID. This capture establishes the default ownership baseline.
 
-The `Escalate High Priority to Sophia` Decision then evaluates `varPriorityLevel`. If High, `varOwnerID` is overwritten with Sophia Delgado's User ID. If Medium or Low, `varOwnerID` retains the regional Queue value.
+The `Escalate High Priority to Sophia` Decision then evaluates `varPriorityLevel`. If Priority Level High, `varOwnerID` is overwritten with Sophia Delgado's User ID. If Priority Level Medium or Low, `varOwnerID` retains the regional Queue value.
 
 | Outcome | Condition | `varOwnerID` Result |
 |---|---|---|
@@ -204,7 +204,7 @@ Four variables carry state across segments. Each variable is initialized at Flow
 | `varTotalScore` | Number | 0 | Segment 2 Assignment elements | Accumulates weighted dimension scores |
 | `varPriorityLevel` | Text | — | Segment 3 Assignment elements | Stores the assigned Priority Level string |
 | `varOwnerID` | Text | — | Segment 4 Assignment elements | Stores the OwnerId to be written at DML |
-| `varQualified` | Boolean | True | Segment 1 (disqualified path only) | Flags qualification state for DML write |
+| `varQualified` | Boolean | True | Segment 1 — Not Qualified path only | Flags qualification state for DML write |
 
 ---
 
@@ -225,7 +225,7 @@ The Flow contains 27 elements across all five segments.
 | Decision elements | Decision | 5 |
 | Scoring Assignment elements | Assignment | 15 |
 | Priority Level Assignment elements | Assignment | 3 |
-| Gatekeeper disqualification Assignment | Assignment | 1 |
+| Not Qualified Assignment element | Assignment | 1 |
 | OwnerId Assignment elements | Assignment | 2 |
 | Update Records element | Update Records | 1 |
 | **Total** | | **27** |
@@ -243,15 +243,4 @@ The Single-DML pattern keeps this Flow well within governor limits under any vol
 
 ---
 
-## 9. Document Status
-
-| Attribute | Value |
-|---|---|
-| Status | Final |
-| File Path | docs/02-architecture/automation-architecture.md |
-| Date Produced | 2026-03-22 |
-| Next Document | docs/06-build-assets/test-scenarios.md |
-
----
-
-*Salesforce Case Study — Céleste Vineyards | Built by Nathaniel Muncie*
+*Salesforce Case Study: Lead - Priority Level Automation | Built by Nathaniel V. Muncie*
