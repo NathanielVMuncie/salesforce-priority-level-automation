@@ -1,7 +1,7 @@
 # Source to Lead Mapping
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards
+Céleste Vineyards | Integration
 
 ---
 
@@ -76,7 +76,7 @@ The following Fields are written exclusively by the After-Save Flow after Record
 | Qualified | `Qualified__c` | Flow Update Records element | Qualified Leads — confirms True |
 | Owner ID | `OwnerId` | Flow escalation logic | All qualified Leads |
 | Qualification Status | `Qualification_Status__c` | Formula Field — self-resolving | All Records |
-| Region | `Region__c` | Assignment Rule | All Records |
+| Region | `Region__c` | Formula Field — self-resolving | All Records |
 
 ---
 
@@ -105,15 +105,4 @@ The `LeadSource` Field is not sourced from the Wix payload. It is hardcoded in b
 
 ---
 
-## 8. Document Status
-
-| Attribute | Value |
-|---|---|
-| Status | Final |
-| File Path | docs/05-integration/source-to-lead-mapping.md |
-| Date Produced | 2026-03-23 |
-| Next Document | docs/05-integration/middleware-responsibilities.md |
-
----
-
-*Salesforce Case Study — Céleste Vineyards | Built by Nathaniel Muncie*
+*Salesforce Case Study: Lead - Priority Level Automation | Built by Nathaniel V. Muncie*
