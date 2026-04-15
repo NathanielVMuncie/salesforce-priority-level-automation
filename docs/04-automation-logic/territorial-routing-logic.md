@@ -1,7 +1,7 @@
 # Territorial Routing Logic
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards
+Céleste Vineyards | Routing, Escalation, and Ownership
 
 ---
 
@@ -28,7 +28,7 @@ Assignment Rule Evaluates State/Province
   |             |                       |
 Rule 1        Rule 2                  Rule 3
 East Coast    West Coast              Central
-Inava         jchen                   pdesa
+lnava         jchen                   pdesa
 (East_Coast_  (West_Coast_            (Central_
 Region)       Region)                 Region)
         |
@@ -65,7 +65,7 @@ After-Save Flow Fires
 | Attribute | Value |
 |---|---|
 | Rule Order | 1 |
-| Queue Label | Inava |
+| Queue Label | lnava |
 | Queue API Name | `East_Coast_Region` |
 | Condition | `State/Province` equals one of the East Coast state values |
 
@@ -182,7 +182,7 @@ Disqualified Leads are routed to the correct regional Queue by the Assignment Ru
 
 ## 7. Region__c Field
 
-The `Region__c` Field stores the regional classification of each Lead Record. It is written by the Assignment Rule and is not modified by the Flow under any circumstances — including High priority escalation.
+The `Region__c` Field stores the regional classification of each Lead Record. It is a Formula (Text) Field that resolves at read time from the `State/Province` Field via a CASE statement. It is not written by the Assignment Rule, the Flow, or Make.com under any circumstances.
 
 Sophia Delgado owns a High priority Lead Record, but `Region__c` correctly reflects the Lead's territory. Regional classification is preserved for pipeline reporting and visibility regardless of Record ownership.
 
@@ -190,33 +190,23 @@ Sophia Delgado owns a High priority Lead Record, but `Region__c` correctly refle
 
 ## 8. Developer Edition Org Context
 
-The Queue labels in this org — Inava, jchen, pdesa — are proof-of-concept placeholders representing regional sales representatives. In a production deployment each Queue would contain provisioned named users. The Assignment Rule logic, state-to-territory mappings, and Queue API names are production-equivalent and require no modification for deployment to a production org.
+The Queue labels in this org — lnava, jchen, pdesa — are proof-of-concept placeholders representing regional sales representatives. In a production deployment each Queue would contain provisioned named users. The Assignment Rule logic, state-to-territory mappings, and Queue API names are production-equivalent and require no modification for deployment to a production org.
 
 ---
 
 ## 9. Live Validation
 
-Three live Lead Records confirm territorial routing executed correctly across all three regions and all routing paths.
+Six live Lead Records confirm territorial routing executed correctly across all three regions and all routing paths.
 
 | Lead | State | Region | Queue Assigned | Priority Level | Final Owner |
 |---|---|---|---|---|---|
-| Richard Miranda | Connecticut | East Coast | East_Coast_Region (Inava) | Low | Inava |
-| Dylan Moss | Louisiana | Central | Central_Region (pdesa) | Not Applicable | pdesa |
-| Neil Thompson | Alaska | West Coast | West_Coast_Region (jchen) | High | Sophia Delgado (escalation override) |
+| Danielle Pruett | Virginia | East Coast | East_Coast_Region (lnava) | Not Applicable | lnava |
+| Marcus Bellard | Louisiana | Central | Central_Region (pdesa) | Not Applicable | pdesa |
+| Tamara Nguyen | Missouri | Central | Central_Region (pdesa) | Low | pdesa |
+| Jerome Castillo | New York | East Coast | East_Coast_Region (lnava) | Medium | lnava |
+| Vivienne Okafor | Georgia | East Coast | East_Coast_Region (lnava) | High | Sophia Delgado (escalation override) |
+| Kenji Watanabe | California | West Coast | West_Coast_Region (jchen) | High | Sophia Delgado (escalation override) |
 
 ---
 
-## 10. Document Status
-
-| Attribute | Value |
-|---|---|
-| Status | Final |
-| File Path | docs/04-automation-logic/territorial-routing-logic.md |
-| Date Produced | 2026-03-22 |
-| Next Document | docs/02-architecture/routing-architecture.md |
-
----
-Note: Regional ownership is implemented via Queue-based simulation due to Salesforce Developer Edition user-license constraints. See `docs/02-architecture/devorg-constraints-and-ownership-model.md`.
-
----
-*Salesforce Case Study — Céleste Vineyards | Built by Nathaniel Muncie*
+*Salesforce Case Study: Lead - Priority Level Automation | Built by Nathaniel V. Muncie*
