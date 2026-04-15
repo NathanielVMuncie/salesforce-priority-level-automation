@@ -1,7 +1,7 @@
 # Middleware Responsibilities
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards
+Céleste Vineyards | Integration
 
 ---
 
@@ -69,7 +69,7 @@ The following are explicitly outside Make.com's scope. These concerns are handle
 | Territorial routing | Salesforce Assignment Rule |
 | Queue assignment | Salesforce Assignment Rule |
 | `Qualified__c` Field write | Salesforce Flow / Field default |
-| `Region__c` Field write | Salesforce Assignment Rule |
+| `Region__c` Field resolution | Formula Field — self-resolving from `State/Province` |
 
 ---
 
@@ -101,15 +101,4 @@ The Make.com layer ensures the correct placeholder values are written before the
 
 ---
 
-## 7. Document Status
-
-| Attribute | Value |
-|---|---|
-| Status | Final |
-| File Path | docs/05-integration/middleware-responsibilities.md |
-| Date Produced | 2026-03-23 |
-| Next Document | docs/06-build-assets/configuration-checklist.md |
-
----
-
-*Salesforce Case Study — Céleste Vineyards | Built by Nathaniel Muncie*
+*Salesforce Case Study: Lead - Priority Level Automation | Built by Nathaniel V. Muncie*
