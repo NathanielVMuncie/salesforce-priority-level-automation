@@ -264,4 +264,14 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 
 ---
 
+## 4. Document Status
+
+| Attribute | Value |
+|---|---|
+| Status | Final |
+| File Path | `docs/03-data-model/field-dictionary.md` |
+| Date Produced | 2026-04-19 |
+
+---
+
 *Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*
