@@ -268,9 +268,8 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 
 | Attribute | Value |
 |---|---|
-| Status | Final |
+| Section | Data Model |
 | File Path | `docs/03-data-model/field-dictionary.md` |
-| Date Produced | 2026-04-19 |
 
 ---
 

@@ -128,9 +128,8 @@ Confirmed via Flow debug logs. All threshold conditions resolved correctly acros
 
 | Attribute | Value |
 |---|---|
-| Status | Final |
+| Section | Data Model |
 | File Path | `docs/03-data-model/priority-thresholds.md` |
-| Date Produced | 2026-04-19 |
 
 ---
 

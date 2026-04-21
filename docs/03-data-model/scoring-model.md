@@ -100,9 +100,8 @@ Lead scoring operates across three dimensions. Each dimension contributes 1–5 
 
 | Attribute | Value |
 |---|---|
-| Status | Final |
+| Section | Data Model |
 | File Path | `docs/03-data-model/scoring-model.md` |
-| Date Produced | 2026-04-19 |
 
 ---
 

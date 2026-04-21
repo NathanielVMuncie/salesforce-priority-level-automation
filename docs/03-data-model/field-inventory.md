@@ -145,9 +145,8 @@ IF(
 
 | Attribute | Value |
 |---|---|
-| Status | Final |
+| Section | Data Model |
 | File Path | `docs/03-data-model/field-inventory.md` |
-| Date Produced | 2026-04-19 |
 
 ---
 
