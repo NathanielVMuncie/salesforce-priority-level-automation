@@ -167,4 +167,13 @@ This system is fully operational. All automation logic, routing rules, and integ
 
 ---
 
-*Salesforce Case Study: Lead - Priority Level Automation | Built by Nathaniel V. Muncie*
+## 10. Document Status
+
+| Attribute | Value |
+|---|---|
+| Section | Overview |
+| File Path | `docs/01-overview/project-overview.md` |
+
+---
+
+*Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*

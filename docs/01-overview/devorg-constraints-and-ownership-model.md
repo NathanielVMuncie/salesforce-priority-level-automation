@@ -66,4 +66,13 @@ In a production deployment, the single license constraint is removed, each Queue
 
 ---
 
-*Salesforce Case Study: Lead - Priority Level Automation | Built by Nathaniel V. Muncie*
+## 5. Document Status
+
+| Attribute | Value |
+|---|---|
+| Section | Overview |
+| File Path | `docs/01-overview/devorg-constraints-and-ownership-model.md` |
+
+---
+
+*Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*

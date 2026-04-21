@@ -69,4 +69,13 @@ Post-conversion activity — Opportunities, Accounts, Contacts — is outside th
 
 ---
 
-*Salesforce Case Study: Lead - Priority Level Automation | Built by Nathaniel V. Muncie*
+## 6. Document Status
+
+| Attribute | Value |
+|---|---|
+| Section | Overview |
+| File Path | `docs/01-overview/business-objective.md` |
+
+---
+
+*Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*

@@ -107,4 +107,13 @@ the website                                                 Management
 
 ---
 
-*Salesforce Case Study: Lead - Priority Level Automation | Built by Nathaniel V. Muncie*
+## 6. Document Status
+
+| Attribute | Value |
+|---|---|
+| Section | Overview |
+| File Path | `docs/01-overview/scope-boundaries.md` |
+
+---
+
+*Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*

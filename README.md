@@ -87,8 +87,8 @@ Lead scoring operates across three dimensions. Each dimension contributes a weig
 | Priority Level | Score Condition |
 |---|---|
 | High | `varTotalScore` ≥ 12 |
-| Medium | `varTotalScore` ≥ 8 and < 12 |
-| Low | Default (≤ 7) |
+| Medium | `varTotalScore` ≥ 8 |
+| Low | Default (below 8) |
 
 ---
 
@@ -98,7 +98,6 @@ Lead scoring operates across three dimensions. Each dimension contributes a weig
 salesforce-priority-level-automation/
 ├── README.md
 ├── docs/
-│   ├── document-standards.md
 │   ├── 01-overview/
 │   ├── 02-architecture/
 │   ├── 03-data-model/
@@ -137,36 +136,38 @@ salesforce-priority-level-automation/
 - `docs/01-overview/scope-boundaries.md`
 - `docs/01-overview/business-objective.md`
 - `docs/01-overview/devorg-constraints-and-ownership-model.md`
-
-### Architecture
 - `docs/02-architecture/system-architecture.md`
-- `docs/02-architecture/automation-architecture.md`
-- `docs/02-architecture/routing-architecture.md`
-- `docs/02-architecture/state-management-risk.md`
-
-### Data Model
-- `docs/03-data-model/field-inventory.md`
-- `docs/03-data-model/field-dictionary.md`
-- `docs/03-data-model/scoring-model.md`
-- `docs/03-data-model/priority-thresholds.md`
-- `metadata/custom-fields/lead-fields.md`
-- `metadata/formulas/priority-formulas.md`
-
-### Automation Logic
-- `docs/04-automation-logic/gatekeeper-logic.md`
-- `docs/04-automation-logic/scoring-logic.md`
-- `docs/04-automation-logic/priority-assignment-logic.md`
-- `docs/04-automation-logic/escalation-logic.md`
-- `docs/04-automation-logic/territorial-routing-logic.md`
-- `metadata/queues/queue-definitions.md`
-- `metadata/assignment-rules/lead-assignment-rules.md`
-- `metadata/flow-notes/lead-scoring-and-priority-assignment.md`
 
 ### Integration
 - `docs/05-integration/wix-form-and-submission-automation.md`
 - `docs/05-integration/key-value-mapping.md`
 - `docs/05-integration/make-com-integration.md`
 - `docs/05-integration/salesforce-integration.md`
+
+### Data Model
+- `docs/03-data-model/field-inventory.md`
+- `docs/03-data-model/field-dictionary.md`
+- `metadata/custom-fields/lead-fields.md`
+- `metadata/formulas/priority-formulas.md`
+
+### Core Logic
+- `docs/03-data-model/scoring-model.md`
+- `docs/03-data-model/priority-thresholds.md`
+- `docs/04-automation-logic/gatekeeper-logic.md`
+- `docs/04-automation-logic/scoring-logic.md`
+- `docs/04-automation-logic/priority-assignment-logic.md`
+
+### Routing, Escalation, and Ownership
+- `docs/04-automation-logic/escalation-logic.md`
+- `docs/04-automation-logic/territorial-routing-logic.md`
+- `docs/02-architecture/routing-architecture.md`
+- `docs/02-architecture/automation-architecture.md`
+- `docs/02-architecture/state-management-risk.md`
+- `metadata/queues/queue-definitions.md`
+- `metadata/assignment-rules/lead-assignment-rules.md`
+- `metadata/flow-notes/lead-scoring-and-priority-assignment.md`
+
+### Integration Boundary
 - `docs/05-integration/wix-make-salesforce-ingestion.md`
 - `docs/05-integration/source-to-lead-mapping.md`
 - `docs/05-integration/middleware-responsibilities.md`
@@ -188,14 +189,6 @@ salesforce-priority-level-automation/
 - `portfolio/resume-bullets/resume-bullets.md`
 - `portfolio/recruiter-summary/recruiter-summary.md`
 - `portfolio/website-copy/project-page-copy.md`
-
----
-
-## Document Status
-
-| Attribute | Value |
-|---|---|
-| File Path | `README.md` |
 
 ---
 

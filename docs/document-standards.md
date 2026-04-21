@@ -9,7 +9,7 @@ Céleste Vineyards | Knowledge Bank
 
 This document defines the canonical format standards for every file in the Céleste Vineyards Lead Priority Level Automation repository. These rules are locked. No file is committed without satisfying all applicable rules. When a rule conflicts with a stylistic preference, the rule wins.
 
-`README.md` is the sole exception to the header standard. See Section 2.3.
+`README.md` is the sole exception to the header and Document Status standards. See Sections 2.3 and 4.3.
 
 ---
 
@@ -65,7 +65,7 @@ Files that serve multiple folders (e.g., `document-standards.md`) use `Knowledge
 [One-line subtitle]
 ```
 
-All other standards — footer, Document Status, backtick usage, em dash, terminology — apply to `README.md` without exception.
+All other standards — footer, backtick usage, em dash, terminology — apply to `README.md` without exception. Document Status does not apply — see Section 4.3.
 
 ---
 
@@ -133,17 +133,7 @@ These fields create maintenance burden and go stale. They are not permitted in a
 
 ### 4.3 README.md Document Status
 
-`README.md` uses the same two-field Document Status format:
-
-```markdown
-## Document Status
-
-| Attribute | Value |
-|---|---|
-| File Path | `README.md` |
-```
-
-`Section` is omitted — README has no category label.
+`README.md` does not contain a Document Status section. It is a GitHub-facing file and is not an indexed documentation artifact. No Document Status table of any kind appears in `README.md`.
 
 ---
 
@@ -200,6 +190,8 @@ Hyphen (`-`) must not substitute for em dash in the project name or footer. Anyw
 | Gatekeeper element | `Determine_Business_Type_Score` | "gatekeeper element", "gate" in isolation |
 | Escalation target | Sophia Delgado | "the National Sales Director" as a substitute for her name |
 | DevOrg constraint | "DevOrg constraint" | "limitation", "gap", "shortfall" |
+| Qualified Lead | ✅ Qualified | "qualified", "eligible", "valid" without visual indicator |
+| Not Qualified Lead | ❌ Not Qualified | "disqualified", "unqualified", "ineligible" without visual indicator |
 
 ### 7.2 Field References
 
@@ -207,6 +199,21 @@ When referencing a Salesforce field in body text, always use the API name in bac
 
 Correct: The `Priority_Level__c` picklist field stores the assigned Priority Level.
 Incorrect: The Priority Level field stores the assigned Priority Level.
+
+### 7.3 Salesforce Term Capitalization
+
+Salesforce Fields, Objects, and pipeline-specific terms must always be capitalized when referenced in prose.
+
+| Term | Required |
+|---|---|
+| Lead | Lead |
+| Queue | Queue |
+| Owner | Owner |
+| Agent | Agent |
+| Priority Level | Priority Level |
+| Qualification Status | Qualification Status |
+| Assignment Rule | Assignment Rule |
+| Flow | Flow |
 
 ---
 
@@ -222,6 +229,7 @@ These items must not appear in any committed file:
 - Missing middle initial `V.` in the author name
 - Missing accent on `Céleste`
 - Forward-looking language that is not yet true (e.g., "will be documented", "TBD", "pending")
+- ✅ Qualified or ❌ Not Qualified written without visual indicators
 
 ---
 
@@ -245,6 +253,7 @@ Before any file is committed to the repo, verify each item:
 **Document Status**
 - [ ] Section and File Path only — no prohibited fields
 - [ ] File path is repo-relative and in backticks
+- [ ] README.md — no Document Status section present
 
 **Body**
 - [ ] All field API names in backticks
@@ -252,6 +261,8 @@ Before any file is committed to the repo, verify each item:
 - [ ] All Flow variable names in backticks
 - [ ] All Flow element labels in backticks
 - [ ] All file paths in backticks
+- [ ] All Salesforce Fields, Objects, and pipeline terms capitalized
+- [ ] ✅ Qualified and ❌ Not Qualified include visual indicators
 - [ ] No `TBD` values anywhere in the file
 - [ ] No forward-looking language about content not yet written
 
