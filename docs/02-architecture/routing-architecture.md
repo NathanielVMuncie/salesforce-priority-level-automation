@@ -1,7 +1,7 @@
 # Routing Architecture
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards
+Céleste Vineyards | Architecture
 
 ---
 
@@ -150,11 +150,9 @@ All three routing paths — qualified Low, disqualified, and qualified High with
 
 | Attribute | Value |
 |---|---|
-| Status | Final |
-| File Path | docs/02-architecture/routing-architecture.md |
-| Date Produced | 2026-03-22 |
-| Next Document | docs/02-architecture/automation-architecture.md |
+| Section | Architecture |
+| File Path | `docs/02-architecture/routing-architecture.md` |
 
 ---
 
-*Salesforce Case Study — Céleste Vineyards | Built by Nathaniel Muncie*
+*Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*

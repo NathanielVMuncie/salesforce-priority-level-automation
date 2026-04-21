@@ -1,7 +1,7 @@
 # System Architecture
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards
+Céleste Vineyards | Architecture
 
 ---
 
@@ -182,11 +182,9 @@ Routing is handled by native Salesforce Assignment Rules, not by Flow-based Fiel
 
 | Attribute | Value |
 |---|---|
-| Status | Final |
-| File Path | docs/02-architecture/system-architecture.md |
-| Date Produced | 2026-03-19 |
-| Next Document | docs/03-data-model/field-inventory.md |
+| Section | Architecture |
+| File Path | `docs/02-architecture/system-architecture.md` |
 
 ---
 
-*Salesforce Case Study — Céleste Vineyards | Built by Nathaniel Muncie*
+*Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*

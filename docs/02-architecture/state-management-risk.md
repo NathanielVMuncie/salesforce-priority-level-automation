@@ -1,7 +1,7 @@
 # State Management Risk
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards
+Céleste Vineyards | Architecture
 
 ---
 
@@ -113,11 +113,9 @@ The escalation override is part of the same Flow interview as scoring and priori
 
 | Attribute | Value |
 |---|---|
-| Status | Final |
-| File Path | docs/02-architecture/state-management-risk.md |
-| Date Produced | 2026-03-23 |
-| Next Document | docs/05-integration/wix-make-salesforce-ingestion.md |
+| Section | Architecture |
+| File Path | `docs/02-architecture/state-management-risk.md` |
 
 ---
 
-*Salesforce Case Study — Céleste Vineyards | Built by Nathaniel Muncie*
+*Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*

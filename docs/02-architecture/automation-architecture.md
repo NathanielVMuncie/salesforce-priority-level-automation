@@ -1,7 +1,7 @@
 # Automation Architecture
 
 **Salesforce Case Study: Lead — Priority Level Automation**
-**Céleste Vineyards | Architecture**
+Céleste Vineyards | Architecture
 
 ---
 
@@ -243,4 +243,13 @@ The Single-DML pattern keeps this Flow well within governor limits under any vol
 
 ---
 
-*Salesforce Case Study: Lead - Priority Level Automation | Built by Nathaniel V. Muncie*
+## 9. Document Status
+
+| Attribute | Value |
+|---|---|
+| Section | Architecture |
+| File Path | `docs/02-architecture/automation-architecture.md` |
+
+---
+
+*Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*
