@@ -9,7 +9,9 @@ Céleste Vineyards | Architecture
 
 This document defines the automation architecture of the Céleste Vineyards Lead Priority Level Automation system. It establishes the structural design of the After-Save Record-Triggered Flow — how it is organized, what each segment is responsible for, how the segments connect, and why the architecture is designed the way it is.
 
-This document covers architecture — the segments, connections, and design decisions of the Flow as a whole. Element-level configuration details are documented in `lead-scoring-and-priority-assignment.md`. Logic-level documentation for individual components is in the automation logic documents.
+This document covers architecture — the segments, connections, and design decisions of the Flow as a whole. Element-level configuration details are in `docs/04-automation-logic/scoring-logic.md` and related automation logic documents.
+
+Every Lead Record that enters the Flow is a confirmed B2B submission. The qualification gate is enforced at the Wix form layer before any data is transmitted. No qualification logic, qualification fields, or disqualification paths exist in this Flow.
 
 ---
 
@@ -30,7 +32,7 @@ This document covers architecture — the segments, connections, and design deci
 
 ## 3. Automation Architecture Overview
 
-The Flow is organized into five sequential segments. Each segment has a defined responsibility and passes execution to the next segment only when its responsibility is complete. No segment executes before its predecessor and no segment is skipped for qualified Leads.
+The Flow is organized into four sequential segments. Each segment has a defined responsibility and passes execution to the next segment only when its responsibility is complete. No segment executes before its predecessor and no segment is skipped for any Lead that enters the Flow.
 
 ```
 Entry Condition Check
@@ -38,18 +40,9 @@ Entry Condition Check
         |
         ▼
 ┌─────────────────────────────────────────┐
-│  SEGMENT 1 — Qualification Gate         │
+│  SEGMENT 1 — Weighted Scoring           │
 │  Determine Business Type Score          │
-│  (Decision — Gatekeeper + BT Score)     │
-│                                         │
-│  Qualified ──────────────────────────►  │
-│  Not Qualified → Set varQualified=False │
-│                → End                    │
-└─────────────────────────────────────────┘
-        |
-        ▼
-┌─────────────────────────────────────────┐
-│  SEGMENT 2 — Weighted Scoring           │
+│  (Decision)                             │
 │  Determine Role Score (Decision)        │
 │  Determine Purchasing Timeline Score    │
 │  (Decision)                             │
@@ -59,7 +52,7 @@ Entry Condition Check
         |
         ▼
 ┌─────────────────────────────────────────┐
-│  SEGMENT 3 — Priority Assignment        │
+│  SEGMENT 2 — Priority Assignment        │
 │  Determine Priority Level (Decision)    │
 │                                         │
 │  High / Medium / Low → varPriorityLevel │
@@ -67,7 +60,7 @@ Entry Condition Check
         |
         ▼
 ┌─────────────────────────────────────────┐
-│  SEGMENT 4 — Escalation                 │
+│  SEGMENT 3 — Escalation                 │
 │  Initialize OwnerId (Default)           │
 │  Escalate High Priority to Sophia       │
 │  (Decision)                             │
@@ -79,13 +72,12 @@ Entry Condition Check
         |
         ▼
 ┌─────────────────────────────────────────┐
-│  SEGMENT 5 — Single DML Write           │
+│  SEGMENT 4 — Single DML Write           │
 │  Update Lead Priority and Score         │
 │  (Update Records)                       │
 │                                         │
-│  Writes: OwnerId, Priority_Level__c,    │
-│          Qualified__c                   │
-│  DML Count: 1 of 150                   │
+│  Writes: OwnerId, Priority_Level__c     │
+│  DML Count: 1 of 150                    │
 └─────────────────────────────────────────┘
         |
         ▼
@@ -96,47 +88,26 @@ Entry Condition Check
 
 ## 4. Segment Definitions
 
-### 4.1 Segment 1 — Qualification Gate
+### 4.1 Segment 1 — Weighted Scoring
 
-**Responsibility:** Determine whether the Lead Record meets minimum qualification criteria before any scoring logic executes.
+**Responsibility:** Calculate the composite Priority Score by evaluating all three scoring dimensions and accumulating their point values into `varTotalScore`.
 
-**Elements:** `Determine Business Type Score` (Decision), `Set_Qualification_State_Disqualified` (Assignment)
+**Elements:** `Determine Business Type Score` (Decision), `Determine Role Score` (Decision), `Determine Purchasing Timeline Score` (Decision), and their corresponding Assignment elements
 
-The Qualification Gate is the first element in the Flow. It is implemented as a dual-purpose Decision element that simultaneously enforces the qualification gate and assigns the Business Type dimension score for qualified Leads. This design eliminates the need for a separate pre-screening element and keeps the gate and scoring logic in one auditable location.
+Segment 1 executes three Decision elements in sequence. Each evaluates one scoring Field, routes to a dedicated Assignment element that adds the dimension score to `varTotalScore` using the Add operator, and converges before the next Decision element executes. At the conclusion of Segment 1, `varTotalScore` holds the complete composite score — the sum of all three dimension scores.
 
-**Qualified path:** One of five qualified Business Type outcomes executes, the Business Type score is added to `varTotalScore`, and execution passes to Segment 2.
-
-**Not Qualified path:** The Gatekeeper Fail outcome executes, `varQualified` is set to False, and the Flow routes directly to End. No further elements execute.
-
-| Outcome | Condition | Result |
-|---|---|---|
-| Qualified | `Business_Type__c` matches any qualified picklist value | Business Type score added — continues to Segment 2 |
-| Not Qualified | `Business_Type__c` Equals `Personal/Individual (Non-Business)` | `varQualified` = False — Flow exits at End |
-
----
-
-### 4.2 Segment 2 — Weighted Scoring
-
-**Responsibility:** Calculate the composite Priority Score by evaluating the Role and Purchasing Timeline dimensions and accumulating their point values into `varTotalScore`.
-
-**Elements:** `Determine Role Score` (Decision), `Determine Purchasing Timeline Score` (Decision), and their corresponding Assignment elements
-
-Segment 2 begins after the Business Type score is already in `varTotalScore` from Segment 1. Two additional Decision elements evaluate `Role__c` and `Purchasing_Timeline__c` respectively. Each Decision routes to a dedicated Assignment element that adds the dimension score to `varTotalScore` using the Add operator, preserving the running total.
-
-At the conclusion of Segment 2, `varTotalScore` holds the complete composite score — the sum of all three dimension scores.
+Every Lead that enters the Flow carries valid B2B values in `Business_Type__c`, `Role__c`, and `Purchasing_Timeline__c`. The Default Outcome in each Decision element is a defensive backstop only — it cannot fire under normal pipeline conditions.
 
 | Dimension | Field | Decision Element | Score Range |
 |---|---|---|---|
-| Business Type | `Business_Type__c` | Determine Business Type Score | 1–5 |
-| Role | `Role__c` | Determine Role Score | 1–5 |
-| Purchasing Timeline | `Purchasing_Timeline__c` | Determine Purchasing Timeline Score | 1–5 |
+| Business Type | `Business_Type__c` | `Determine Business Type Score` | 1–5 |
+| Role | `Role__c` | `Determine Role Score` | 1–5 |
+| Purchasing Timeline | `Purchasing_Timeline__c` | `Determine Purchasing Timeline Score` | 1–5 |
 | **Total** | | | **3–15** |
-
-**Default Outcome behavior:** If `Role__c` or `Purchasing_Timeline__c` contains a value not matching any defined outcome, the Default Outcome routes the Flow to End. This prevents a partial score from being assigned a Priority Level and written to the Lead Record.
 
 ---
 
-### 4.3 Segment 3 — Priority Assignment
+### 4.2 Segment 2 — Priority Assignment
 
 **Responsibility:** Map the composite `varTotalScore` to a Priority Level and store it in `varPriorityLevel`.
 
@@ -150,42 +121,41 @@ The `Determine Priority Level` Decision evaluates `varTotalScore` against two fi
 | Medium | `varTotalScore` ≥ 8 | `Medium` |
 | Low | Default Outcome | `Low` |
 
-All three Assignment elements converge at Segment 4.
+All three Assignment elements converge at Segment 3.
 
 ---
 
-### 4.4 Segment 4 — Escalation
+### 4.3 Segment 3 — Escalation
 
-**Responsibility:** Determine the final OwnerId value by either retaining the regional Queue OwnerId or overriding it with Sophia Delgado's User ID based on Priority Level.
+**Responsibility:** Determine the final `OwnerId` value by either retaining the regional Queue `OwnerId` or overriding it with Sophia Delgado's User ID based on Priority Level.
 
 **Elements:** `Initialize OwnerId (Default)` (Assignment), `Escalate High Priority to Sophia` (Decision), `Set OwnerId to Sophia` (Assignment)
 
-Segment 4 begins with the `Initialize OwnerId (Default)` Assignment element, which captures `{!$Record.OwnerId}` into `varOwnerID`. At this point in execution, the Lead Assignment Rule has already fired and the Record's OwnerId holds the regional Queue ID. This capture establishes the default ownership baseline.
+Segment 3 begins with the `Initialize OwnerId (Default)` Assignment element, which captures `{!$Record.OwnerId}` into `varOwnerID`. At this point in execution, the Lead Assignment Rule has already fired and the Record's `OwnerId` holds the regional Queue ID. This capture establishes the default ownership baseline.
 
 The `Escalate High Priority to Sophia` Decision then evaluates `varPriorityLevel`. If Priority Level High, `varOwnerID` is overwritten with Sophia Delgado's User ID. If Priority Level Medium or Low, `varOwnerID` retains the regional Queue value.
 
 | Outcome | Condition | `varOwnerID` Result |
 |---|---|---|
 | Is High | `varPriorityLevel` Equals `High` | Sophia Delgado User ID |
-| Is Not High | Default Outcome | Regional Queue OwnerId retained |
+| Is Not High | Default Outcome | Regional Queue `OwnerId` retained |
 
-Both paths converge at Segment 5.
+Both paths converge at Segment 4.
 
 ---
 
-### 4.5 Segment 5 — Single DML Write
+### 4.4 Segment 4 — Single DML Write
 
 **Responsibility:** Commit all automation results to the Lead Record in a single DML operation.
 
 **Elements:** `Update Lead Priority and Score` (Update Records)
 
-`Update Lead Priority and Score` is the sole Update Records element in the Flow. It executes after all five segments of logic are complete and writes three Fields to the triggering Lead Record simultaneously.
+`Update Lead Priority and Score` is the sole Update Records element in the Flow. It executes after all four segments of logic are complete and writes two Fields to the triggering Lead Record simultaneously.
 
 | Field Label | API Name | Source Variable |
 |---|---|---|
 | Owner ID | `OwnerId` | `{!varOwnerID}` |
 | Priority Level | `Priority_Level__c` | `{!varPriorityLevel}` |
-| Qualified | `Qualified__c` | `{!varQualified}` |
 
 **Condition Requirements:** None — Always Update Record.
 
@@ -197,14 +167,13 @@ Consolidating all writes into a single Update Records element prevents recursive
 
 ## 5. Flow Variables
 
-Four variables carry state across segments. Each variable is initialized at Flow start and written by the appropriate segment.
+Three variables carry state across segments. Each variable is initialized at Flow start and written by the appropriate segment.
 
 | Variable | Data Type | Default | Written By | Purpose |
 |---|---|---|---|---|
-| `varTotalScore` | Number | 0 | Segment 2 Assignment elements | Accumulates weighted dimension scores |
-| `varPriorityLevel` | Text | — | Segment 3 Assignment elements | Stores the assigned Priority Level string |
-| `varOwnerID` | Text | — | Segment 4 Assignment elements | Stores the OwnerId to be written at DML |
-| `varQualified` | Boolean | True | Segment 1 — Not Qualified path only | Flags qualification state for DML write |
+| `varTotalScore` | Number | 0 | Segment 1 Assignment elements | Accumulates weighted dimension scores |
+| `varPriorityLevel` | Text | — | Segment 2 Assignment elements | Stores the assigned Priority Level string |
+| `varOwnerID` | Text | — | Segment 3 Assignment elements | Stores the OwnerId to be written at DML |
 
 ---
 
@@ -218,17 +187,16 @@ This entry condition ensures the automation is scoped to the Wix inquiry form pi
 
 ## 7. Element Count
 
-The Flow contains 27 elements across all five segments.
+The Flow contains 24 elements across all four segments.
 
 | Category | Element Type | Count |
 |---|---|---|
-| Decision elements | Decision | 5 |
+| Decision elements | Decision | 4 |
 | Scoring Assignment elements | Assignment | 15 |
 | Priority Level Assignment elements | Assignment | 3 |
-| Not Qualified Assignment element | Assignment | 1 |
-| OwnerId Assignment elements | Assignment | 2 |
+| `OwnerId` Assignment elements | Assignment | 2 |
 | Update Records element | Update Records | 1 |
-| **Total** | | **27** |
+| **Total** | | **25** |
 
 ---
 
