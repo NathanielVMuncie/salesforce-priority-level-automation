@@ -14,7 +14,7 @@ The primary objectives were:
 - **Priority Determination:** Assign a Priority Level to every Lead at creation based on a weighted scoring model reflecting potential business value.
 - **Territorial Routing:** Assign each Lead to the correct regional Queue based on geographic territory using Salesforce Assignment Rules.
 - **Escalation Control:** Automatically route Priority Level High Leads to the National Sales Director without manual intervention.
-- **Zero-Touch Processing:** Ensure all qualification, scoring, and routing decisions are handled automatically from form submission through owner assignment.
+- **Zero-Touch Processing:** Ensure all scoring and routing decisions are handled automatically from form submission through owner assignment.
 
 Without this system, high-value Leads risked being overlooked, routing was inconsistent, and no standardized Priority Level existed at the point of entry. This architecture enforces immediate scoring, prioritization, and ownership assignment for every B2B Lead.
 
@@ -22,16 +22,19 @@ Without this system, high-value Leads risked being overlooked, routing was incon
 
 ## How the System Works
 
-The automation operates as a linear pipeline across three layers. Each layer owns a distinct responsibility. No layer duplicates the work of another.
+The automation operates as a linear pipeline. The qualification gate is the outermost boundary — it is not a pipeline layer, it is the wall that determines whether a prospect enters the pipeline at all. Everything downstream of the gate operates on confirmed B2B submissions only.
 
 ```
-Wix Form (Qualification Gate)
+Wix Form — Qualification Gate
         |
-        | B2B submission only — non-business path locks form, nothing transmits
+        | Personal/Individual (Non-Business) selected:
+        | form collapses, no submission possible, pipeline never reached
+        |
+        | B2B selection: form active, prospect submits
         ▼
 Make.com (Middleware)
         |
-        | Normalizes payload, maps fields, creates Lead Record via Salesforce API
+        | Normalizes payload, maps Fields, creates Lead Record via Salesforce API
         ▼
 Salesforce Lead Record Created
         |
@@ -58,7 +61,7 @@ Priority Level Medium / Low → Regional Queue retained
         |
         ▼
 Single DML Write
-OwnerId + Priority_Level__c + Lead_Score__c committed to Lead Record
+OwnerId + Priority_Level__c committed to Lead Record
         |
         ▼
 Lead owned — pipeline complete
@@ -68,9 +71,9 @@ Lead owned — pipeline complete
 
 ## Qualification Gate — Wix Form
 
-The Wix inquiry form is the qualification gate for the entire pipeline. It is the first layer of the automation and the only place where non-business contacts are identified and blocked.
+The Wix inquiry form is the qualification gate for the entire system. It is not a pipeline layer — it is the structural boundary that determines whether a prospect enters the pipeline at all.
 
-When a prospect selects `Personal/Individual (Non-Business)` from the Business Type field, the form transforms: all remaining fields are hidden and the form becomes unsubmittable. No payload is transmitted to Make.com. No Lead Record is created in Salesforce. The contact never enters the pipeline.
+When a prospect selects `Personal/Individual (Non-Business)` from the Business Type field, the form immediately transforms: all remaining fields collapse and the form becomes unsubmittable. The Wix Automation that would transmit the payload to Make.com is triggered only by form submission — because no submission occurs, no Wix Automation fires, no payload is generated, and no data reaches Make.com or Salesforce. The prospect exits entirely at the Wix layer.
 
 Every Lead Record that exists in Salesforce originated from a B2B submission. No qualification logic, qualification fields, or disqualification paths exist anywhere in the Salesforce layer — they are not needed.
 
@@ -80,8 +83,8 @@ Every Lead Record that exists in Salesforce originated from a B2B submission. No
 
 | Layer | Technology | Responsibility |
 |---|---|---|
-| Qualification Gate | Wix | Form-level B2B gate — blocks non-business submissions before transmission |
-| Middleware | Make.com | Payload normalization, field mapping, Salesforce API ingestion |
+| Qualification Gate | Wix | Form-level B2B gate — blocks non-business submissions before any data transmits |
+| Middleware | Make.com | Payload normalization, Field mapping, Salesforce API ingestion |
 | CRM | Salesforce Sales Cloud | Scoring, priority assignment, escalation, routing |
 | Automation | Record-Triggered After-Save Flow | Weighted scoring + priority assignment + escalation override |
 | Routing | Lead Assignment Rules + Queues | Territory-based owner assignment |
@@ -90,7 +93,7 @@ Every Lead Record that exists in Salesforce originated from a B2B submission. No
 
 ## Scoring Model
 
-Every Lead that reaches Salesforce is scored across three dimensions. Each dimension contributes 1–5 points to `Lead_Score__c`. The composite score determines `Priority_Level__c`.
+Every Lead that reaches Salesforce is scored across three dimensions. Each dimension contributes 1–5 points to `varTotalScore`. The composite score determines `Priority_Level__c`.
 
 ### Business Type (`Business_Type__c`)
 
@@ -126,8 +129,8 @@ Every Lead that reaches Salesforce is scored across three dimensions. Each dimen
 
 | Priority Level | Condition | Score Range |
 |---|---|---|
-| High | `Lead_Score__c` ≥ 12 | 12–15 |
-| Medium | `Lead_Score__c` ≥ 8 | 8–11 |
+| High | `varTotalScore` ≥ 12 | 12–15 |
+| Medium | `varTotalScore` ≥ 8 | 8–11 |
 | Low | Default | 3–7 |
 
 ---
@@ -158,10 +161,10 @@ The `Region__c` Formula Field preserves the correct territorial classification o
 
 | Principle | Description |
 |---|---|
-| Gate at the Source | Non-business contacts are blocked at the Wix form. Nothing worthless enters the pipeline. |
+| Gate at the Source | Non-business contacts are blocked at the Wix form before any data is transmitted. The gate is the wall — nothing that does not belong enters the pipeline. |
 | Single-DML Pattern | All custom Field writes occur in one Flow Update Records element. No recursive triggers. Governor limit exposure is contained and predictable. |
-| Separation of Concerns | Each layer owns exactly one responsibility. Wix qualifies. Make.com ingests. Salesforce scores, prioritizes, and routes. No layer duplicates another. |
-| Deterministic Output | Identical input values always produce identical output — Priority Level, Owner, and Score. No subjective assessment. |
+| Separation of Concerns | Each layer owns exactly one responsibility. Wix enforces the gate. Make.com ingests. Salesforce scores, prioritizes, and routes. No layer duplicates another. |
+| Deterministic Output | Identical input values always produce identical output — Priority Level and Owner. No subjective assessment. |
 | Bulk-Safe Design | Flow logic handles batch Lead creation without violating Salesforce governor limits. |
 
 ---
@@ -197,7 +200,7 @@ The `Region__c` Formula Field preserves the correct territorial classification o
 |---|---|---|
 | `varTotalScore` | Number | Accumulates weighted dimension scores (3–15) |
 | `varPriorityLevel` | Text | Stores assigned Priority Level string |
-| `varOwnerID` | Text | Stores OwnerId for final DML write |
+| `varOwnerID` | Text | Stores `OwnerId` for final DML write |
 
 ---
 
@@ -238,6 +241,7 @@ salesforce-priority-level-automation/
 │   │   └── scope-boundaries.md
 │   ├── 02-architecture/
 │   │   ├── automation-architecture.md
+│   │   ├── gatekeeper-logic.md
 │   │   ├── routing-architecture.md
 │   │   ├── state-management-risk.md
 │   │   └── system-architecture.md
@@ -247,7 +251,6 @@ salesforce-priority-level-automation/
 │   │   ├── priority-thresholds.md
 │   │   └── scoring-model.md
 │   ├── 04-automation-logic/
-│   │   ├── gatekeeper-logic.md
 │   │   ├── scoring-logic.md
 │   │   ├── scoring-matrix.md
 │   │   └── territorial-routing-logic.md
@@ -309,7 +312,7 @@ salesforce-priority-level-automation/
 
 - Fully implemented and operational in a Salesforce Developer Edition Org
 - Integrated end-to-end: Wix → Make.com → Salesforce
-- Six canonical Lead Records validate all paths — Priority Level Low, Medium, and High with escalation across all three regional territories
+- Four canonical Lead Records validate all paths — Priority Level Low, Medium, and High with escalation across all three regional territories
 - Documentation produced via reverse documentation from the live system
 
 ---
