@@ -262,7 +262,6 @@ Before any file is committed to the repo, verify each item:
 - [ ] All Flow element labels in backticks
 - [ ] All file paths in backticks
 - [ ] All Salesforce Fields, Objects, and pipeline terms capitalized
-- [ ] ✅ Qualified and ❌ Not Qualified include visual indicators
 - [ ] No `TBD` values anywhere in the file
 - [ ] No forward-looking language about content not yet written
 
