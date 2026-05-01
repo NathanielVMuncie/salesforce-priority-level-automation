@@ -1,0 +1,42 @@
+# Notes
+
+## License Management and Appropriation
+
+### Standard Salesforce and Standard Platform Licenses
+We are limited to a total of 5 licenses:
+
+- 2 Standard Salesforce User
+
+- 3 Standard Platform User
+
+Standard Salesforce User License (often called "Full" or "Salesforce" license): 
+Grants access to standard CRM objects (Accounts, Contacts, Opportunities, Cases, Leads, etc.), custom objects, reports, dashboards, and most platform features. Used for sales, service, and full CRM roles.
+
+Standard Platform User License (officially "Salesforce Platform" license): 
+Grants access to custom objects, core standard objects (Accounts, Contacts, Documents), reports, and dashboards, but excludes standard sales/service objects like Opportunities, Leads, Cases, and Campaigns. Designed for users of custom-built apps who don't need full CRM functionality.
+
+
+### License Limit
+
+
+- 2 tandard with one permanently assigned to the System Administrator and the other by a designated user ("User X"), who cycles it among four non‑System Admin users.
+
+- 3 Standard Platform User licenses are distributed among the remaining agents.
+
+
+### License Allocation Process
+Whenever the shared Standard User license is moved from one non‑System Admin user to another, the two users involved in the swap must follow this process:
+
+
+Deactivate both users
+
+Switch the license assignment.
+
+Reactivate both users.
+
+This prevents exceeding the license limit.
+
+Critical Step – Disable Salesforce CRM Content Checkbox
+(found under Setup).
+
+If you leave it checked, the Developer Org will search for any remaining available licenses. Because an inactive user is already holding the third Standard Platform User license, no licenses will be found, and the system will not allow the user to be activated.
