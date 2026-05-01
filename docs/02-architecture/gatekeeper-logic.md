@@ -11,6 +11,8 @@ This document defines the qualification gate enforced on the Céleste Vineyards 
 
 The gatekeeper is architectural — it is the outermost wall of the system. It is not automation logic, it is not integration logic, and it has no connection to any external platform. It operates entirely within the Wix inquiry form before any submission occurs, before any Wix Automation fires, and before any data reaches Make.com or Salesforce. No downstream system has any awareness of or responsibility for this gate.
 
+No qualification fields, qualification variables, or qualification logic exist anywhere in the Salesforce org or the Make.com scenario. Every Lead Record that exists in Salesforce is a confirmed B2B submission by definition.
+
 ---
 
 ## 2. Architectural Position
@@ -92,9 +94,24 @@ This message is display-only. It does not generate any record, log any event, or
 
 ---
 
-## 4. Outcome Paths
+## 4. Downstream System State
 
-### 4.1 Non-Business Path — Personal/Individual (Non-Business)
+Because the gatekeeper operates entirely within Wix, no downstream system contains any record, variable, field, or logic related to non-business contacts or qualification status.
+
+| System | Qualification Logic Present | Notes |
+|---|---|---|
+| Wix | Yes — gate enforced at form layer | Self-contained — no external communication required |
+| Make.com | No | Single-stream linear pipeline — no router, no qualification path |
+| Salesforce — Flow | No | No qualification fields, variables, or decision elements |
+| Salesforce — Lead Object | No | No qualification fields of any kind exist on the object |
+
+Every Lead Record in Salesforce entered through the B2B path. The presence of a Lead Record in the org is itself confirmation of B2B qualification.
+
+---
+
+## 5. Outcome Paths
+
+### 5.1 Non-Business Path — Personal/Individual (Non-Business)
 
 | Attribute | Value |
 |---|---|
@@ -107,7 +124,7 @@ This message is display-only. It does not generate any record, log any event, or
 | Flow triggered | No |
 | Pipeline outcome | Prospect exits at the Wix layer — no record of any kind is created anywhere |
 
-### 4.2 B2B Path — Any Qualified Business Type
+### 5.2 B2B Path — Any B2B Business Type
 
 | Attribute | Value |
 |---|---|
@@ -116,27 +133,9 @@ This message is display-only. It does not generate any record, log any event, or
 | Wix Automation fires | Yes — `POST_To_Make_Inlet_Webhook` fires on submission |
 | Payload generated | Yes — on form submission |
 | Make.com reached | Yes — payload received by Custom Webhook module |
-| Salesforce Lead Record created | Yes — via Make.com `Module 12` |
-| Flow triggered | Yes — After-Save Flow fires on Lead Record creation |
+| Salesforce Lead Record created | Yes — via Make.com Salesforce Create Record module |
+| Flow triggered | Yes — After-Save Flow `Lead_Scoring_and_Priority_Level_Assignment` fires on Lead Record creation |
 | Pipeline outcome | Lead enters the scoring and routing pipeline |
-
----
-
-## 5. Illustrative Scenarios
-
-The following scenarios illustrate the gate's behavior across both outcome paths. These are representative examples — not UAT records.
-
-### Scenario A — Non-Business Contact, Pipeline Not Reached
-
-A prospect visits the Céleste Vineyards inquiry form and selects `Personal/Individual (Non-Business)` from the Business Type dropdown. The form immediately collapses. The gate message renders. No other fields are visible. The form cannot be submitted. No Wix Automation fires. No payload is generated. No Lead Record is created in Salesforce. The prospect reads the message and leaves the page.
-
-### Scenario B — B2B Contact, High Priority Lead Enters Pipeline
-
-A prospect representing a Premium Wine Distributor visits the form and selects `Premium Wine Distributor`. All fields remain visible. The prospect selects `Owner` for Role and `Short-Term (Within 30 Days)` for Purchasing Timeline, enters contact information, and submits the form. The Wix Automation fires. The payload reaches Make.com. A Lead Record is created in Salesforce. The Flow executes — assigning a Priority Level of High and routing the Lead to Sophia Delgado.
-
-### Scenario C — B2B Contact, Low Priority Lead Enters Pipeline
-
-A prospect representing a Catering & Event Company visits the form and selects `Catering & Event Company`. All fields remain visible. The prospect selects `Event Coordinator` for Role and `Information Gathering` for Purchasing Timeline, enters contact information, and submits the form. The Wix Automation fires. The payload reaches Make.com. A Lead Record is created in Salesforce. The Flow executes — assigning a Priority Level of Low and routing the Lead to the correct regional Queue.
 
 ---
 
