@@ -7,69 +7,90 @@ Céleste Vineyards | Overview
 
 ## 1. Document Purpose
 
-This document is the authoritative reference for all users, roles, titles, profiles, licenses, and Queue assignments active in the Céleste Vineyards Salesforce Developer Edition org. All documentation, Flow architecture decisions, and routing logic in this repository must reference this document for user and role details.
+This document is the authoritative reference for all users, roles, titles, profiles, licenses, and Assignment Rule ownership active in the Céleste Vineyards Salesforce Developer Edition org. All documentation, Flow architecture decisions, and routing logic in this repository must reference this document for user and role details.
 
 ---
 
 ## 2. User Roster
 
-| Full Name | Alias | Username | Title | Role | Profile | Assigned Queue |
-|---|---|---|---|---|---|---|
-| Navarro, Luis | `lnava` | luis.navarro@celestevineyards.com | Sales Representative | Sales Representative, East Coast Region | Sales Representative | `East_Coast_Region` |
-| Chen, Jordan | `jchen` | jordan.chen@celestevineyards.com | Sales Representative | Sales Representative, West Coast Region | Sales Representative | `West_Coast_Region` |
-| Desai, Priya | `pdesa` | priya.desai@celestevineyards.com | Sales Representative | Sales Representative, Central Region | Sales Representative | `Central_Region` |
-| Delgado, Sophia | `sdelg` | sophia.delgado@celestevineyards.com | National Sales Director | National Sales Director | National Sales Director | — |
-| Muncie, Nathaniel V. | `nmunc` | nathaniel.muncie@celestevineyards.com | System Administrator | System Administrator | System Administrator | — |
+| Full Name | Alias | Username | Title | Role | Profile |
+|---|---|---|---|---|---|
+| Navarro, Luis | `lnava` | `luis.navarro@celestevineyards.com` | Sales Representative | Sales Representative, East Coast Region | Sales Representative |
+| Chen, Jordan | `jchen` | `jordan.chen@celestevineyards.com` | Sales Representative | Sales Representative, West Coast Region | Sales Representative |
+| Desai, Priya | `pdesa` | `priya.desai@celestevineyards.com` | Sales Representative | Sales Representative, Central Region | Sales Representative |
+| Delgado, Sophia | `sdelg` | `sophia.delgado@celestevineyards.com` | National Sales Director | National Sales Director | National Sales Director |
+| Muncie, Nathaniel V. | `nmunc` | `nathaniel.muncie@celestevineyards.com` | System Administrator | System Administrator | System Administrator |
 
 ---
 
 ## 3. License Model
 
-| License Type | Assigned To |
-|---|---|
-| Salesforce (Standard) | Rotates among Luis Navarro, Jordan Chen, Priya Desai, Sophia Delgado |
-| Salesforce Platform User | Rotates among Luis Navarro, Jordan Chen, Priya Desai, Sophia Delgado |
-| System Administrator | Nathaniel V. Muncie — permanent |
+The Developer Edition org provides 4 Salesforce Standard User licenses. Nathaniel V. Muncie holds 1 permanently as System Administrator. The remaining 3 licenses are distributed among the 4 sales users — Luis Navarro, Jordan Chen, Priya Desai, and Sophia Delgado — on a rotation basis.
 
-The Developer Edition org supports one active Standard User license. The Salesforce and Salesforce Platform User licenses cycle among the four sales users for demonstration and validation purposes. This is a DevOrg constraint — not a production configuration.
+| User | License Type | Notes |
+|---|---|---|
+| Nathaniel V. Muncie | Salesforce | Permanent — System Administrator |
+| Luis Navarro | Salesforce | Active when territorial Lead Records are being created or demonstrated |
+| Jordan Chen | Salesforce | Active when territorial Lead Records are being created or demonstrated |
+| Priya Desai | Salesforce | Active when territorial Lead Records are being created or demonstrated |
+| Sophia Delgado | Salesforce | Active when escalated High Priority Lead Records are being created or demonstrated |
+
+Because only 3 licenses are available to the 4 sales users simultaneously, the license rotates to ensure each user holds a valid Salesforce license at the point their owned Lead Records are created. Lead Records retain their assigned owner after the license rotates — the owner's name remains on the Record.
+
+The rotation sequence follows Lead creation order. Sophia Delgado requires the license first if escalated High Priority Leads are the first records created.
 
 ---
 
-## 4. Queue Assignments
+## 4. Profiles
 
-| Queue Label | Queue API Name | Assigned User | Territory |
+Two profiles support the sales user roster. Both are cloned from the standard Salesforce profiles and configured for Lead ownership.
+
+| Profile Name | Assigned To | Basis |
+|---|---|---|
+| `Sales Representative` | Luis Navarro, Jordan Chen, Priya Desai | Cloned from standard Sales User profile |
+| `National Sales Director` | Sophia Delgado | Cloned from standard Sales User profile — distinct title |
+
+Profile permissions are equivalent across both sales profiles. The distinction is title and role only — not object access or field-level security.
+
+---
+
+## 5. Assignment Rule Ownership
+
+The Lead Assignment Rule assigns Lead Records to named users or a Queue based on `State/Province`. The current live configuration reflects the active license state of each territorial representative.
+
+| Rule Order | Region | Assign To | Type | Notes |
+|---|---|---|---|---|
+| 2 | West Coast | Jordan Chen | Named User | Direct assignment — license active |
+| 3 | Central | `Central_Region` Queue | Queue | License-aware fallback — Priya Desai not yet fully provisioned for direct assignment |
+| 4 | East Coast | Luis Navarro | Named User | Direct assignment — license active |
+
+Named user assignment is the standard path. Queue assignment is the license-aware fallback for the scenario where the assigned territorial representative does not hold a valid license to own Lead Records directly. When Priya Desai's license is confirmed active, Rule 3 will be updated to assign directly to her — matching the pattern for Luis Navarro and Jordan Chen.
+
+---
+
+## 6. Queue
+
+One Queue is active in the org. It serves as the ownership fallback for the Central region.
+
+| Queue Label | Queue API Name | Territory | Purpose |
 |---|---|---|---|
-| East Coast Region | `East_Coast_Region` | Luis Navarro (`lnava`) | East Coast |
-| West Coast Region | `West_Coast_Region` | Jordan Chen (`jchen`) | West Coast |
-| Central Region | `Central_Region` | Priya Desai (`pdesa`) | Central |
+| Central Region | `Central_Region` | Central | License-aware ownership fallback for Central territorial Leads |
 
-Sophia Delgado holds no Queue assignment. She receives Priority Level High Lead Records via Flow escalation override — `OwnerId` is written directly to her User ID by the `Escalate OwnerId to Sophia` Assignment element in the `Lead_Scoring_and_Priority_Level_Assignment` Flow.
+`East_Coast_Region` and `West_Coast_Region` Queues are not active. East Coast and West Coast Leads are assigned directly to named users via the Assignment Rule.
 
 ---
 
-## 5. Queue Routing Behavior
-
-Each Sales Representative tends to their assigned regional Queue. When a Lead hits a Queue Routing path due to a data mismatch or unmatched value in the Flow, it lands in the correct territorial Queue with no Priority Level assigned. The Sales Representative responsible for that region tends to their Queue, manually identifies the issue, corrects it, and manually services the Lead.
-
-| Queue Routing Path | Destination Queue |
-|---|---|
-| `Queue Routing` — Tier 1 Default | Territorial Queue (`East_Coast_Region`, `West_Coast_Region`, or `Central_Region`) |
-| `Queue Routing 1` — Tier 2 Default | Territorial Queue (`East_Coast_Region`, `West_Coast_Region`, or `Central_Region`) |
-| `Queue Routing 2` — Tier 3 Default | Territorial Queue (`East_Coast_Region`, `West_Coast_Region`, or `Central_Region`) |
-
----
-
-## 6. Escalation Target
+## 7. Escalation Target
 
 | Role | User | Escalation Mechanism |
 |---|---|---|
-| National Sales Director | Sophia Delgado (`sdelg`) | Flow — `Escalate OwnerId to Sophia` Assignment element |
+| National Sales Director | Sophia Delgado | Flow — `Escalate High Priority to Sophia` Assignment element |
 
-All `Priority_Level__c` = `High` Lead Records are routed to Sophia Delgado via Flow escalation logic. `OwnerId` is overridden from the regional Queue to Sophia Delgado's User ID by the `Lead_Scoring_and_Priority_Level_Assignment` Flow.
+All `Priority_Level__c` = `High` Lead Records are routed to Sophia Delgado via Flow escalation logic. `OwnerId` is overridden from the regional assignment to Sophia Delgado's User ID by the `Lead_Scoring_and_Priority_Level_Assignment` Flow. Sophia Delgado holds no Queue assignment.
 
 ---
 
-## 7. Document Status
+## 8. Document Status
 
 | Attribute | Value |
 |---|---|
