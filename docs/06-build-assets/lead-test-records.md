@@ -20,7 +20,7 @@ These records represent the complete canonical validation set. No fault path is 
 | L-01 | Marcus Thibodeau | m.thibodeau@thibodeauwines.com | +1 (404) 882-3317 | High | 14 | East Coast | Sophia Delgado |
 | L-02 | Renata Voss | r.voss@pacificcrestwine.com | +1 (503) 741-6290 | High | 13 | West Coast | Sophia Delgado |
 | L-03 | Dominic Reyes | d.reyes@greystonekitchen.com | +1 (312) 558-4473 | Medium | 9 | Central | Priya Desai |
-| L-04 | Janelle Harmon | c.harmon@harmonfinewines.com | +1 (571) 334-8851 | Medium | 8 | East Coast | Luis Navarro |
+| L-04 | Janelle Harmon | j.harmon@harmonfinewines.com | +1 (571) 334-8851 | Medium | 8 | East Coast | Luis Navarro |
 | L-05 | Britta Sandoval | b.sandoval@pacificeventscatering.com | +1 (206) 917-3042 | Low | 3 | West Coast | Jordan Chen |
 ---
 
