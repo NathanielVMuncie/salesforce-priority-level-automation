@@ -7,7 +7,7 @@ Céleste Vineyards | Data Model
 
 ## 1. Document Purpose
 
-This document provides field-level definitions for every field active in the Céleste Vineyards Lead Priority Level Automation pipeline. Each entry records the field label, API name, data type, who writes it, its default value if applicable, and its precise role in the pipeline.
+This document provides field-level definitions for every field activ at Lead phase of the Céleste Vineyards  pipeline. Each entry records the field label, API name, data type, who writes it, its default value if applicable, and its precise role in the pipeline.
 
 The authoritative source for all custom field metadata is the live SFDX retrieval from org `celeste-vineyards-dev-ed.develop.my.salesforce.com` at API v66.0.
 
