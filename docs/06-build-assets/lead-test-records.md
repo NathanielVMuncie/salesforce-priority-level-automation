@@ -17,11 +17,20 @@ These records represent the complete canonical validation set. No fault path is 
 
 | ID | Name | Email | Phone | Priority | Score | Territory | Final Owner |
 |---|---|---|---|---|---|---|---|
+<<<<<<< HEAD
 | L-01 | Marcus Thibodeau | m.thibodeau@thibodeauwines.com | +1 (404) 882-3317 | High | 14 | East Coast | Sophia Delgado |
 | L-02 | Renata Voss | r.voss@pacificcrestwine.com | +1 (503) 741-6290 | High | 13 | West Coast | Sophia Delgado |
 | L-03 | Dominic Reyes | d.reyes@greystonekitchen.com | +1 (312) 558-4473 | Medium | 9 | Central | Priya Desai |
 | L-04 | Janelle Harmon | j.harmon@harmonfinewines.com | +1 (571) 334-8851 | Medium | 8 | East Coast | Luis Navarro |
 | L-05 | Britta Sandoval | b.sandoval@pacificeventscatering.com | +1 (206) 917-3042 | Low | 3 | West Coast | Jordan Chen |
+=======
+| L-01 | Marcus Thibodeau | m.thibodeau@thibodeauwines.com | +1 (404) 882-3317 | High | 14 | East Coast Region | Sophia Delgado |
+| L-02 | Renata Voss | r.voss@pacificcrestwine.com | +1 (503) 741-6290 | High | 13 | West Coast Region | Sophia Delgado |
+| L-03 | Dominic Reyes | d.reyes@greystonekitchen.com | +1 (312) 558-4473 | Medium | 9 | Central Region | Priya Desai |
+| L-04 | Janelle Harmon | j.harmon@harmonfinewines.com | +1 (571) 334-8851 | Medium | 8 | East Coast Region | Luis Navarro |
+| L-05 | Britta Sandoval | b.sandoval@pacificeventscatering.com | +1 (206) 917-3042 | Low | 3 | West Coast Region | Jordan Chen |
+
+>>>>>>> 157c524 (lead-test-records.md)
 ---
 
 ## 3. Lead Record Definitions
@@ -35,14 +44,14 @@ These records represent the complete canonical validation set. No fault path is 
 | Company | Thibodeau Premier Wines |
 | Email | m.thibodeau@thibodeauwines.com |
 | Phone | +1 (404) 882-3317 |
-| `State` | Georgia |
+| State | Georgia |
 | `Business_Type__c` | `Premium Wine Distributor` |
 | `Role__c` | `Owner` |
 | `Purchasing_Timeline__c` | `Short-Term (Within 30 Days)` |
 | `Customer_Note__c` | Looking to expand our distribution portfolio with premium labels for the Southeast market. Interested in volume pricing and exclusivity options. |
 | `varTotalScore` | 14 |
 | `Priority_Level__c` | `High` |
-| Assignment Rule Output | `East_Coast_Region` → Sophia Delgado (Flow override) |
+| Assignment Rule Output | `East Coast Region Queue` → Flow escalates to Sophia Delgado |
 | Final `OwnerId` | Sophia Delgado |
 
 **Score Composition:**
@@ -65,14 +74,14 @@ These records represent the complete canonical validation set. No fault path is 
 | Company | Pacific Crest Wine Group |
 | Email | r.voss@pacificcrestwine.com |
 | Phone | +1 (503) 741-6290 |
-| `State` | Oregon |
+| State | Oregon |
 | `Business_Type__c` | `Premium Wine Distributor` |
 | `Role__c` | `Purchasing Manager` |
 | `Purchasing_Timeline__c` | `Short-Term (Within 30 Days)` |
 | `Customer_Note__c` | Evaluating new supplier partnerships for our Pacific Northwest accounts. Interested in your allocation model and lead times. |
 | `varTotalScore` | 13 |
 | `Priority_Level__c` | `High` |
-| Assignment Rule Output | `West_Coast_Region` → Sophia Delgado (Flow override) |
+| Assignment Rule Output | `West Coast Region Queue` → Flow escalates to Sophia Delgado |
 | Final `OwnerId` | Sophia Delgado |
 
 **Score Composition:**
@@ -95,14 +104,14 @@ These records represent the complete canonical validation set. No fault path is 
 | Company | The Greystone Kitchen |
 | Email | d.reyes@greystonekitchen.com |
 | Phone | +1 (312) 558-4473 |
-| `State` | Illinois |
+| State | Illinois |
 | `Business_Type__c` | `Upscale Restaurant` |
 | `Role__c` | `General Manager` |
 | `Purchasing_Timeline__c` | `Evaluating Vendors (Next 90 Days)` |
 | `Customer_Note__c` | Reviewing wine program options for our seasonal menu refresh. Looking for a reliable supplier with flexible ordering minimums. |
 | `varTotalScore` | 9 |
 | `Priority_Level__c` | `Medium` |
-| Assignment Rule Output | `Central_Region` Queue |
+| Assignment Rule Output | Priya Desai |
 | Final `OwnerId` | Priya Desai |
 
 **Score Composition:**
@@ -125,7 +134,7 @@ These records represent the complete canonical validation set. No fault path is 
 | Company | Harmon Fine Wines & Spirits |
 | Email | j.harmon@harmonfinewines.com |
 | Phone | +1 (571) 334-8851 |
-| `State` | Virginia |
+| State | Virginia |
 | `Business_Type__c` | `High-End Wine Store` |
 | `Role__c` | `Sales Manager` |
 | `Purchasing_Timeline__c` | `Budget Planning (Future Quarter)` |
@@ -155,7 +164,7 @@ These records represent the complete canonical validation set. No fault path is 
 | Company | Pacific Events & Catering |
 | Email | b.sandoval@pacificeventscatering.com |
 | Phone | +1 (206) 917-3042 |
-| `State` | Washington |
+| State | Washington |
 | `Business_Type__c` | `Catering & Event Company` |
 | `Role__c` | `Event Coordinator` |
 | `Purchasing_Timeline__c` | `Information Gathering` |
@@ -180,25 +189,26 @@ These records represent the complete canonical validation set. No fault path is 
 
 | Lead | State | Territory | Assignment Rule Output | Flow Escalation | Final Owner |
 |---|---|---|---|---|---|
-| L-01 Marcus Thibodeau | Georgia | East Coast | Luis Navarro | Yes — Sophia Delgado | Sophia Delgado |
-| L-02 Renata Voss | Oregon | West Coast | Jordan Chen | Yes — Sophia Delgado | Sophia Delgado |
-| L-03 Dominic Reyes | Illinois | Central | Priya Desai | No | Priya Desai |
-| L-04 Janelle Harmon | Virginia | East Coast | Luis Navarro | No | Luis Navarro |
-| L-05 Britta Sandoval | Washington | West Coast | Jordan Chen | No | Jordan Chen |
+| L-01 | Georgia | East Coast Region | East Coast Region Queue | Yes — escalates to Sophia Delgado | Sophia Delgado |
+| L-02 | Oregon | West Coast Region | West Coast Region Queue | Yes — escalates to Sophia Delgado | Sophia Delgado |
+| L-03 | Illinois | Central Region | Priya Desai | No | Priya Desai |
+| L-04 | Virginia | East Coast Region | Luis Navarro | No | Luis Navarro |
+| L-05 | Washington | West Coast Region | Jordan Chen | No | Jordan Chen |
 
 ---
 
 ## 5. License Rotation Sequence
 
-Lead Records must be created in the following order to ensure each owner holds a valid Salesforce license at the time of record creation.
+Lead Records must be created in the following order to ensure each owner holds a valid Salesforce license at the time of record creation. Only one user holds a Standard License at any given moment. The licensed user’s own territory receives leads directly; all other territories are represented by queues.
 
-| Step | Active Licenses (excluding Nathaniel) | Records Created |
-|---|---|---|
-| 1 | Sophia Delgado  | L-01, L-02 |
-| 2 | Swap Sophia → Priya Desai | L-03, L-04 |
-| 3 | No swap required | L-05 |
+| Step | Licensed User | Records Created | Assignment Rule Behaviour |
+|------|---------------|----------------|---------------------------|
+| 1 | Sophia Delgado | L‑01, L‑02 | All leads go to territory queues; High priority leads escalate to Sophia |
+| 2 | Swap Sophia → Priya Desai | L‑03 | Central Region leads go directly to Priya; other regions go to queues |
+| 3 | Swap Priya → Luis Navarro | L‑04 | East Coast Region leads go directly to Luis; other regions go to queues |
+| 4 | Swap Luis → Jordan Chen | L‑05 | West Coast Region leads go directly to Jordan; other regions go to queues |
 
-Total license swaps: 2.
+**Total license swaps:** 3
 
 ---
 
@@ -212,4 +222,3 @@ Total license swaps: 2.
 ---
 
 *Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*
-
