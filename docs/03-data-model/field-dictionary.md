@@ -35,8 +35,7 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | Last Name |
 | API Name | `LastName` |
 | Field Type | Text |
-| Written By | Make.com — passed from Wix payload key `last_name` |
-| Default | None |
+| Written By | Make.com — passed from Wix payload key `last_name` | Default | None |
 | Pipeline Role | Identity — prospect's surname. Required field on Lead Object |
 
 ---
@@ -79,19 +78,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Transformation | Regex formula applied in Make.com: `replace(trim(2. data: phone); /^\+?1?(\d{3})(\d{3})(\d{4})$/; +1 ($1) $2-$3)` |
 | Output Format | `+1 (xxx) xxx-xxxx` |
 | Pipeline Role | Contact — prospect phone number, standardized format |
-
----
-
-### State
-
-| Attribute | Value |
-|---|---|
-| Field Label | State/Province |
-| API Name | `State` |
-| Field Type | Text |
-| Written By | Make.com — passed from Wix payload key `state` |
-| Default | None |
-| Pipeline Role | Routing — evaluated by the Lead Assignment Rule to determine regional Queue assignment. Also input to the `Region__c` formula field |
 
 ---
 
@@ -190,37 +176,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Written By | Flow Update Records element — qualified path only |
 | Default | None |
 | Pipeline Role | Composite score output — the numeric sum of all three dimension scores. Written from `varTotalScore` by the single Update Records element. Range: 3–15 for qualified Leads. Not written on the Not Qualified path |
-
----
-
-### Qualified__c
-
-| Attribute | Value |
-|---|---|
-| Field Label | Qualified |
-| API Name | `Qualified__c` |
-| Field Type | Checkbox |
-| Written By | Flow Update Records element — qualified path only |
-| Field Default | True (Checked) — set in Object Manager |
-| Pipeline Role | Qualification state storage. Field default of True ensures all Records begin as qualified. The Flow writes this field explicitly on the qualified path via Update Records. On the Not Qualified path, the Flow exits before Update Records — the field retains the True default. `Qualification_Status__c` does not read from this field — it reads from `Business_Type__c` directly |
-| Defect History | D-01 — field default was initially unset (False). Corrected to True in Object Manager during UAT |
-
----
-
-### Qualification_Status__c
-
-| Attribute | Value |
-|---|---|
-| Field Label | Qualification Status |
-| API Name | `Qualification_Status__c` |
-| Field Type | Formula (Text) |
-| Written By | Self-resolving — evaluates at read time |
-| Formula | `IF(ISPICKVAL(Business_Type__c, "Personal/Individual (Non-Business)"), "❌ Not Qualified", "✅ Qualified")` |
-| Reads From | `Business_Type__c` via `ISPICKVAL` |
-| Default | None — formula field |
-| Pipeline Role | Display field — renders the Lead's qualification state as a human-readable indicator on the Record. Resolves correctly on all Records regardless of Flow execution path |
-| Display Values | `✅ Qualified` (all qualified Business Type values) / `❌ Not Qualified` (`Personal/Individual (Non-Business)`) |
-| Design Note | Formula reads from `Business_Type__c`, not from `Qualified__c`. This ensures the display is accurate on Not Qualified Records even though the Flow exits before writing `Qualified__c` to False on that path |
 
 ---
 
