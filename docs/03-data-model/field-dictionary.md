@@ -35,7 +35,8 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | Last Name |
 | API Name | `LastName` |
 | Field Type | Text |
-| Written By | Make.com — passed from Wix payload key `last_name` | Default | None |
+| Written By | Make.com — passed from Wix payload key `last_name` |
+| Default | None |
 | Pipeline Role | Identity — prospect's surname. Required field on Lead Object |
 
 ---
@@ -49,7 +50,7 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Type | Text |
 | Written By | Make.com — passed from Wix payload key `company` |
 | Default | None |
-| Pipeline Role | Identity — prospect's organization name. May be null on the non-qualified path; the Wix conditional rule hides this field when `Personal/Individual (Non-Business)` is selected |
+| Pipeline Role | Identity — prospect's organization name |
 
 ---
 
@@ -81,6 +82,18 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 
 ---
 
+### State/Province
+
+| Attribute | Value |
+|---|---|
+| Field Label | State/Province |
+| Field Type | Text(255) |
+| Written By | Make.com — passed from Wix payload key `state` |
+| Default | None |
+| Pipeline Role | Routing — evaluated by the Lead Assignment Rule to determine Territory Sales Representative assignment. Also input to the `Region__c` formula field |
+
+---
+
 ### LeadSource
 
 | Attribute | Value |
@@ -88,7 +101,7 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | Lead Source |
 | API Name | `LeadSource` |
 | Field Type | Picklist |
-| Written By | Make.com — hardcoded in both Module 12 and Module 13 |
+| Written By | Make.com — hardcoded value set in the Create Lead module |
 | Hardcoded Value | `Céleste Vineyards - Business Inquiry Form` |
 | Default | None |
 | Pipeline Role | Flow entry condition. The After-Save Flow fires only on Lead Records where `LeadSource` equals this exact value. Records created through any other mechanism do not trigger the automation |
@@ -102,9 +115,9 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | Owner ID |
 | API Name | `OwnerId` |
 | Field Type | Lookup (User or Queue) |
-| Written By | Assignment Rule (Queue assignment at Record creation) — then Flow Update Records element (escalation override for Priority Level High) |
+| Written By | Assignment Rule (Territory Sales Representative assignment at Record creation) — then Flow `Update Lead Priority and Score` Update Records element (escalation override for Priority Level High) |
 | Default | None |
-| Pipeline Role | Routing — final owner of the Lead Record. For Priority Level High Leads, overridden to Sophia Delgado's User ID by the Flow escalation logic. For Priority Level Medium and Low Leads, retains the regional Queue ID set by the Assignment Rule. For Not Qualified Leads, retains the regional Queue ID — the Flow exits before Update Records |
+| Pipeline Role | Routing — final owner of the Lead Record. The Assignment Rule assigns to the Territory Sales Representative designated to that region. If the representative does not hold the active license, their regional Queue serves as proxy owner. For Priority Level High Leads, the Flow overrides `OwnerId` to Sophia Delgado's User ID regardless of the Assignment Rule output. If the Flow misfires, the Queue absorbs the Lead as a fault-path catch-all, as the regional owner ID is written at Record creation before the Flow executes |
 
 ---
 
@@ -119,8 +132,8 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Type | Picklist |
 | Written By | Make.com — passed from Wix payload key `business_type` |
 | Default | None |
-| Pipeline Role | Dual purpose. First: gatekeeper input — if value is `Personal/Individual (Non-Business)`, the Gatekeeper Fail outcome fires and the Flow exits. Second: scoring dimension 1 — all other qualified values contribute 1–5 points to `varTotalScore`. Also the input field for `Qualification_Status__c` formula resolution |
-| Picklist Values | Premium Wine Distributor (5 pts), High-End Wine Store (4 pts), Upscale Restaurant (3 pts), Specialty Gourmet Grocer (2 pts), Catering & Event Company (1 pt), Personal/Individual (Non-Business) (disqualifies), Not Applicable (Module 13 placeholder) |
+| Pipeline Role | Scoring tier 1 — evaluated by the `Determine Business Type Score` Decision element in Tier 1. Contributes 1–5 points to `varTotalScore` |
+| Picklist Values | `Premium Wine Distributor` (5 pts), `High-End Wine Store` (4 pts), `Upscale Restaurant` (3 pts), `Specialty Gourmet Grocer` (2 pts), `Catering & Event Company` (1 pt) |
 
 ---
 
@@ -131,10 +144,10 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | Role |
 | API Name | `Role__c` |
 | Field Type | Picklist |
-| Written By | Make.com — passed from Wix payload key `role` (qualified path) or hardcoded as `Not Applicable` (Module 13 — non-qualified path) |
+| Written By | Make.com — passed from Wix payload key `role` |
 | Default | None |
-| Pipeline Role | Scoring dimension 2 — contributes 1–5 points to `varTotalScore` via the `Determine Role Score` Decision element. Not evaluated on the non-qualified path |
-| Picklist Values | Owner (5 pts), Purchasing Manager (4 pts), General Manager (3 pts), Sales Manager (2 pts), Event Coordinator (1 pt), Not Applicable (placeholder) |
+| Pipeline Role | Scoring tier 2 — evaluated by the `Determine Role Score` Decision element in Tier 2. Contributes 1–5 points to `varTotalScore` |
+| Picklist Values | `Owner` (5 pts), `Purchasing Manager` (4 pts), `General Manager` (3 pts), `Sales Manager` (2 pts), `Event Coordinator` (1 pt) |
 
 ---
 
@@ -145,10 +158,10 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | Purchasing Timeline |
 | API Name | `Purchasing_Timeline__c` |
 | Field Type | Picklist |
-| Written By | Make.com — passed from Wix payload key `purchasing_timeline` (qualified path) or hardcoded as `Not Applicable` (Module 13 — non-qualified path) |
+| Written By | Make.com — passed from Wix payload key `purchasing_timeline` |
 | Default | None |
-| Pipeline Role | Scoring dimension 3 — contributes 1–5 points to `varTotalScore` via the `Determine Purchasing Timeline Score` Decision element. Not evaluated on the non-qualified path |
-| Picklist Values | Immediate Need (Contracting) (5 pts), Short-Term / Within 30 Days (4 pts), Evaluating Vendors (Next 90 Days) (3 pts), Budget Planning (Future Quarter) (2 pts), Information Gathering (1 pt), Not Applicable (placeholder) |
+| Pipeline Role | Scoring tier 3 — evaluated by the `Determine Purchasing Timeline Score` Decision element in Tier 3. Contributes 1–5 points to `varTotalScore` |
+| Picklist Values | `Immediate Need (Contracting)` (5 pts), `Short-Term (Within 30 Days)` (4 pts), `Evaluating Vendors (Next 90 Days)` (3 pts), `Budget Planning (Future Quarter)` (2 pts), `Information Gathering` (1 pt) |
 
 ---
 
@@ -159,10 +172,10 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | Priority Level |
 | API Name | `Priority_Level__c` |
 | Field Type | Picklist |
-| Written By | Flow Update Records element — qualified path only. Make.com Module 13 writes `Not Applicable` on the non-qualified path before Record creation |
+| Written By | Flow — `Update Lead Priority and Score` Update Records element |
 | Default | None |
 | Pipeline Role | Priority output — the final assigned Priority Level for the Lead Record. Written from `varPriorityLevel` by the single Update Records element |
-| Picklist Values | High (`varTotalScore` ≥ 12), Medium (`varTotalScore` ≥ 8), Low (default outcome), Not Applicable (Module 13 placeholder) |
+| Picklist Values | `High` (`varTotalScore` ≥ 12), `Medium` (`varTotalScore` ≥ 8 and < 12), `Low` (Default Outcome) |
 
 ---
 
@@ -173,9 +186,9 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | Lead Score |
 | API Name | `Lead_Score__c` |
 | Field Type | Number |
-| Written By | Flow Update Records element — qualified path only |
+| Written By | Flow — `Update Lead Priority and Score` Update Records element |
 | Default | None |
-| Pipeline Role | Composite score output — the numeric sum of all three dimension scores. Written from `varTotalScore` by the single Update Records element. Range: 3–15 for qualified Leads. Not written on the Not Qualified path |
+| Pipeline Role | Composite score output — the numeric sum of all three tier scores. Written from `varTotalScore` by the single Update Records element. Range: 3–15 |
 
 ---
 
@@ -201,8 +214,8 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Type | Formula (Text) |
 | Written By | Self-resolving — evaluates at read time from `State` via CASE statement |
 | Default | None — formula field |
-| Pipeline Role | Territorial classification — derives the Lead's geographic region from `State/Province`. Populated on all Records regardless of qualification status or Priority Level. Preserved on Priority Level High Records even after Flow escalation overrides `OwnerId` to Sophia Delgado. Used for regional pipeline reporting |
-| Possible Values | `East Coast`, `West Coast`, `Central` |
+| Pipeline Role | Territorial classification — derives the Lead's geographic region from `State/Province`. Populated on all Records regardless of Priority Level. Preserved on Priority Level High Records even after Flow escalation overrides `OwnerId` to Sophia Delgado. Used for regional pipeline reporting |
+| Possible Values | `East Coast Region`, `West Coast Region`, `Central Region` |
 
 ---
 
