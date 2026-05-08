@@ -7,13 +7,15 @@ Céleste Vineyards | Overview
 
 ## 1. Document Purpose
 
-This document defines the business objective that drives the Céleste Vineyards Lead Priority Level Automation system. It establishes the problem being solved, the measurable outcome the system is designed to produce, and the constraints within which the solution operates.
+This document defines the business objective that drives Céleste Vineyards to adopt the Salesforce no touch lead automation system. It displays the resolution to  major disruptions in the compsny's sales pipeline. The document will display measurable outcomes, the system is designed to produce, and the constraints within which the solution operates.
 
 ---
 
 ## 2. The Business Problem
 
-Céleste Vineyards is a B2B winery operating in the premium wine distribution market. Inbound inquiries arrive through a public-facing Wix web form and represent a mix of qualified buyers, early-stage researchers, and non-business contacts.
+Céleste Vineyards is a medium B2B winery operating in the premium wine distribution market. Their business doesn't profit from individuals making quick one or two bottle purchases. Celeste Vineyards sells large and lucrative quantities at once. No lead can afford to slip through the cracks,and that is where the problem begins 
+
+Leads call Celeste Vineyards with intest,walkins come in and leave their business cards or other types of contact information and Sales Representatives bogged down cold callingrequesting that someone will reach out to  reach ourthrough a public-facing web Business Inauiform and represent a mix of qualified buyers, early-stage researchers, and non-business contacts.
 
 Prior to this system, every inbound Lead required manual review to determine three things:
 
