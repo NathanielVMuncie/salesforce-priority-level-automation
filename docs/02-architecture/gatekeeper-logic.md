@@ -7,7 +7,7 @@ Céleste Vineyards | Architecture
 
 ## 1. Document Purpose
 
-This document defines the qualification gate enforced on the Céleste Vineyards Wix inquiry form. It records the gate's structural position in the system, the mechanism by which non-business submissions are blocked, the form state transformation that enforces the block, and the outcome paths produced by each Business Type selection.
+This document defines the qualification gate enforced on the Céleste Vineyards Business Inquiry Form. It records the gate's structural position in the system, the mechanism by which non-business submissions are blocked, the form state transformation that enforces the block, and the outcome paths produced by each Business Type selection.
 
 The gatekeeper is architectural — it is the outermost wall of the system. It is not automation logic, it is not integration logic, and it has no connection to any external platform. It operates entirely within the Wix inquiry form before any submission occurs, before any Wix Automation fires, and before any data reaches Make.com or Salesforce. No downstream system has any awareness of or responsibility for this gate.
 
@@ -22,7 +22,7 @@ The gatekeeper is the first and outermost boundary of the pipeline. It is not a 
 The Wix Automation `POST_To_Make_Inlet_Webhook` is the integration point between Wix and Make.com. It fires only on form submission. The gatekeeper prevents form submission from occurring for non-business contacts. Because the Wix Automation never fires, no integration with any external platform occurs. The gate is self-contained within Wix.
 
 ```
-Prospect visits Wix inquiry form
+Prospect visits Celeste Vineyards Business inquiry form
         |
         v
 Selects Business Type dropdown value
@@ -96,7 +96,7 @@ This message is display-only. It does not generate any record, log any event, or
 
 ## 4. Downstream System State
 
-Because the gatekeeper operates entirely within Wix, no downstream system contains any record, variable, field, or logic related to non-business contacts or qualification status.
+Because the gatekeeper operates entirely within the Business Inquiry Form, no downstream system contains any record, variable, field, or logic related to non-business contacts or qualification status.
 
 | System | Qualification Logic Present | Notes |
 |---|---|---|
