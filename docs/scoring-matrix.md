@@ -15,7 +15,6 @@
 - Personal/Individual (Non-Business) → **Gatekeeper**  
 
 **Gatekeeper Rule:**  
-Personal/Individual (Non-Business) → ❌ Not Qualified (Excluded from scoring)  
 
 
 ---
@@ -54,7 +53,6 @@ Incremented via Assignment elements across:
 - Purchasing Timeline  
 
 Used exclusively for **Priority_Level__c determination**.  
-No impact on qualification logic.  
 
 
 ---
@@ -78,7 +76,7 @@ No impact on qualification logic.
 
 ### Architectural Notes
 
-- Qualification is **binary and upstream** (Gatekeeper-controlled via Business_Type__c)  
+- (Gatekeeper-controlled via Business_Type__c)  
 - Scoring is **deterministic and downstream** (no conditional branching beyond assignment)  
 - Guarantees:
   - No partial scoring (all qualified Leads receive full 3-factor evaluation)  
