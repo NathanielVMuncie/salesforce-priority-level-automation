@@ -1,0 +1,865 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Add_Catering_Event_Company_Add_1_Point</name>
+        <label>Add Catering &amp; Event Company, Add 1 Point</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varTotalScore</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_Role_Score</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Budget_Planning_Future_Quarter_Add_2_Points</name>
+        <label>Budget Planning (Future Quarter), Add 2 Points</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varTotalScore</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>2.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_Priority_Level</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Captures the territorial Queue OwnerId set by the Assignment Rule into varOwnerID when a Lead&apos;s Business Type value does not match any scored outcome. Preserves the correct regional Queue assignment for the fault path DML write.</description>
+        <name>Business_Type_Queue_Routing</name>
+        <label>Business Type Queue Routing</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varOwnerID</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Business_Type_Queue_Routing_Update</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Escalate_OwnerId_to_Sophia</name>
+        <label>Escalate OwnerId to Sophia</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varOwnerID</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>005gL00000Fcu29</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Lead_Priority_and_Score</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Evaluating_Vendors_Next_90_Days_Add_3_Points</name>
+        <label>Evaluating Vendors (Next 90 Days), Add 3 Points</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varTotalScore</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>3.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_Priority_Level</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Event_Coordinator_Add_1_Point</name>
+        <label>Event Coordinator, Add 1 Point</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varTotalScore</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_Purchasing_Timeline_Score</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>General_Manager_Add_3_Points</name>
+        <label>General Manager, Add 3 Points</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varTotalScore</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>3.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_Purchasing_Timeline_Score</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>High_End_Wine_Store_Add_4_Points</name>
+        <label>High-End Wine Store, Add 4 Points</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varTotalScore</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>4.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_Role_Score</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Immediate_Need_Contracting_Add_5_Points</name>
+        <label>Immediate Need (Contracting), Add 5 Points</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varTotalScore</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>5.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_Priority_Level</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Information_Gathering_Add_1_Point</name>
+        <label>Information Gathering, Add 1 Point</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varTotalScore</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_Priority_Level</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Initialize_OwnerId_Default</name>
+        <label>Initialize OwnerId (Default)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varOwnerID</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Escalate_High_Priority_to_Sophia</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Owner_Add_5_Points</name>
+        <label>Owner, Add 5 Points</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varTotalScore</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>5.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_Purchasing_Timeline_Score</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Premium_Wine_Distributor_Add_5_Points</name>
+        <label>Premium Wine Distributor, Add 5 Points</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varTotalScore</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>5.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_Role_Score</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Priority_Level_High</name>
+        <label>Priority Level High</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varPriorityLevel</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varOwnerID</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>005aj00000Iw65tAAB</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Initialize_OwnerId_Default</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Priority_Level_Low</name>
+        <label>Priority Level Low</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varPriorityLevel</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Low</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Initialize_OwnerId_Default</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Priority_Level_Medium</name>
+        <label>Priority Level Medium</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varPriorityLevel</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Medium</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Initialize_OwnerId_Default</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Purchasing_Manager_Add_4_Points</name>
+        <label>Purchasing Manager, Add 4 Points</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varTotalScore</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>4.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_Purchasing_Timeline_Score</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Purchasing_Timeline_Queue_Routing</name>
+        <label>Purchasing Timeline Queue Routing</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varOwnerID</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Purchasing_Timeline_Queue_Routing_Updated</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Roll_Queue_Routing</name>
+        <label>Roll Queue Routing</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varOwnerID</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Roll_Queue_Routing_Update</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Sales_Manager_Add_2_Points</name>
+        <label>Sales Manager, Add 2 Points</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varTotalScore</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>2.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_Purchasing_Timeline_Score</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Short_Term_Within_30_Days_Add_4_Points</name>
+        <label>Short-Term (Within 30 Days), Add 4 Points</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varTotalScore</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>4.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_Priority_Level</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Specialty_Gourmet_Grocer_Add_2_Points</name>
+        <label>Specialty Gourmet Grocer, Add 2 Points</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varTotalScore</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>2.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_Role_Score</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Upscale_Restaurant_Add_3_Points</name>
+        <label>Upscale Restaurant, Add 3 Points</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varTotalScore</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>3.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_Role_Score</targetReference>
+        </connector>
+    </assignments>
+    <constants>
+        <description>Constant storing the User Id for Sophia Delgado (National Sales Director).
+
+Used by the Lead Priority Level Automation flow to override OwnerId when Priority_Level__c = &quot;High&quot;. 
+
+Centralized as a constant to avoid hardcoding User Id values inside Update Records elements and to improve maintainability if the escalation authority changes.</description>
+        <name>Sophia_UserId</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>005aj00000Iw65t</stringValue>
+        </value>
+    </constants>
+    <decisions>
+        <description>Evaluates the Lead’s declared business type and assigns a weighted score based on strategic value and expected revenue potential. Higher-value commercial buyers receive more points, while non-business or consumer leads are routed to disqualification logic.</description>
+        <name>Determine_Business_Type_Score</name>
+        <label>Determine Business Type Score</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Business_Type_Queue_Routing</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Business Type Queue Routing</defaultConnectorLabel>
+        <rules>
+            <name>Is_Premium_Wine_Distributor</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Business_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Premium Wine Distributor</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Premium_Wine_Distributor_Add_5_Points</targetReference>
+            </connector>
+            <label>Is Premium Wine Distributor</label>
+        </rules>
+        <rules>
+            <name>Is_High_End_Wine_Store</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Business_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>High-End Wine Store</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>High_End_Wine_Store_Add_4_Points</targetReference>
+            </connector>
+            <label>Is High-End Wine Store</label>
+        </rules>
+        <rules>
+            <name>Is_Upscale_Restaurant</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Business_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Upscale Restaurant</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Upscale_Restaurant_Add_3_Points</targetReference>
+            </connector>
+            <label>Is Upscale Restaurant</label>
+        </rules>
+        <rules>
+            <name>Is_Specialty_Gourmet_Grocer</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Business_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Specialty Gourmet Grocer</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Specialty_Gourmet_Grocer_Add_2_Points</targetReference>
+            </connector>
+            <label>Is Specialty Gourmet Grocer</label>
+        </rules>
+        <rules>
+            <name>Is_Catering_Event_Company</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Business_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Catering &amp; Event Company</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Add_Catering_Event_Company_Add_1_Point</targetReference>
+            </connector>
+            <label>Is Catering &amp; Event Company</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Calculates the final Priority Level (High, Medium, or Low) based on the cumulative Lead Score derived from business type, role, and purchasing timeline. This decision determines downstream routing, escalation, and queue assignment behavior.</description>
+        <name>Determine_Priority_Level</name>
+        <label>Determine Priority Level</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Priority_Level_Low</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Ia Priority Level Low</defaultConnectorLabel>
+        <rules>
+            <name>Is_Priority_Level_High</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varTotalScore</leftValueReference>
+                <operator>GreaterThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>12.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Priority_Level_High</targetReference>
+            </connector>
+            <label>Is Priority Level  High</label>
+        </rules>
+        <rules>
+            <name>Ia_Priority_Level_Medium</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varTotalScore</leftValueReference>
+                <operator>GreaterThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>8.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Priority_Level_Medium</targetReference>
+            </connector>
+            <label>Ia Priority Level Medium</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Analyzes the Lead’s stated purchasing timeline to gauge sales readiness and urgency. Leads with near-term intent receive higher scores, while long-term or undefined timelines contribute fewer points.</description>
+        <name>Determine_Purchasing_Timeline_Score</name>
+        <label>Determine Purchasing Timeline Score</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Purchasing_Timeline_Queue_Routing</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Purchasing Timeline Queue Routing</defaultConnectorLabel>
+        <rules>
+            <name>Is_Immediate_Need_Contracting</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Purchasing_Timeline__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Immediate Need (Contracting)</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Immediate_Need_Contracting_Add_5_Points</targetReference>
+            </connector>
+            <label>Is Immediate Need (Contracting)</label>
+        </rules>
+        <rules>
+            <name>Is_Short_Term_Within_30_Days</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Purchasing_Timeline__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Short-Term (Within 30 Days)</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Short_Term_Within_30_Days_Add_4_Points</targetReference>
+            </connector>
+            <label>Is Short-Term (Within 30 Days)</label>
+        </rules>
+        <rules>
+            <name>Is_Evaluating_Vendors_Next_90_Days</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Purchasing_Timeline__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Evaluating Vendors (Next 90 Days)</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Evaluating_Vendors_Next_90_Days_Add_3_Points</targetReference>
+            </connector>
+            <label>Is Evaluating Vendors (Next 90 Days)</label>
+        </rules>
+        <rules>
+            <name>Is_Budget_Planning_Future_Quarter</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Purchasing_Timeline__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Budget Planning (Future Quarter)</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Budget_Planning_Future_Quarter_Add_2_Points</targetReference>
+            </connector>
+            <label>Is Budget Planning (Future Quarter)</label>
+        </rules>
+        <rules>
+            <name>Is_Information_Gathering</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Purchasing_Timeline__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Information Gathering</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Information_Gathering_Add_1_Point</targetReference>
+            </connector>
+            <label>Is Information Gathering</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Assesses the Lead’s role within the organization to determine purchasing authority and decision-making influence. Roles with direct buying power receive higher scores, while lower-influence roles contribute fewer points to the overall qualification score.</description>
+        <name>Determine_Role_Score</name>
+        <label>Determine Role Score</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Roll_Queue_Routing</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Roll Queue Routing</defaultConnectorLabel>
+        <rules>
+            <name>IsOwner</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Role__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Owner</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Owner_Add_5_Points</targetReference>
+            </connector>
+            <label>Is Owner</label>
+        </rules>
+        <rules>
+            <name>IsPurchasingManager</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Role__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Purchasing Manager</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Purchasing_Manager_Add_4_Points</targetReference>
+            </connector>
+            <label>Is Purchasing Manager</label>
+        </rules>
+        <rules>
+            <name>Is_General_Manager</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Role__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>General Manager</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>General_Manager_Add_3_Points</targetReference>
+            </connector>
+            <label>Is General Manager</label>
+        </rules>
+        <rules>
+            <name>Is_Sales_Manager</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Role__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Sales Manager</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Sales_Manager_Add_2_Points</targetReference>
+            </connector>
+            <label>Is Sales Manager</label>
+        </rules>
+        <rules>
+            <name>Is_Event_Coordinator</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Role__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Event Coordinator</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Event_Coordinator_Add_1_Point</targetReference>
+            </connector>
+            <label>Is Event Coordinator</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Escalate_High_Priority_to_Sophia</name>
+        <label>Escalate High Priority to Sophia</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_Lead_Priority_and_Score</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Is Not High</defaultConnectorLabel>
+        <rules>
+            <name>Is_High_Escalate</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varPriorityLevel</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>High</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Escalate_OwnerId_to_Sophia</targetReference>
+            </connector>
+            <label>Is High - Escalate</label>
+        </rules>
+    </decisions>
+    <description>After-save Lead automation that enforces B2B qualification, calculates deterministic lead scoring, assigns Priority_Level__c, and performs escalation ownership overrides when High-priority conditions are met.</description>
+    <environments>Default</environments>
+    <interviewLabel>Lead Scoring and Priority Level Assignment {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Lead Scoring and Priority Level Assignment</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <description>Writes varOwnerID to OwnerId on the triggering Lead Record when the Business Type scoring tier hits the Default Outcome. Ensures the Lead is owned by the correct territorial Queue with no Priority Level assigned. The Territory Sales Representative responsible for that region tends to the Queue, manually identifies the issue, corrects it, and manually services the Lead.</description>
+        <name>Business_Type_Queue_Routing_Update</name>
+        <label>Business Type Queue Routing Update</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>varOwnerID</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Purchasing_Timeline_Queue_Routing_Updated</name>
+        <label>Purchasing Timeline Queue Routing Updated</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>varOwnerID</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Roll_Queue_Routing_Update</name>
+        <label>Roll Queue Routing Update</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>varOwnerID</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Persists the final scoring outcomes to the triggering Lead after all scoring and Priority Level decisions are complete.
+Updates `Priority_Level__c` and `Qualified__c`.  
+The record reflects the authoritative scoring result for reporting and Lightning UI.
+When configured, this step also invokes the active Lead Assignment Rules to route ownership to the appropriate regional or escalation queue.</description>
+        <name>Update_Lead_Priority_and_Score</name>
+        <label>Update Lead Priority and Score</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>varOwnerID</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority_Level__c</field>
+            <value>
+                <elementReference>varPriorityLevel</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Determine_Business_Type_Score</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>LeadSource</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Céleste Vineyards - Business Inquiry Form</stringValue>
+            </value>
+        </filters>
+        <object>Lead</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <description>Stores the Id of the User or Queue that the Lead should be assigned to based on routing logic.
+This variable is set by routing decisions (priority level, qualification status, and territory) and is used to update the Lead OwnerId in a single Update Records element.</description>
+        <name>varOwnerID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Stores the calculated Priority Level assigned to the Lead based on the total score.
+
+This variable is derived after scoring logic executes and is used to:
+- Control routing and escalation behavior
+- Update the Lead Priority_Level__c field
+
+Possible values: High, Medium, Low.</description>
+        <name>varPriorityLevel</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <elementReference>$Record.Priority_Level__c</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <description>```
+Running total score used to determine Lead Priority Level (High, Medium, Low).
+
+Initialized to 0 and incremented through Assignment elements based on the Lead’s intake responses (Business Type, Role, and Purchasing Timeline).
+This variable is used exclusively for prioritization and routing urgency and does not control Lead qualification.
+```</description>
+        <name>varTotalScore</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
+    </variables>
+</Flow>
