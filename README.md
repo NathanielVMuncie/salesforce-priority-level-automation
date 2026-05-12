@@ -99,39 +99,39 @@ Every Lead that reaches Salesforce is scored across three dimensions. Each dimen
 
 | Picklist Value | Points |
 |---|---|
-| Premium Wine Distributor | 5 |
-| High-End Wine Store | 4 |
-| Upscale Restaurant | 3 |
-| Specialty Gourmet Grocer | 2 |
-| Catering & Event Company | 1 |
+| `Premium Wine Distributor` | 5 |
+| `High-End Wine Store` | 4 |
+| `Upscale Restaurant` | 3 |
+| `Specialty Gourmet Grocer` | 2 |
+| `Catering & Event Company` | 1 |
 
 ### Role (`Role__c`)
 
 | Picklist Value | Points |
 |---|---|
-| Owner | 5 |
-| Purchasing Manager | 4 |
-| General Manager | 3 |
-| Sales Manager | 2 |
-| Event Coordinator | 1 |
+| `Owner` | 5 |
+| `Purchasing Manager` | 4 |
+| `General Manager` | 3 |
+| `Sales Manager` | 2 |
+| `Event Coordinator` | 1 |
 
 ### Purchasing Timeline (`Purchasing_Timeline__c`)
 
 | Picklist Value | Points |
 |---|---|
-| Immediate Need (Contracting) | 5 |
-| Short-Term (Within 30 Days) | 4 |
-| Evaluating Vendors (Next 90 Days) | 3 |
-| Budget Planning (Future Quarter) | 2 |
-| Information Gathering | 1 |
+| `Immediate Need (Contracting)` | 5 |
+| `Short-Term (Within 30 Days)` | 4 |
+| `Evaluating Vendors (Next 90 Days)` | 3 |
+| `Budget Planning (Future Quarter)` | 2 |
+| `Information Gathering` | 1 |
 
 ### Priority Level Thresholds
 
 | Priority Level | Condition | Score Range |
 |---|---|---|
-| High | `varTotalScore` ≥ 12 | 12–15 |
-| Medium | `varTotalScore` ≥ 8 | 8–11 |
-| Low | Default | 3–7 |
+| `High` | `varTotalScore` ≥ 12 | 12–15 |
+| `Medium` | `varTotalScore` ≥ 8 | 8–11 |
+| `Low` | Default | 3–7 |
 
 ---
 
@@ -151,7 +151,7 @@ All 50 US states and the District of Columbia are covered. No Lead is unassigned
 
 ## Escalation
 
-Priority Level High Leads are escalated to **Sophia Delgado**, National Sales Director, via Flow escalation logic. The Flow captures the regional Queue `OwnerId` set by the Assignment Rule, evaluates `varPriorityLevel`, and overwrites `OwnerId` with Sophia Delgado's User ID when Priority Level is High. Priority Level Medium and Low Leads retain regional Queue ownership.
+Priority Level High Leads are escalated to Sophia Delgado, National Sales Director, via Flow escalation logic. The Flow captures the regional Queue `OwnerId` set by the Assignment Rule, evaluates `varPriorityLevel`, and overwrites `OwnerId` with Sophia Delgado's User ID when Priority Level is High. Priority Level Medium and Low Leads retain regional Queue ownership.
 
 The `Region__c` Formula Field preserves the correct territorial classification on all Lead Records regardless of who owns them — escalated Leads owned by Sophia Delgado still carry the correct regional value for pipeline reporting.
 
@@ -289,8 +289,8 @@ salesforce-priority-level-automation/
 │       └── queue-definitions.md
 │
 ├── notes/
-│   ├── claude-project-instructions.md
-│   └── claude-project-instructions.txt
+│   ├── project-instructions.md
+│   └── project-instructions.txt
 │
 ├── portfolio/
 │   ├── case-study-snippets/
@@ -310,9 +310,9 @@ salesforce-priority-level-automation/
 
 ## Operational Status
 
-- Fully implemented and operational in a Salesforce Developer Edition Org
+- Fully implemented and operational in a Salesforce Developer Edition org
 - Integrated end-to-end: Wix → Make.com → Salesforce
-- Four canonical Lead Records validate all paths — Priority Level Low, Medium, and High with escalation across all three regional territories
+- Five canonical Lead Records validate all paths — Priority Level Low, Medium (×2), and High (×2) with escalation across all three regional territories
 - Documentation produced via reverse documentation from the live system
 
 ---
@@ -321,7 +321,7 @@ salesforce-priority-level-automation/
 
 This system is built in a Salesforce Developer Edition org. Two constraints are documented as scope acknowledgments, not gaps.
 
-**Single active user license.** The org supports one Standard User license, assigned to Sophia Delgado. Regional Queues — `East_Coast_Region`, `West_Coast_Region`, `Central_Region` — operate as proof-of-concept ownership placeholders. In a production deployment, each Queue would contain provisioned named users.
+**Single active user license.** The org supports one Standard User license. The license rotates across regional representatives — Sophia Delgado, Jordan Chen, Priya Desai, and Luis Navarro — to produce named ownership on Lead Records across all three territories. Regional Queues — `East_Coast_Region`, `West_Coast_Region`, `Central_Region` — serve as license-aware ownership proxies when a representative does not hold the active license. In a production deployment, all four personnel hold provisioned licenses simultaneously.
 
 **No production sandbox.** All test records, debug logs, and UAT evidence are produced in the Developer Edition org. Sandbox migration procedures are not demonstrated. This does not affect the correctness or completeness of any automation logic documented in this repository.
 
