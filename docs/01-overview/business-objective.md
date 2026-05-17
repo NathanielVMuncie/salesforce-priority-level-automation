@@ -7,65 +7,65 @@ Céleste Vineyards | Overview
 
 ## 1. Document Purpose
 
-This document defines the business objective that drives Céleste Vineyards to adopt the Salesforce no touch lead automation system. It displays the resolution to  major disruptions in the compsny's sales pipeline. The document will display measurable outcomes, the system is designed to produce, and the constraints within which the solution operates.
+This document defines the business objective that drives the Céleste Vineyards Lead Priority Level Automation system. It establishes the operational problem being solved, the measurable outcomes the system is designed to produce, and the constraints within which the solution operates.
 
 ---
 
 ## 2. The Business Problem
 
-Céleste Vineyards is a medium B2B winery operating in the premium wine distribution market. Their business doesn't profit from individuals making quick one or two bottle purchases. Celeste Vineyards sells large and lucrative quantities at once. No lead can afford to slip through the cracks,and that is where the problem begins 
+Céleste Vineyards is a B2B winery operating in the premium wine distribution market. The business does not sell to individuals — its revenue depends entirely on relationships with distributors, restaurants, retailers, and event companies purchasing in volume. Every inbound B2B Lead represents a meaningful revenue opportunity. A single contact at the right business could represent a long-term account worth tens of thousands of dollars annually.
 
-Leads call Celeste Vineyards with intest,walkins come in and leave their business cards or other types of contact information and Sales Representatives bogged down cold callingrequesting that someone will reach out to  reach ourthrough a public-facing web Business Inauiform and represent a mix of qualified buyers, early-stage researchers, and non-business contacts.
+Before this system existed, Céleste Vineyards had no standardized intake process. Inbound Leads arrived through multiple uncontrolled channels — phone calls, walk-ins leaving business cards, email inquiries, and Sales Representatives manually logging cold call responses. There was no single point of entry, no structured handoff, and no mechanism for determining which contacts represented the most commercial value or who should pursue them.
 
-Prior to this system, every inbound Lead required manual review to determine three things:
+The result was a Sales department operating reactively. Representatives fielded inquiries as they arrived, routed Leads based on individual judgment, and had no consistent way to distinguish a Premium Wine Distributor ready to contract from a Catering company gathering information for a future event. Contacts with significant revenue potential moved through the same informal process as low-value inquiries — and some did not move through it at all.
 
-- Whether the Lead represented a viable B2B contact
-- How urgently the Lead should be contacted
-- Which sales representative should receive the assignment
+This operational failure produced three specific, compounding problems:
 
-This manual triage process created three structural failures:
+**Failure 1 — High-value Leads were not identified at entry.** No scoring model existed to distinguish Lead value at the point of contact. A Premium Wine Distributor with a Purchasing Manager ready to contract within 30 days entered the same informal queue as a Catering company in early research. The most commercially significant Leads were not surfaced, not prioritized, and not escalated. They were treated identically to the least valuable ones.
 
-**Failure 1 — High-value Leads were not reliably identified at entry.** A Premium Wine Distributor with a Purchasing Manager ready to contract within 30 days could sit in the pipeline alongside a Catering & Event Company gathering information for next year. No mechanism existed to surface the difference automatically.
+**Failure 2 — Lead routing was inconsistent and undocumented.** Assignment depended entirely on individual judgment with no territorial structure or documented criteria. The same Lead profile could be handled by different representatives on different days. There was no regional ownership model and no mechanism to ensure the right representative received the right Lead.
 
-**Failure 2 — Lead routing was inconsistent.** Assignment depended on individual judgment rather than documented criteria. Different representatives applied different standards. The same Lead profile could receive different treatment on different days.
-
-**Failure 3 — No Lead entered the pipeline with a standardized priority designation.** Without a consistent priority structure, Queue management was unreliable and pipeline forecasting was impossible.
+**Failure 3 — Lead leakage was structurally inevitable.** With no single intake channel, no priority designation, and no routing logic, the pipeline had no integrity. Leads arriving by phone, walk-in, or email depended on a Sales Representative being available, attentive, and correctly informed to act. When that chain failed — and it did — the Lead was lost with no system to catch it.
 
 ---
 
 ## 3. The Business Objective
 
-Eliminate manual Lead triage by automatically scoring and prioritizing every inbound Lead at the point of creation.
+Establish a structured, fully automated Lead intake pipeline that eliminates manual triage, enforces regional routing, and ensures the highest-value Leads reach the appropriate owner without delay or human judgment.
 
 The system must ensure that:
 
-- Every Lead that meets minimum B2B qualification criteria receives a numeric priority score and a designated Priority Level — High, Medium, or Low — upon creation
-- Priority Level High Leads are routed immediately to the National Sales Director without manual intervention
-- Priority Level Medium and Low Leads are routed to the correct regional sales Queue based on geographic territory
-- Leads that do not meet minimum qualification criteria are flagged, excluded from scoring, and routed to the correct regional Queue without disrupting the qualified pipeline
-- The scoring and routing logic is deterministic, auditable, and reproducible under any volume of simultaneous Lead creation
+- Every inbound B2B Lead is captured through a single controlled intake point and enters the pipeline with complete, structured data
+- Non-business contacts are excluded at the intake layer before any data reaches Salesforce, keeping the pipeline clean without requiring Sales Representative involvement
+- Every Lead receives a composite Priority Score across three dimensions — Business Type, Role, and Purchasing Timeline — reflecting the commercial value that Lead represents relative to other inbound inquiries
+- Every Lead is assigned a Priority Level — `High`, `Medium`, or `Low` — at the moment of creation, based on fixed thresholds applied to that composite score
+- Priority Level High Leads are routed immediately to the National Sales Director without manual intervention, because the commercial value they represent warrants direct senior attention
+- Priority Level Medium and Low Leads are routed directly to the correct regional Sales Representative based on geographic territory, ensuring organized regional ownership across the pipeline
+- The complete pipeline — from form submission to owner assignment — requires zero manual steps under normal operating conditions
 
 ---
 
 ## 4. Success Criteria
 
-The system is considered successful when the following conditions are met for every Lead created through the Wix inquiry form:
+The system is considered successful when the following conditions are met for every Lead entering through the Céleste Vineyards Wix inquiry form:
 
 | Criterion | Requirement |
 |---|---|
-| Qualification gate | Non-business Leads are identified and excluded from scoring before any priority logic executes |
-| Scoring completeness | Every qualified Lead receives a numeric score across all three dimensions — Business Type, Role, and Purchasing Timeline |
-| Priority assignment | Every qualified Lead receives a Priority Level of High, Medium, or Low based on fixed thresholds |
-| Routing accuracy | Every Lead is assigned to the correct owner or Queue based on Priority Level and State/Province |
-| Escalation | Every Priority Level High Lead is assigned directly to the National Sales Director |
-| No manual intervention | The complete pipeline — from form submission to owner assignment — requires zero manual steps |
-| Determinism | Identical input values always produce identical output — Priority Level, owner, and Qualification Status |
+| Single intake point | All inbound B2B Leads enter through one controlled channel — the Wix inquiry form |
+| Intake boundary | Non-business contacts are blocked at the form layer before any data reaches Salesforce |
+| Scoring completeness | Every Lead receives a numeric Priority Score across all three dimensions — Business Type, Role, and Purchasing Timeline |
+| Priority assignment | Every Lead is assigned a Priority Level of `High`, `Medium`, or `Low` based on fixed score thresholds |
+| Routing accuracy | Every Lead is assigned to the correct regional Sales Representative based on Priority Level and `State/Province` |
+| Escalation | Every Priority Level High Lead is assigned directly to the National Sales Director at the point of creation |
+| No manual intervention | The complete pipeline requires zero manual steps from form submission through owner assignment |
+| Zero Lead leakage | No inbound B2B Lead exits the pipeline without an owner assignment and a Priority Level |
+| Determinism | Identical input values always produce identical output — Priority Level and owner |
 
 ---
 
 ## 5. Scope Constraint
 
-This objective applies exclusively to inbound Leads originating from the Céleste Vineyards Wix inquiry form. The system does not apply to Leads created through any other mechanism. The `LeadSource` entry condition on the Record-Triggered Flow enforces this constraint at the Salesforce layer.
+This objective applies exclusively to inbound Leads originating from the Céleste Vineyards Wix inquiry form. The `LeadSource` entry condition on the Record-Triggered Flow enforces this constraint at the Salesforce layer — Lead Records created through any other mechanism do not trigger the automation.
 
 Post-conversion activity — Opportunities, Accounts, Contacts — is outside the scope of this objective. The system terminates at Lead owner assignment.
 
