@@ -1,6 +1,4 @@
-# Field Dictionary
-
-**Salesforce Case Study: Lead — Priority Level Automation**
+ Case Study: Lead — Priority Level Automation**
 Céleste Vineyards | Data Model
 
 ---
@@ -23,7 +21,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | API Name | `FirstName` |
 | Field Type | Text |
 | Written By | Make.com — passed from Wix payload key `first_name` |
-| Default | None |
 | Pipeline Role | Identity — prospect's given name |
 
 ---
@@ -36,7 +33,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | API Name | `LastName` |
 | Field Type | Text |
 | Written By | Make.com — passed from Wix payload key `last_name` |
-| Default | None |
 | Pipeline Role | Identity — prospect's surname. Required field on Lead Object |
 
 ---
@@ -49,7 +45,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | API Name | `Company` |
 | Field Type | Text |
 | Written By | Make.com — passed from Wix payload key `company` |
-| Default | None |
 | Pipeline Role | Identity — prospect's organization name |
 
 ---
@@ -62,7 +57,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | API Name | `Email` |
 | Field Type | Email |
 | Written By | Make.com — passed from Wix payload key `email` |
-| Default | None |
 | Pipeline Role | Contact — primary prospect email address |
 
 ---
@@ -75,7 +69,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | API Name | `Phone` |
 | Field Type | Phone |
 | Written By | Make.com — normalized from Wix payload key `phone` |
-| Default | None |
 | Transformation | Regex formula applied in Make.com: `replace(trim(2. data: phone); /^\+?1?(\d{3})(\d{3})(\d{4})$/; +1 ($1) $2-$3)` |
 | Output Format | `+1 (xxx) xxx-xxxx` |
 | Pipeline Role | Contact — prospect phone number, standardized format |
@@ -89,7 +82,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | State/Province |
 | Field Type | Text(255) |
 | Written By | Make.com — passed from Wix payload key `state` |
-| Default | None |
 | Pipeline Role | Routing — evaluated by the Lead Assignment Rule to determine Territory Sales Representative assignment. Also input to the `Region__c` formula field |
 
 ---
@@ -103,7 +95,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Type | Picklist |
 | Written By | Make.com — hardcoded value set in the Create Lead module |
 | Hardcoded Value | `Céleste Vineyards - Business Inquiry Form` |
-| Default | None |
 | Pipeline Role | Flow entry condition. The After-Save Flow fires only on Lead Records where `LeadSource` equals this exact value. Records created through any other mechanism do not trigger the automation |
 
 ---
@@ -116,7 +107,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | API Name | `OwnerId` |
 | Field Type | Lookup (User or Queue) |
 | Written By | Assignment Rule (Territory Sales Representative assignment at Record creation) — then Flow `Update Lead Priority and Score` Update Records element (escalation override for Priority Level High) |
-| Default | None |
 | Pipeline Role | Routing — final owner of the Lead Record. The Assignment Rule assigns to the Territory Sales Representative designated to that region. If the representative does not hold the active license, their regional Queue serves as proxy owner. For Priority Level High Leads, the Flow overrides `OwnerId` to Sophia Delgado's User ID regardless of the Assignment Rule output. If the Flow misfires, the Queue absorbs the Lead as a fault-path catch-all, as the regional owner ID is written at Record creation before the Flow executes |
 
 ---
@@ -131,7 +121,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | API Name | `Business_Type__c` |
 | Field Type | Picklist |
 | Written By | Make.com — passed from Wix payload key `business_type` |
-| Default | None |
 | Pipeline Role | Scoring tier 1 — evaluated by the `Determine Business Type Score` Decision element in Tier 1. Contributes 1–5 points to `varTotalScore` |
 | Picklist Values | `Premium Wine Distributor` (5 pts), `High-End Wine Store` (4 pts), `Upscale Restaurant` (3 pts), `Specialty Gourmet Grocer` (2 pts), `Catering & Event Company` (1 pt) |
 
@@ -145,7 +134,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | API Name | `Role__c` |
 | Field Type | Picklist |
 | Written By | Make.com — passed from Wix payload key `role` |
-| Default | None |
 | Pipeline Role | Scoring tier 2 — evaluated by the `Determine Role Score` Decision element in Tier 2. Contributes 1–5 points to `varTotalScore` |
 | Picklist Values | `Owner` (5 pts), `Purchasing Manager` (4 pts), `General Manager` (3 pts), `Sales Manager` (2 pts), `Event Coordinator` (1 pt) |
 
@@ -159,7 +147,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | API Name | `Purchasing_Timeline__c` |
 | Field Type | Picklist |
 | Written By | Make.com — passed from Wix payload key `purchasing_timeline` |
-| Default | None |
 | Pipeline Role | Scoring tier 3 — evaluated by the `Determine Purchasing Timeline Score` Decision element in Tier 3. Contributes 1–5 points to `varTotalScore` |
 | Picklist Values | `Immediate Need (Contracting)` (5 pts), `Short-Term (Within 30 Days)` (4 pts), `Evaluating Vendors (Next 90 Days)` (3 pts), `Budget Planning (Future Quarter)` (2 pts), `Information Gathering` (1 pt) |
 
@@ -170,10 +157,9 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Attribute | Value |
 |---|---|
 | Field Label | Priority Level |
-| API Name | `Priority_Level__c` |
+| API Name |
 | Field Type | Picklist |
-| Written By | Flow — `Update Lead Priority and Score` Update Records element |
-| Default | None |
+| Written By | Flow — `Update Lead Priority and Score` Update Records eleméent | None |
 | Pipeline Role | Priority output — the final assigned Priority Level for the Lead Record. Written from `varPriorityLevel` by the single Update Records element |
 | Picklist Values | `High` (`varTotalScore` ≥ 12), `Medium` (`varTotalScore` ≥ 8 and < 12), `Low` (Default Outcome) |
 
@@ -187,7 +173,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | API Name | `Lead_Score__c` |
 | Field Type | Number |
 | Written By | Flow — `Update Lead Priority and Score` Update Records element |
-| Default | None |
 | Pipeline Role | Composite score output — the numeric sum of all three tier scores. Written from `varTotalScore` by the single Update Records element. Range: 3–15 |
 
 ---
@@ -200,7 +185,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | API Name | `Customer_Note__c` |
 | Field Type | Text Area |
 | Written By | Make.com — passed from Wix payload key `customer_note` |
-| Default | None |
 | Pipeline Role | Prospect-submitted free text. Optional field — may be null. Not evaluated by any scoring or routing logic |
 
 ---
@@ -212,8 +196,7 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | Region |
 | API Name | `Region__c` |
 | Field Type | Formula (Text) |
-| Written By | Self-resolving — evaluates at read time from `State` via CASE statement |
-| Default | None — formula field |
+| Written By | Self-resolving — evaluates at read time from `State` via CASE statement | None — formula field |
 | Pipeline Role | Territorial classification — derives the Lead's geographic region from `State/Province`. Populated on all Records regardless of Priority Level. Preserved on Priority Level High Records even after Flow escalation overrides `OwnerId` to Sophia Delgado. Used for regional pipeline reporting |
 | Possible Values | `East Coast Region`, `West Coast Region`, `Central Region` |
 
@@ -226,8 +209,7 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | Lead Created |
 | API Name | `Lead_Created__c` |
 | Field Type | Formula (Date) |
-| Written By | Self-resolving — evaluates at read time from `CreatedDate` |
-| Default | None — formula field |
+| Written By | Self-resolving — evaluates at read time from `CreatedDate` |9 None — formula field |
 | Pipeline Role | Audit timestamp — records the date the Lead Record was created in Salesforce |
 
 ---
