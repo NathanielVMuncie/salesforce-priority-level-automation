@@ -1,11 +1,13 @@
-**Case Study: Lead — Priority Level Automation**
+# Field Dictionary
+
+**Salesforce Case Study: Lead — Priority Level Automation**
 Céleste Vineyards | Data Model
 
 ---
 
 ## 1. Document Purpose
 
-This document provides field-level definitions for every field active at Lead phase of the Céleste Vineyards  pipeline. Each entry records the field label, API name, data type, who writes it, its default value if applicable, and its precise role in the pipeline.
+This document provides field-level definitions for every field active at the Lead phase of the Céleste Vineyards pipeline. Each entry records the field label, API name, data type, who writes it, and its precise role in the pipeline.
 
 The authoritative source for all custom field metadata is the live SFDX retrieval from org `celeste-vineyards-dev-ed.develop.my.salesforce.com` at API v66.0.
 
@@ -75,14 +77,15 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 
 ---
 
-### State/Province
+### State
 
 | Attribute | Value |
 |---|---|
 | Field Label | State/Province |
-| Field Type | Text(255) |
+| API Name | `State` |
+| Field Type | Text |
 | Written By | Make.com — passed from Wix payload key `state` |
-| Pipeline Role | Routing — evaluated by the Lead Assignment Rule to determine Territory Sales Representative assignment. Also input to the `Region__c` formula field |
+| Pipeline Role | Routing — evaluated by the Lead Assignment Rule to determine Sales Representative assignment. Also input to the `Region__c` formula field |
 
 ---
 
@@ -106,8 +109,8 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | Owner ID |
 | API Name | `OwnerId` |
 | Field Type | Lookup (User or Queue) |
-| Written By | Assignment Rule (Territory Sales Representative assignment at Record creation) — then Flow `Update Lead Priority and Score` Update Records element (escalation override for Priority Level High) |
-| Pipeline Role | Routing — final owner of the Lead Record. The Assignment Rule assigns to the Territory Sales Representative designated to that region. If the representative does not hold the active license, their regional Queue serves as proxy owner. For Priority Level High Leads, the Flow overrides `OwnerId` to Sophia Delgado's User ID regardless of the Assignment Rule output. If the Flow misfires, the Queue absorbs the Lead as a fault-path catch-all, as the regional owner ID is written at Record creation before the Flow executes |
+| Written By | Assignment Rule (Sales Representative assignment at Record creation) — then Flow `Update Lead Priority and Score` Update Records element (escalation override for Priority Level High) |
+| Pipeline Role | Routing — final owner of the Lead Record. The Assignment Rule assigns to the Sales Representative designated to that region. If the representative does not hold the active license, their regional Queue serves as proxy owner. For Priority Level High Leads, the Flow overrides `OwnerId` to Sophia Delgado's User ID regardless of the Assignment Rule output. If the Flow misfires, the Queue absorbs the Lead as a fault-path catch-all, as the regional Queue owner ID is written at Record creation before the Flow executes |
 
 ---
 
@@ -121,7 +124,7 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | API Name | `Business_Type__c` |
 | Field Type | Picklist |
 | Written By | Make.com — passed from Wix payload key `business_type` |
-| Pipeline Role | Scoring tier 1 — evaluated by the `Determine Business Type Score` Decision element in Tier 1. Contributes 1–5 points to `varTotalScore` |
+| Pipeline Role | Scoring dimension 1 — evaluated by the `Determine Business Type Score` Decision element. Contributes 1–5 points to `varTotalScore` |
 | Picklist Values | `Premium Wine Distributor` (5 pts), `High-End Wine Store` (4 pts), `Upscale Restaurant` (3 pts), `Specialty Gourmet Grocer` (2 pts), `Catering & Event Company` (1 pt) |
 
 ---
@@ -134,7 +137,7 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | API Name | `Role__c` |
 | Field Type | Picklist |
 | Written By | Make.com — passed from Wix payload key `role` |
-| Pipeline Role | Scoring tier 2 — evaluated by the `Determine Role Score` Decision element in Tier 2. Contributes 1–5 points to `varTotalScore` |
+| Pipeline Role | Scoring dimension 2 — evaluated by the `Determine Role Score` Decision element. Contributes 1–5 points to `varTotalScore` |
 | Picklist Values | `Owner` (5 pts), `Purchasing Manager` (4 pts), `General Manager` (3 pts), `Sales Manager` (2 pts), `Event Coordinator` (1 pt) |
 
 ---
@@ -147,7 +150,7 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | API Name | `Purchasing_Timeline__c` |
 | Field Type | Picklist |
 | Written By | Make.com — passed from Wix payload key `purchasing_timeline` |
-| Pipeline Role | Scoring tier 3 — evaluated by the `Determine Purchasing Timeline Score` Decision element in Tier 3. Contributes 1–5 points to `varTotalScore` |
+| Pipeline Role | Scoring dimension 3 — evaluated by the `Determine Purchasing Timeline Score` Decision element. Contributes 1–5 points to `varTotalScore` |
 | Picklist Values | `Immediate Need (Contracting)` (5 pts), `Short-Term (Within 30 Days)` (4 pts), `Evaluating Vendors (Next 90 Days)` (3 pts), `Budget Planning (Future Quarter)` (2 pts), `Information Gathering` (1 pt) |
 
 ---
@@ -157,9 +160,9 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Attribute | Value |
 |---|---|
 | Field Label | Priority Level |
-| API Name |
+| API Name | `Priority_Level__c` |
 | Field Type | Picklist |
-| Written By | Flow — `Update Lead Priority and Score` Update Records eleméent | None |
+| Written By | Flow — `Update Lead Priority and Score` Update Records element |
 | Pipeline Role | Priority output — the final assigned Priority Level for the Lead Record. Written from `varPriorityLevel` by the single Update Records element |
 | Picklist Values | `High` (`varTotalScore` ≥ 12), `Medium` (`varTotalScore` ≥ 8 and < 12), `Low` (Default Outcome) |
 
@@ -173,7 +176,7 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | API Name | `Lead_Score__c` |
 | Field Type | Number |
 | Written By | Flow — `Update Lead Priority and Score` Update Records element |
-| Pipeline Role | Composite score output — the numeric sum of all three tier scores. Written from `varTotalScore` by the single Update Records element. Range: 3–15 |
+| Pipeline Role | Composite score output — the numeric sum of all three scoring dimensions. Written from `varTotalScore` by the single Update Records element. Range: 3–15 |
 
 ---
 
@@ -196,9 +199,9 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | Region |
 | API Name | `Region__c` |
 | Field Type | Formula (Text) |
-| Written By | Self-resolving — evaluates at read time from `State` via CASE statement | None — formula field |
+| Written By | Self-resolving — evaluates at read time from `State` via CASE statement |
 | Pipeline Role | Territorial classification — derives the Lead's geographic region from `State/Province`. Populated on all Records regardless of Priority Level. Preserved on Priority Level High Records even after Flow escalation overrides `OwnerId` to Sophia Delgado. Used for regional pipeline reporting |
-| Possible Values | `East Coast Region`, `West Coast Region`, `Central Region` |
+| Possible Values | `East Coast`, `West Coast`, `Central`, `International` |
 
 ---
 
@@ -209,7 +212,7 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | Lead Created |
 | API Name | `Lead_Created__c` |
 | Field Type | Formula (Date) |
-| Written By | Self-resolving — evaluates at read time from `CreatedDate` |9 None — formula field |
+| Written By | Self-resolving — evaluates at read time from `CreatedDate` |
 | Pipeline Role | Audit timestamp — records the date the Lead Record was created in Salesforce |
 
 ---
