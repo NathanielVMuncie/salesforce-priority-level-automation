@@ -1,10 +1,27 @@
 # Coverage Validation Matrix
 
-| Lead Name         | Qualification Status | Path                          | Region       | Priority Level   | Score |
-|-------------------|----------------------|-------------------------------|--------------|------------------|-------|
-| Danielle Pruett   | ❌ Not Qualified     | Gatekeeper Fail               | East Coast   | N/A              | N/A   |
-| Marcus Bellard    | ❌ Not Qualified     | Gatekeeper Fail               | Central      | N/A              | N/A   |
-| Tamara Nguyen     | ✅ Qualified         | Qualified (No Escalation)     | Central      | Low              | 3     |
-| Jerome Castillo   | ✅ Qualified         | Qualified (No Escalation)     | East Coast   | Medium           | 9     |
-| Vivienne Okafor   | ✅ Qualified         | Qualified (Escalated)         | East Coast   | High             | 13    |
-| Kenji Watanabe    | ✅ Qualified         | Qualified (Escalated)         | West Coast   | High             | 13    |
+**Salesforce Case Study: Lead — Priority Level Automation**
+Céleste Vineyards | Validation and Evidence
+
+---
+
+| Lead Name          | Path                  | Region     | Priority Level | Score |
+|--------------------|-----------------------|------------|----------------|-------|
+| Marcus Thibodeau   | Scored — Escalated    | East Coast | High           | 14    |
+| Renata Voss        | Scored — Escalated    | West Coast | High           | 13    |
+| Dominic Reyes      | Scored — No Escalation | Central   | Medium         | 9     |
+| Janelle Harmon     | Scored — No Escalation | East Coast | Medium         | 8     |
+| Britta Sandoval    | Scored — No Escalation | West Coast | Low            | 3     |
+
+---
+
+## Document Status
+
+| Attribute | Value |
+|---|---|
+| Section | Validation and Evidence |
+| File Path | `test-artifacts/uat-evidence/coverage-orbital-matrix.md` |
+
+---
+
+*Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*
