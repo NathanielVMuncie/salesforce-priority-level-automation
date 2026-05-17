@@ -1,4 +1,4 @@
- Case Study: Lead — Priority Level Automation**
+**Case Study: Lead — Priority Level Automation**
 Céleste Vineyards | Data Model
 
 ---
