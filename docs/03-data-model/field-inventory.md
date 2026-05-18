@@ -24,9 +24,9 @@ These standard Salesforce Lead fields are populated by Make.com from the Wix for
 | Company | `Company` | Text | `company` | None | Identity |
 | Email | `Email` | Email | `email` | None | Contact |
 | Phone | `Phone` | Phone | `phone` | Regex normalization to `+1 (xxx) xxx-xxxx` | Contact |
-| State/Province | `State` | Text(255) | `state` | None | Routing — evaluated by Assignment Rule |
+| State/Province | `State` | Text | `state` | None | Routing — evaluated by Assignment Rule |
 | Lead Source | `LeadSource` | Picklist | *(not from payload)* | Hardcoded: `Céleste Vineyards - Business Inquiry Form` | Flow entry condition |
-| Owner ID | `OwnerId` | Lookup | *(not from payload)* | Set by Assignment Rule to Territory Sales Representative or regional Queue proxy; overridden by Flow escalation for Priority Level High | Routing — final owner |
+| Owner ID | `OwnerId` | Lookup | *(not from payload)* | Set by Assignment Rule; overridden by Flow escalation for Priority Level High Leads | Routing — final owner |
 
 ---
 
@@ -36,10 +36,10 @@ These custom fields were created on the Lead Object to support the scoring model
 
 | Field Label | API Name | Field Type | Written By | Pipeline Role |
 |---|---|---|---|---|
-| Business Type | `Business_Type__c` | Picklist | Make.com (payload) | Scoring tier 1 — Tier 1 Decision element |
-| Role | `Role__c` | Picklist | Make.com (payload) | Scoring tier 2 — Tier 2 Decision element |
-| Purchasing Timeline | `Purchasing_Timeline__c` | Picklist | Make.com (payload) | Scoring tier 3 — Tier 3 Decision element |
-| Priority Level | `Priority_Level__c` | Picklist | Flow — `Update Lead Priority and Score` Update Records element | Priority output — written by Flow on all scored Leads |
+| Business Type | `Business_Type__c` | Picklist | Make.com (payload) | Scoring dimension 1 — Tier 1 Decision element |
+| Role | `Role__c` | Picklist | Make.com (payload) | Scoring dimension 2 — Tier 2 Decision element |
+| Purchasing Timeline | `Purchasing_Timeline__c` | Picklist | Make.com (payload) | Scoring dimension 3 — Tier 3 Decision element |
+| Priority Level | `Priority_Level__c` | Picklist | Flow — `Update Lead Priority and Score` Update Records element | Priority output — written by Flow on all Leads |
 | Lead Score | `Lead_Score__c` | Number | Flow — `Update Lead Priority and Score` Update Records element | Composite score output (3–15) — written by Flow |
 | Customer Note | `Customer_Note__c` | Text Area | Make.com (payload — optional) | Prospect-submitted free text |
 | Region | `Region__c` | Formula (Text) | Self-resolving — derives from `State` via CASE statement | Territorial classification — populated on all Records |
@@ -68,15 +68,15 @@ These custom fields were created on the Lead Object to support the scoring model
 | `Phone` | ✅ Collected | ✅ Written (normalized) | | |
 | `State` | ✅ Collected | ✅ Written | | |
 | `LeadSource` | | ✅ Hardcoded | | |
-| `OwnerId` | | | ✅ Territory Sales Representative assignment | ✅ Escalation override |
+| `OwnerId` | | | ✅ Sales Representative assignment | ✅ Escalation override (Priority Level High) |
 | `Business_Type__c` | ✅ Collected | ✅ Written | | |
 | `Role__c` | ✅ Collected | ✅ Written | | |
 | `Purchasing_Timeline__c` | ✅ Collected | ✅ Written | | |
 | `Priority_Level__c` | | | | ✅ Written |
 | `Lead_Score__c` | | | | ✅ Written |
 | `Customer_Note__c` | ✅ Collected | ✅ Written | | |
-| `Region__c` | | | | ✅ Formula — self-resolving |
-| `Lead_Created__c` | | | | ✅ Formula — self-resolving |
+| `Region__c` | | | | Formula — self-resolving |
+| `Lead_Created__c` | | | | Formula — self-resolving |
 
 ---
 
@@ -89,7 +89,7 @@ These custom fields were created on the Lead Object to support the scoring model
 | `Premium Wine Distributor` | Highest value | 5 |
 | `High-End Wine Store` | High value | 4 |
 | `Upscale Restaurant` | Mid value | 3 |
-| `Specialty Gourmet Grocer` | Low value | 2 |
+| `Specialty Gourmet Grocer` | Low-mid value | 2 |
 | `Catering & Event Company` | Lowest value | 1 |
 
 ### 6.2 Role__c
@@ -106,11 +106,11 @@ These custom fields were created on the Lead Object to support the scoring model
 
 | Picklist Value | Scoring Role | Points |
 |---|---|---|
-| `Immediate Need (Contracting)` | Highest urgency | 5 |
-| `Short-Term (Within 30 Days)` | High urgency | 4 |
-| `Evaluating Vendors (Next 90 Days)` | Mid urgency | 3 |
-| `Budget Planning (Future Quarter)` | Low urgency | 2 |
-| `Information Gathering` | No urgency | 1 |
+| `Immediate Need (Contracting)` | Shortest timeline | 5 |
+| `Short-Term (Within 30 Days)` | Near-term | 4 |
+| `Evaluating Vendors (Next 90 Days)` | Mid-term | 3 |
+| `Budget Planning (Future Quarter)` | Long-term | 2 |
+| `Information Gathering` | No timeline | 1 |
 
 ---
 
