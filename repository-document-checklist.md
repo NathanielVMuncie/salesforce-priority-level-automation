@@ -21,7 +21,7 @@
 
 ## docs/01-overview/
 
-- [ ] `business-objective.md`
+- [X] `business-objective.md`
 - [ ] `devorg-constraints-and-ownership-model.md`
 - [ ] `project-overview.md`
 - [ ] `scope-boundaries.md`
@@ -30,7 +30,7 @@
 
 ## docs/02-architecture/
 
-- [ ] `automation-architecture.md`
+- [X] `automation-architecture.md`
 - [ ] `gatekeeper-logic.md`
 - [ ] `routing-architecture.md`
 - [ ] `state-management-risk.md`
