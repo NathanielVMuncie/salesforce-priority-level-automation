@@ -40,9 +40,9 @@
 
 ## docs/03-data-model/
 
-- [ ] `field-dictionary.md`
-- [ ] `field-inventory.md`
-- [ ] `priority-thresholds.md`
+- [X] `field-dictionary.md`
+- [x] `field-inventory.md`
+- [X] `priority-thresholds.md`
 - [ ] `scoring-model.md`
 
 ---
@@ -73,6 +73,7 @@
 - [ ] `test-scenarios.md`
 - [ ] `uat-matrix.md`
 - [ ] `uat-session-log.md`
+- [X] `coverage-orbital-matrix.md`
 
 ---
 
@@ -91,16 +92,9 @@
 
 - [ ] `metadata/assignment-rules/lead-assignment-rules.md`
 - [ ] `metadata/custom-fields/lead-fields.md`
-- [ ] `metadata/custom-fields/lead-fieldss.md` ⚠️ *Possible typo — confirm or remove*
 - [ ] `metadata/flow-notes/lead-scoring-and-priority-assignment.md`
 - [ ] `metadata/formulas/priority-formulas.md`
 - [ ] `metadata/queues/queue-definitions.md`
-
----
-
-## test-artifacts/
-
-- [ ] `test-artifacts/uat-evidence/coverage-orbital-matrix.md`
 
 ---
 
