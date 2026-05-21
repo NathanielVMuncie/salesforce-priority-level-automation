@@ -17,12 +17,12 @@ This document covers threshold evaluation only. Scoring dimension logic — how 
 
 `varTotalScore` is a Flow Number variable initialized at 0. It accumulates weighted dimension scores across three tiers — Business Type, Role, and Purchasing Timeline — via Assignment elements in the Flow. Each tier contributes 1–5 points.
 
-| Variable | Data Type | Default | Range (Qualified Leads) |
+| Variable | Data Type | Default | Range |
 |---|---|---|---|
 | `varTotalScore` | Number | 0 | 3–15 |
 
-- **Minimum (3):** Lowest qualifying value in all three tiers — Catering & Event Company (1) + Event Coordinator (1) + Information Gathering (1)
-- **Maximum (15):** Highest value in all three tiers — Premium Wine Distributor (5) + Owner (5) + Immediate Need (Contracting) (5)
+- **Minimum (3):** Lowest value across all three tiers — Catering & Event Company (1) + Event Coordinator (1) + Information Gathering (1)
+- **Maximum (15):** Highest value across all three tiers — Premium Wine Distributor (5) + Owner (5) + Immediate Need (Contracting) (5)
 
 `varTotalScore` is the sole input to the Priority Level threshold Decision element. No other variable or field is evaluated at this stage.
 
@@ -62,7 +62,7 @@ Each outcome routes to a dedicated Assignment element that writes the Priority L
 | `Medium` | `Medium` |
 | `Low` | `Low` |
 
-All three Assignment elements converge at the Escalation segment (Segment 4) of the Flow.
+All three Assignment elements converge at the Escalation segment of the Flow.
 
 ---
 
@@ -85,15 +85,13 @@ All three Assignment elements converge at the Escalation segment (Segment 4) of 
 | Field Label | Priority Level |
 | API Name | `Priority_Level__c` |
 | Field Type | Picklist |
-| Written By | Flow — `Update Lead Priority and Score` Update Records element (qualified path) |
-| Written By (non-qualified path) | Make.com Module 13 — hardcoded `Not Applicable` before Record creation |
+| Written By | Flow — `Update Lead Priority and Score` Update Records element |
 
-| Picklist Value | Source | Condition |
-|---|---|---|
-| `High` | Flow — qualified path | `varTotalScore` ≥ 12 |
-| `Medium` | Flow — qualified path | `varTotalScore` ≥ 8 and < 12 |
-| `Low` | Flow — qualified path | `varTotalScore` ≤ 7 (Default Outcome) |
-| `Not Applicable` | Make.com Module 13 | Non-qualified path — Gatekeeper Fail |
+| Picklist Value | Condition |
+|---|---|
+| `High` | `varTotalScore` ≥ 12 |
+| `Medium` | `varTotalScore` ≥ 8 and < 12 |
+| `Low` | Default Outcome — `varTotalScore` ≤ 7 |
 
 ---
 
@@ -101,8 +99,8 @@ All three Assignment elements converge at the Escalation segment (Segment 4) of 
 
 | Score | Priority Level | Example Composition |
 |---|---|---|
-| 15 | High | Premium Wine Distributor (5) + Owner (5) + Immediate Need (5) |
-| 13 | High | Premium Wine Distributor (5) + Owner (5) + Short-Term Within 30 Days (3) — or other combinations summing to 13 |
+| 15 | High | Premium Wine Distributor (5) + Owner (5) + Immediate Need (Contracting) (5) |
+| 13 | High | Premium Wine Distributor (5) + Owner (5) + Short-Term (Within 30 Days) (4) — or other combinations summing to 13 |
 | 12 | High | Threshold minimum — multiple valid compositions |
 | 11 | Medium | Threshold maximum |
 | 8 | Medium | Threshold minimum — multiple valid compositions |
@@ -115,10 +113,11 @@ All three Assignment elements converge at the Escalation segment (Segment 4) of 
 
 | Lead | `varTotalScore` | Priority Level Assigned | Path |
 |---|---|---|---|
-| Tamara Nguyen (S-03) | 3 | Low | Qualified — No Escalation |
-| Jerome Castillo (S-04) | 9 | Medium | Qualified — No Escalation |
-| Vivienne Okafor (S-05) | 13 | High | Qualified — Escalated |
-| Kenji Watanabe (S-06) | 13 | High | Qualified — Escalated |
+| Britta Sandoval (L-05) | 3 | Low | Scored — No Escalation |
+| Janelle Harmon (L-04) | 8 | Medium | Scored — No Escalation |
+| Dominic Reyes (L-03) | 9 | Medium | Scored — No Escalation |
+| Renata Voss (L-02) | 13 | High | Scored — Escalated |
+| Marcus Thibodeau (L-01) | 14 | High | Scored — Escalated |
 
 Confirmed via Flow debug logs. All threshold conditions resolved correctly across the score range.
 
