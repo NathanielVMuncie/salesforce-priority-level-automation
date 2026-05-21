@@ -109,8 +109,8 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | Owner ID |
 | API Name | `OwnerId` |
 | Field Type | Lookup (User or Queue) |
-| Written By | Assignment Rule (Sales Representative assignment at Record creation) — then Flow `Update Lead Priority and Score` Update Records element (escalation override for Priority Level High) |
-| Pipeline Role | Routing — final owner of the Lead Record. The Assignment Rule assigns to the Sales Representative designated to that region. If the representative does not hold the active license, their regional Queue serves as proxy owner. For Priority Level High Leads, the Flow overrides `OwnerId` to Sophia Delgado's User ID regardless of the Assignment Rule output. If the Flow misfires, the Queue absorbs the Lead as a fault-path catch-all, as the regional Queue owner ID is written at Record creation before the Flow executes |
+| Written By | Assignment Rule (named Sales Representative assignment at Record creation) — then Flow `Update Lead Priority and Score` Update Records element (escalation override for Priority Level High) |
+| Pipeline Role | Routing — final owner of the Lead Record. The Assignment Rule assigns to the named Sales Representative designated to that region. For Priority Level High Leads, the Flow overrides `OwnerId` to Sophia Delgado's User ID regardless of the Assignment Rule output. If the Flow misfires, the regional Queue absorbs the Lead as a fault-path catch-all — the Queue `OwnerId` is written at Record creation before the Flow executes |
 
 ---
 
