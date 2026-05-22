@@ -77,25 +77,4 @@
 
 ---
 
-## docs/07-portfolio/
-
-- [ ] `case-study-summary.md`
-- [ ] `design-insight-gatekeeper-sequencing.md`
-- [ ] `project-page-copy.md`
-- [ ] `recruiter-readable-summary.md`
-- [ ] `recruiter-summary.md`
-- [ ] `resume-bullets.md`
-
----
-
-## metadata/
-
-- [ ] `metadata/assignment-rules/lead-assignment-rules.md`
-- [ ] `metadata/custom-fields/lead-fields.md`
-- [ ] `metadata/flow-notes/lead-scoring-and-priority-assignment.md`
-- [ ] `metadata/formulas/priority-formulas.md`
-- [ ] `metadata/queues/queue-definitions.md`
-
----
-
 **Total document files: 43**
