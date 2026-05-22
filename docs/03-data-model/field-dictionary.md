@@ -96,7 +96,7 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Field Label | Lead Source |
 | API Name | `LeadSource` |
 | Field Type | Picklist |
-| Written By | Make.com — hardcoded value set in the Create Lead module |
+| Written By | Make.com — hardcoded value set in `Module 12` |
 | Hardcoded Value | `Céleste Vineyards - Business Inquiry Form` |
 | Pipeline Role | Flow entry condition. The After-Save Flow fires only on Lead Records where `LeadSource` equals this exact value. Records created through any other mechanism do not trigger the automation |
 
@@ -165,18 +165,6 @@ The authoritative source for all custom field metadata is the live SFDX retrieva
 | Written By | Flow — `Update Lead Priority and Score` Update Records element |
 | Pipeline Role | Priority output — the final assigned Priority Level for the Lead Record. Written from `varPriorityLevel` by the single Update Records element |
 | Picklist Values | `High` (`varTotalScore` ≥ 12), `Medium` (`varTotalScore` ≥ 8 and < 12), `Low` (Default Outcome) |
-
----
-
-### Lead_Score__c
-
-| Attribute | Value |
-|---|---|
-| Field Label | Lead Score |
-| API Name | `Lead_Score__c` |
-| Field Type | Number |
-| Written By | Flow — `Update Lead Priority and Score` Update Records element |
-| Pipeline Role | Composite score output — the numeric sum of all three scoring dimensions. Written from `varTotalScore` by the single Update Records element. Range: 3–15 |
 
 ---
 
