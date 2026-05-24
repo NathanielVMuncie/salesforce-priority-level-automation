@@ -7,25 +7,26 @@ Céleste Vineyards | Integration
 
 ## 1. Document Purpose
 
-This document defines the complete Field-level mapping between the Wix inquiry form submission payload and the Salesforce Lead Object. It establishes the exact mapping path for every Field — from the Wix form key, through Make.com normalization, to the Salesforce Lead Field API name and Field type.
+This document defines the complete field-level mapping between the Wix inquiry form submission payload and the Salesforce Lead Object. It establishes the exact mapping path for every field — from the Wix form key, through Make.com normalization, to the Salesforce Lead field API name and field type.
 
-This is the authoritative Field mapping reference for the integration pipeline. All mapping decisions documented here are reflected in the Make.com Module 12 and Module 13 configurations.
+This is the authoritative field mapping reference for the integration pipeline. All mapping decisions documented here are reflected in the Make.com `Module 12` configuration.
 
 ---
 
 ## 2. Mapping Architecture
 
-Every Field that appears on the Lead Record originates from one of three sources:
+Every field that appears on the Lead Record originates from one of two sources:
 
 | Source | Description |
 |---|---|
 | Wix payload | Field value submitted by the prospect and transmitted via the Wix Automation webhook |
 | Make.com hardcoded | Value set explicitly in the Make.com module configuration — not derived from the payload |
-| Salesforce Field default | Value set at the Field level in Object Manager — applied automatically at Record creation |
+
+Every payload Make.com receives is a confirmed B2B submission. The qualification gate is enforced at the Wix form layer before any payload is transmitted. Non-business submissions never reach Make.com.
 
 ---
 
-## 3. Complete Field Mapping — Qualified Path (Module 12)
+## 3. Complete Field Mapping — Module 12
 
 | Wix Form Key | Make.com Transformation | Salesforce Field Label | Salesforce API Name | Field Type |
 |---|---|---|---|---|
@@ -40,49 +41,36 @@ Every Field that appears on the Lead Record originates from one of three sources
 | `purchasing_timeline` | None | Purchasing Timeline | `Purchasing_Timeline__c` | Picklist |
 | `customer_note` | None | Customer Note | `Customer_Note__c` | Text Area |
 | *(not from payload)* | Hardcoded: `Céleste Vineyards - Business Inquiry Form` | Lead Source | `LeadSource` | Picklist |
-| *(not from payload)* | Field default: `True` | Qualified | `Qualified__c` | Checkbox |
 
 ---
 
-## 4. Complete Field Mapping — Non-Qualified Path (Module 13)
+## 4. Fields Outside Mapping Scope
 
-Identity and contact Fields are mapped identically to Module 12. Scoring-relevant Fields are replaced with placeholder values.
+These fields are populated after Record creation and are not part of the Make.com field mapping.
 
-| Wix Form Key | Make.com Value Written | Salesforce Field Label | Salesforce API Name | Field Type |
-|---|---|---|---|---|
-| `first_name` | Passed from payload | First Name | `FirstName` | Text |
-| `last_name` | Passed from payload | Last Name | `LastName` | Text |
-| `company` | Passed from payload (may be empty) | Company | `Company` | Text |
-| `email` | Passed from payload | Email | `Email` | Email |
-| `phone` | Regex normalization applied | Phone | `Phone` | Phone |
-| `state` | Passed from payload | State/Province | `State` | Text |
-| `business_type` | `Personal/Individual (Non-Business)` | Business Type | `Business_Type__c` | Picklist |
-| *(not from payload)* | `Not Applicable` | Role | `Role__c` | Picklist |
-| *(not from payload)* | `Not Applicable` | Purchasing Timeline | `Purchasing_Timeline__c` | Picklist |
-| `customer_note` | Passed from payload | Customer Note | `Customer_Note__c` | Text Area |
-| *(not from payload)* | `Not Applicable` | Priority Level | `Priority_Level__c` | Picklist |
-| *(not from payload)* | Hardcoded: `Céleste Vineyards - Business Inquiry Form` | Lead Source | `LeadSource` | Picklist |
-| *(not from payload)* | Field default: `True` | Qualified | `Qualified__c` | Checkbox |
+### 4.1 Fields Written by the Flow
 
----
-
-## 5. Fields Written by the Flow — Not in Mapping Scope
-
-The following Fields are written exclusively by the After-Save Flow after Record creation. They are not part of the Make.com Field mapping and are included here only for completeness.
+These fields are written by the After-Save Flow via the `Update Lead Priority and Score` Update Records element or the escalation logic that precedes it.
 
 | Salesforce Field Label | API Name | Written By | Path |
 |---|---|---|---|
-| Priority Level | `Priority_Level__c` | Flow (qualified path only) | Qualified Leads — overwrites null |
-| Qualified | `Qualified__c` | Flow Update Records element | Qualified Leads — confirms True |
-| Owner ID | `OwnerId` | Flow escalation logic | All qualified Leads |
-| Qualification Status | `Qualification_Status__c` | Formula Field — self-resolving | All Records |
-| Region | `Region__c` | Formula Field — self-resolving | All Records |
+| Priority Level | `Priority_Level__c` | Flow — `Update Lead Priority and Score` | All Leads |
+| Owner ID | `OwnerId` | Flow — escalation logic | All Leads |
+
+### 4.2 Self-Resolving Formula Fields
+
+These fields are Formula fields that resolve at read time from existing Record data. They are not written by the Flow, the Assignment Rule, or Make.com.
+
+| Salesforce Field Label | API Name | Resolves From | Resolution Mechanism |
+|---|---|---|---|
+| Region | `Region__c` | `State` | Formula (Text) — CASE statement mapping state values to `East Coast`, `West Coast`, `Central`, or `International` |
+| Lead Created | `Lead_Created__c` | `CreatedDate` | Formula (Date) — `DATEVALUE(CreatedDate)` strips time component |
 
 ---
 
-## 6. Phone Normalization
+## 5. Phone Normalization
 
-The `phone` Field requires normalization before it is written to the Salesforce `Phone` Field. Wix transmits phone numbers in raw concatenated format. Make.com applies the following regex formula in Module 12 and Module 13 before the API call executes.
+The `phone` field requires normalization before it is written to the Salesforce `Phone` field. Wix transmits phone numbers in raw concatenated format. Make.com applies the following regex formula in `Module 12` before the API call executes.
 
 **Formula:**
 ```
@@ -96,13 +84,22 @@ replace(trim(2. data: phone); /^\+?1?(\d{3})(\d{3})(\d{4})$/; +1 ($1) $2-$3)
 
 ---
 
-## 7. LeadSource Hardcoding
+## 6. LeadSource Hardcoding
 
-The `LeadSource` Field is not sourced from the Wix payload. It is hardcoded in both Module 12 and Module 13 as `Céleste Vineyards - Business Inquiry Form`. This value serves two purposes:
+The `LeadSource` field is not sourced from the Wix payload. It is hardcoded in `Module 12` as `Céleste Vineyards - Business Inquiry Form`. This value serves two purposes:
 
 - It provides accurate source attribution on the Lead Record for reporting
 - It is the entry condition evaluated by the After-Save Flow — only Records with this exact `LeadSource` value trigger the automation
 
 ---
 
-*Salesforce Case Study: Lead - Priority Level Automation | Built by Nathaniel V. Muncie*
+## 7. Document Status
+
+| Attribute | Value |
+|---|---|
+| Section | Integration |
+| File Path | `docs/05-integration/source-to-lead-mapping.md` |
+
+---
+
+*Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*
