@@ -7,139 +7,197 @@ Céleste Vineyards | Architecture
 
 ## 1. Document Purpose
 
-This document defines the complete routing architecture of the Céleste Vineyards Lead Priority Level Automation system. It establishes how Lead Records are owned at the point of creation, how the Assignment Rule and Flow escalation logic interact to determine final ownership, and how the system ensures every Lead Record exits the pipeline with a correct and deliberate owner assignment.
+This document defines the routing architecture of the Céleste Vineyards Lead Priority Level Automation system. It establishes how the Lead Assignment Rule and the After-Save Flow escalation interact to produce final Lead ownership, how the DevOrg license-cycling constraint is managed within that architecture, and what the Queue layer is responsible for.
 
-This document covers architecture — the structural decisions, component interactions, and ownership outcomes. Component-level configuration details are documented in `docs/04-automation-logic/territorial-routing-logic.md` and `docs/04-automation-logic/escalation-logic.md`.
+Routing occurs twice for every Lead Record that enters this pipeline.
 
-Every Lead Record that enters the routing pipeline is a confirmed B2B submission. The qualification gate is enforced at the Wix form layer. No non-business Lead Record exists in Salesforce.
+**First routing — Assignment Rule.** Fires at the moment of Record creation, before the Flow executes. Evaluates `State/Province` and writes an initial `OwnerId` — either the named Sales Representative for that territory or their regional Queue. This routing applies to every Lead without exception.
+
+**Second routing — Flow escalation.** Fires after the Assignment Rule completes, as part of the After-Save Flow. Evaluates `varPriorityLevel` and conditionally overrides the `OwnerId` written by the Assignment Rule. This routing applies only to Priority Level `High` Leads. Priority Level `Medium` and `Low` Leads retain the `OwnerId` written by the Assignment Rule unchanged.
+
+Every Lead Record that enters Salesforce is a confirmed B2B submission — the Gatekeeper is enforced at the Wix form layer before any data is transmitted.
+
+This document covers routing architecture. State-level territory coverage detail is in `docs/04-automation-logic/territorial-routing-logic.md`. Flow segment configuration is in `docs/02-architecture/automation-architecture.md`.
 
 ---
 
 ## 2. Routing Architecture Overview
 
-Lead ownership is determined by two components operating in sequence: the Lead Assignment Rule and the After-Save Flow. These two components do not conflict — they are designed to work together. The Assignment Rule establishes the default territorial ownership. The Flow either preserves or overrides that ownership based on Priority Level.
+Routing is implemented in two sequential events. The first routing event fires on every Lead. The second routing event fires conditionally — only when Priority Level is `High`.
+
+**Routing Event 1 — Regional Territory Assignment Rule (`regional_territory_assignment`).** Fires at Record creation, before the Flow executes. Evaluates `State/Province` and writes an initial `OwnerId` — either the named Sales Representative for that territory or their regional Queue — depending on which representative holds the active license at that moment. This event establishes the baseline ownership for all Leads.
+
+**Routing Event 2 — After-Save Flow escalation.** Fires after the Assignment Rule completes. Captures the `OwnerId` established by Routing Event 1 into `varOwnerID`, evaluates `varPriorityLevel`, and overrides `varOwnerID` with Sophia Delgado's User ID if Priority Level is `High`. If Priority Level is `Medium` or `Low`, the baseline `OwnerId` from Routing Event 1 is retained and committed unchanged.
 
 ```
-Lead Record Created (Make.com API Call — B2B submissions only)
+Lead Record Created via Make.com
         |
         ▼
-Lead Assignment Rule Fires
-(Evaluates State/Province → Assigns Regional Queue)
+Regional Territory Assignment Rule Fires
+Evaluates State/Province
+        |
+   _____|________________________________
+  |              |                       |
+Rule 1         Rule 2                  Rule 3
+East Coast     West Coast              Central
+Luis Navarro   Jordan Chen             Priya Desai
+or             or                      or
+East_Coast_    West_Coast_             Central_
+Region Queue   Region Queue            Region Queue
+        |
+        ▼
+OwnerId written to Lead Record
+(named Sales Representative or regional Queue)
         |
         ▼
 After-Save Flow Fires
-(Scores Lead → Evaluates Priority Level → Retains or Overrides OwnerId)
+Lead_Scoring_and_Priority_Level_Assignment
         |
         ▼
-Update Records — Single DML Write
-(Commits OwnerId, Priority_Level__c)
+Scoring and Priority Assignment execute (Segments 1–2)
         |
         ▼
-Lead Record Owned by:
-  ┌─────────────────────────────────────────────┐
-  │  High Priority  →  Sophia Delgado           │
-  │  Medium Priority  →  Regional Queue         │
-  │  Low Priority  →  Regional Queue            │
-  └─────────────────────────────────────────────┘
+Escalation Segment executes (Segment 3)
+        |
+   _____|_______________________
+  |                             |
+Priority Level High         Priority Level Medium / Low
+        |                             |
+varOwnerID overridden           varOwnerID retained
+Sophia Delgado User ID          Regional Sales Representative
+                                or Queue OwnerId
+        |
+        ▼
+Single DML Write — OwnerId committed
 ```
 
 ---
 
-## 3. Component Responsibilities
+## 3. Assignment Rule Configuration
 
-### 3.1 Lead Assignment Rule
-
-The Lead Assignment Rule is responsible for territorial ownership. It evaluates the `State/Province` Field on the Lead Record and assigns the Record to the correct regional Queue based on geographic territory.
-
-| Responsibility | Detail |
+| Attribute | Value |
 |---|---|
-| Fires on | Lead Record creation |
-| Evaluates | `State/Province` Field |
-| Output | Regional Queue `OwnerId` written to Record |
-| Scope | All Lead Records — all Priority Levels |
-| Awareness of Priority Level | None — the Assignment Rule does not evaluate Priority Level |
+| Rule Label | Regional Territory Assignment |
+| Rule API Name | `regional_territory_assignment` |
+| Object | Lead |
+| Active | Yes |
+| Evaluation Field | `State/Province` |
+| Rule Entries | 3 |
 
-The Assignment Rule fires before the Flow. At the point the Flow begins executing, the Lead Record is already owned by the correct regional Queue.
-
-### 3.2 After-Save Flow — Escalation Logic
-
-The Flow is responsible for scoring the Lead and applying priority-based ownership override. After scoring and Priority Level assignment are complete, the Flow evaluates whether the assigned Priority Level requires escalation. If the Priority Level is High, the Flow overwrites the regional Queue `OwnerId` with Sophia Delgado's User ID. If the Priority Level is Medium or Low, the regional Queue `OwnerId` is retained unchanged.
-
-| Responsibility | Detail |
-|---|---|
-| Fires on | Lead Record creation — After-Save |
-| Evaluates | `varPriorityLevel` (after scoring is complete) |
-| Output | `varOwnerID` set to Sophia Delgado (High) or retained as regional Queue (Medium / Low) |
-| Scope | All Lead Records that enter Salesforce |
-| Awareness of Territory | Indirect — captures regional Queue OwnerId via `{!$Record.OwnerId}` before evaluating escalation |
+The Assignment Rule is named to reflect its design intent: regional territory determines ownership. Priority Level is not evaluated by the Assignment Rule — that concern belongs to the Flow.
 
 ---
 
-## 4. Ownership Determination Sequence
+## 4. Rule Entry Definitions
 
-The following sequence defines exactly how ownership is determined for every Lead Record that enters the system.
+Each rule entry covers a fixed set of states. The state-to-territory mapping never changes regardless of which Sales Representative holds the active license. What changes is the "Assign To" target — either the named Sales Representative or their regional Queue.
 
-| Step | Component | Action | Record State After Step |
-|---|---|---|---|
-| 1 | Make.com | Creates Lead Record via API | Record exists — `OwnerId` is the creating user or default |
-| 2 | Assignment Rule | Evaluates `State/Province` — assigns regional Queue | OwnerId = Regional Queue |
-| 3 | Flow — Weighted Scoring | Calculates `varTotalScore` across three dimensions | Score accumulated in `varTotalScore` |
-| 4 | Flow — Priority Assignment | Maps `varTotalScore` to Priority Level | `varPriorityLevel` set to `High`, `Medium`, or `Low` |
-| 5 | Flow — OwnerId Initialization | Captures `{!$Record.OwnerId}` into `varOwnerID` | `varOwnerID` = Regional Queue OwnerId |
-| 6 | Flow — Escalation Decision | Evaluates `varPriorityLevel` | High: `varOwnerID` overwritten with Sophia Delgado User ID. Medium / Low: `varOwnerID` unchanged |
-| 7 | Flow — Update Records | Writes `OwnerId`, `Priority_Level__c` in single DML | Record ownership committed — pipeline complete |
-
----
-
-## 5. Ownership Outcomes by Path
-
-Every Lead Record that enters the system exits with one of three ownership states. The table below maps each path to its final ownership outcome.
-
-| Path | Condition | Final OwnerId | `Priority_Level__c` |
-|---|---|---|---|
-| Qualified — High | `varTotalScore` ≥ 12 | Sophia Delgado | `High` |
-| Qualified — Medium | `varTotalScore` 8–11 | Regional Queue | `Medium` |
-| Qualified — Low | `varTotalScore` 3–7 | Regional Queue | `Low` |
-
----
-
-## 6. `Region__c` Field — Preserved Across All Paths
-
-The `Region__c` Formula Field derives the Lead's territorial classification from `State/Province` at read time. It is not written by the Assignment Rule, the Flow, or Make.com under any circumstances.
-
-- A High priority Lead owned by Sophia Delgado retains the correct `Region__c` value for the territory the Lead originated from.
-- `Region__c` is always reliable as a territorial classification Field regardless of who owns the Record.
-
-This design preserves regional pipeline visibility for reporting purposes even when escalation overrides Queue ownership.
-
----
-
-## 7. Routing Architecture — Design Decisions
-
-### 7.1 Why the Assignment Rule Fires Before the Flow
-
-Salesforce executes Lead Assignment Rules synchronously at Record creation, before After-Save Flow logic runs. This sequencing is native platform behavior. The system design leverages this behavior deliberately — the Assignment Rule establishes the territorial Queue OwnerId first, and the Flow reads that value via `{!$Record.OwnerId}` to use as the default before evaluating escalation.
-
-The Flow does not need to contain territory evaluation logic. Territory is handled entirely by the Assignment Rule. The Flow only needs to decide whether to keep or override the value the Assignment Rule already set.
-
-### 7.2 Why `OwnerId` Is Written by the Flow, Not the Assignment Rule Alone
-
-For Medium and Low priority Leads, the Assignment Rule's Queue assignment is the final ownership state — the Flow retains it. For High priority Leads, the Flow must override it. Writing `OwnerId` through the Flow's Update Records element ensures the Single-DML pattern is maintained — all Field writes occur in one operation, including the ownership override.
-
----
-
-## 8. Live Validation — Ownership Outcomes Confirmed
-
-| Lead | Priority Level | Assignment Rule Output | Flow Override | Final Owner |
+| Order | Territory | Named Sales Representative | Queue | States Covered |
 |---|---|---|---|---|
-| Richard Miranda | Low | `East_Coast_Region` (lnava) | No | lnava (`East_Coast_Region`) |
-| Neil Thompson | High | `West_Coast_Region` (jchen) | Yes — Sophia Delgado | Sophia Delgado |
+| 1 | East Coast | Luis Navarro | `East_Coast_Region` | Alabama, Connecticut, Delaware, District of Columbia, Florida, Georgia, Maine, Maryland, Massachusetts, New Hampshire, New Jersey, New York, North Carolina, Pennsylvania, Rhode Island, South Carolina, Tennessee, Vermont, Virginia, West Virginia |
+| 2 | West Coast | Jordan Chen | `West_Coast_Region` | Alaska, Arizona, California, Colorado, Hawaii, Idaho, Montana, Nevada, New Mexico, Oregon, Utah, Washington, Wyoming |
+| 3 | Central | Priya Desai | `Central_Region` | Arkansas, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana, Michigan, Minnesota, Mississippi, Missouri, Nebraska, North Dakota, Ohio, Oklahoma, South Dakota, Texas, Wisconsin |
 
-Both routing paths — qualified Low and qualified High with escalation — confirmed operational on live Lead Records.
+Full state-level coverage detail is in `docs/04-automation-logic/territorial-routing-logic.md`.
 
 ---
 
-## 9. Document Status
+## 5. License-Cycling Mechanics
+
+The Developer Edition org supports one active Salesforce Standard User license. Only one Sales Representative can hold direct Lead ownership via the Assignment Rule at any given time. This is a DevOrg constraint, not a design gap.
+
+The Assignment Rule accommodates this constraint through a cycling pattern:
+
+- The rule entry for the currently licensed Sales Representative assigns directly to that named user
+- The rule entries for the two non-licensed Sales Representatives assign to their regional Queues as placeholders
+- When the license moves to a different Sales Representative, the corresponding rule entry is updated to assign to that named user; the previously licensed representative's entry reverts to their Queue
+
+**Example — Priya Desai holds the license:**
+
+| Rule Entry | Territory | Assign To |
+|---|---|---|
+| Rule 1 | East Coast | `East_Coast_Region` Queue |
+| Rule 2 | West Coast | `West_Coast_Region` Queue |
+| Rule 3 | Central | Priya Desai |
+
+**Example — Jordan Chen holds the license:**
+
+| Rule Entry | Territory | Assign To |
+|---|---|---|
+| Rule 1 | East Coast | `East_Coast_Region` Queue |
+| Rule 2 | West Coast | Jordan Chen |
+| Rule 3 | Central | `Central_Region` Queue |
+
+**Example — Luis Navarro holds the license:**
+
+| Rule Entry | Territory | Assign To |
+|---|---|---|
+| Rule 1 | East Coast | Luis Navarro |
+| Rule 2 | West Coast | `West_Coast_Region` Queue |
+| Rule 3 | Central | `Central_Region` Queue |
+
+In all configurations, only one rule entry assigns to a named user. State coverage does not change — Priya Desai always covers Central Region states, Jordan Chen always covers West Coast states, and Luis Navarro always covers East Coast states. Only the form of ownership (named user vs. Queue proxy) changes with the license.
+
+---
+
+## 6. Queue Role
+
+Each regional Queue serves as a proxy owner for its territory when that territory's Sales Representative does not hold the active license. Queues are not the design-intent routing target — named Sales Representatives are. The Queue exists to satisfy the Assignment Rule's requirement for a valid "Assign To" target under the DevOrg license constraint.
+
+| Queue | API Name | Territory | Design-Intent Owner |
+|---|---|---|---|
+| East Coast Region | `East_Coast_Region` | East Coast | Luis Navarro |
+| West Coast Region | `West_Coast_Region` | West Coast | Jordan Chen |
+| Central Region | `Central_Region` | Central | Priya Desai |
+
+In a production org, all three Sales Representatives hold provisioned licenses simultaneously and the Queues are not required as proxies. The Assignment Rule logic and state-to-territory mappings require no modification for production deployment.
+
+---
+
+## 7. Flow Escalation Interaction
+
+The Assignment Rule fires before the After-Save Flow executes. The `OwnerId` written by the Assignment Rule — either a named Sales Representative or a regional Queue — is the value present on the Record when the Flow begins.
+
+The Flow's escalation segment (Segment 3) captures this `OwnerId` into `varOwnerID` via the `Initialize OwnerId (Default)` Assignment element. The `Escalate High Priority to Sophia` Decision then evaluates `varPriorityLevel`.
+
+- If Priority Level is `High`: `varOwnerID` is overwritten with Sophia Delgado's User ID
+- If Priority Level is `Medium` or `Low`: `varOwnerID` retains the value written by the Assignment Rule
+
+The `Update Lead Priority and Score` Update Records element writes `varOwnerID` to `OwnerId` as the sole DML operation. This commit is what produces the final ownership state visible on the Lead Record.
+
+Sophia Delgado's escalation assignment is not subject to the license-cycling constraint. Her User ID is written directly by the Flow, not by the Assignment Rule. She receives Priority Level `High` Leads correctly regardless of which Sales Representative currently holds the active license.
+
+---
+
+## 8. Final Ownership by Priority Level and License State
+
+| Priority Level | Assignment Rule Output | Flow Override | Final Owner |
+|---|---|---|---|
+| `High` | Named Sales Representative or regional Queue | Yes — Sophia Delgado | Sophia Delgado |
+| `Medium` | Named Sales Representative (if licensed) | No | Named Sales Representative |
+| `Medium` | Regional Queue (if not licensed) | No | Regional Queue |
+| `Low` | Named Sales Representative (if licensed) | No | Named Sales Representative |
+| `Low` | Regional Queue (if not licensed) | No | Regional Queue |
+
+Priority Level `High` ownership is license-state-independent. Sophia Delgado receives all Priority Level `High` Leads in all license configurations.
+
+---
+
+## 9. Live Validation
+
+| Lead | State | Territory | Assignment Rule Output | Priority Level | Final Owner |
+|---|---|---|---|---|---|
+| L-01 — Marcus Thibodeau | Georgia | East Coast | Luis Navarro or `East_Coast_Region` | `High` | Sophia Delgado |
+| L-02 — Renata Voss | Oregon | West Coast | Jordan Chen or `West_Coast_Region` | `High` | Sophia Delgado |
+| L-03 — Dominic Reyes | Illinois | Central | Priya Desai or `Central_Region` | `Medium` | Priya Desai or `Central_Region` |
+| L-04 — Janelle Harmon | Virginia | East Coast | Luis Navarro or `East_Coast_Region` | `Medium` | Luis Navarro or `East_Coast_Region` |
+| L-05 — Britta Sandoval | Washington | West Coast | Jordan Chen or `West_Coast_Region` | `Low` | Jordan Chen or `West_Coast_Region` |
+
+Assignment Rule output and final owner for Medium and Low Leads reflects the license state at the time of Record creation. Priority Level `High` final owner is Sophia Delgado in all license configurations.
+
+---
+
+## 10. Document Status
 
 | Attribute | Value |
 |---|---|
