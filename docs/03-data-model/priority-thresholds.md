@@ -7,123 +7,95 @@ Céleste Vineyards | Data Model
 
 ## 1. Document Purpose
 
-This document defines the priority threshold logic applied in the Céleste Vineyards Lead Priority Level Automation system. It records how `varTotalScore` is evaluated, how each threshold condition maps to a Priority Level, and how the Decision element structure ensures correct outcome resolution.
+This document defines the Priority Level threshold logic applied in the Céleste Vineyards Lead Priority Level Automation system. It records the fixed score thresholds mapped to each Priority Level, the decision structure that evaluates them, the output variable produced, and the downstream effect of each outcome.
 
-This document covers threshold evaluation only. Scoring dimension logic — how `varTotalScore` is built — is documented in `docs/03-data-model/scoring-model.md`. Escalation logic triggered by the Priority Level output is documented in `docs/04-automation-logic/escalation-logic.md`.
+Priority Level thresholds are evaluated after all three scoring tiers complete and `varTotalScore` holds the composite score for the Lead. Threshold logic is implemented in the `Determine Priority Level` Decision element of the `Lead_Scoring_and_Priority_Level_Assignment` Flow. Scoring dimension definitions and point values are documented in `docs/03-data-model/scoring-model.md`. Flow implementation details are documented in `docs/04-automation-logic/scoring-logic.md`.
 
 ---
 
-## 2. Input — varTotalScore
+## 2. Threshold Definitions
 
-`varTotalScore` is a Flow Number variable initialized at 0. It accumulates weighted dimension scores across three tiers — Business Type, Role, and Purchasing Timeline — via Assignment elements in the Flow. Each tier contributes 1–5 points.
+`varTotalScore` is evaluated against two fixed thresholds. Outcomes are evaluated in order — `High` first, then `Medium`, then `Low` as the Default Outcome. The first matching condition wins.
 
-| Variable | Data Type | Default | Range |
+| Priority Level | Threshold Condition | `varPriorityLevel` Set To | Score Range |
 |---|---|---|---|
-| `varTotalScore` | Number | 0 | 3–15 |
+| `High` | `varTotalScore` ≥ 12 | `High` | 12–15 |
+| `Medium` | `varTotalScore` ≥ 8 and < 12 | `Medium` | 8–11 |
+| `Low` | Default Outcome (`varTotalScore` < 8) | `Low` | 3–7 |
 
-- **Minimum (3):** Lowest value across all three tiers — Catering & Event Company (1) + Event Coordinator (1) + Information Gathering (1)
-- **Maximum (15):** Highest value across all three tiers — Premium Wine Distributor (5) + Owner (5) + Immediate Need (Contracting) (5)
-
-`varTotalScore` is the sole input to the Priority Level threshold Decision element. No other variable or field is evaluated at this stage.
+**Outcome order is required.** A score of 12 satisfies both the `High` condition (≥ 12) and the `Medium` condition (≥ 8). Because `High` is evaluated first, scores of 12–15 always resolve to `High`. Reversing the order would cause scores of 12–15 to incorrectly resolve to `Medium`.
 
 ---
 
-## 3. Threshold Logic
-
-### 3.1 Decision Element
+## 3. Decision Element Configuration
 
 | Attribute | Value |
 |---|---|
-| Flow | `Lead_Scoring_and_Priority_Level_Assignment` |
 | Element Type | Decision |
 | Element Label | `Determine Priority Level` |
-| Input Evaluated | `varTotalScore` |
-| Output Written | `varPriorityLevel` |
+| Variable Evaluated | `varTotalScore` |
+| Output Variable | `varPriorityLevel` |
+| Outcome Count | 3 |
+| Default Outcome | `Is Priority Level Low` |
 
-### 3.2 Outcome Definitions
+### 3.1 Outcome Definitions
 
-Outcomes are evaluated in order. The first matching condition wins. High is evaluated before Medium. Low is the Default Outcome and requires no condition.
-
-| Outcome | Condition | `varPriorityLevel` Set To | Score Range |
+| Outcome Label | Condition | Assignment Element | `varPriorityLevel` Result |
 |---|---|---|---|
-| High | `varTotalScore` ≥ 12 | `High` | 12–15 |
-| Medium | `varTotalScore` ≥ 8 | `Medium` | 8–11 |
-| Low | Default Outcome | `Low` | 3–7 |
+| `Is Priority Level High` | `varTotalScore` ≥ 12 | `Priority Level High` | `High` |
+| `Is Priority Level Medium` | `varTotalScore` ≥ 8 | `Priority Level Medium` | `Medium` |
+| `Is Priority Level Low` | Default Outcome | `Priority Level Low` | `Low` |
 
-**Outcome order is architecturally significant.** A score of 12 satisfies both the High condition (≥ 12) and the Medium condition (≥ 8). Because High is evaluated first, a score of 12 always resolves to High. If Medium were evaluated first, scores of 12–15 would incorrectly resolve to Medium.
-
-### 3.3 Assignment Elements
-
-Each outcome routes to a dedicated Assignment element that writes the Priority Level string to `varPriorityLevel`.
-
-| Assignment Element | Sets `varPriorityLevel` To |
-|---|---|
-| `High` | `High` |
-| `Medium` | `Medium` |
-| `Low` | `Low` |
-
-All three Assignment elements converge at the Escalation segment of the Flow.
+All three Assignment elements converge at Segment 3 — Escalation.
 
 ---
 
-## 4. Output — varPriorityLevel
+## 4. Composite Score Range
 
-`varPriorityLevel` is a Flow Text variable with no default value. It is written by one of the three Assignment elements in this segment and carries the Priority Level string forward to the Escalation Decision and ultimately to the `Update Lead Priority and Score` Update Records element.
+`varTotalScore` is constrained to a range of 3–15 by the scoring model. No score outside this range is possible under normal pipeline conditions.
 
-| Variable | Data Type | Default | Possible Values |
-|---|---|---|---|
-| `varPriorityLevel` | Text | — | `High`, `Medium`, `Low` |
-
-`varPriorityLevel` is written to `Priority_Level__c` on the Lead Record by the single `Update Lead Priority and Score` Update Records element at the conclusion of the Flow.
-
----
-
-## 5. Priority Level Field
-
-| Attribute | Value |
-|---|---|
-| Field Label | Priority Level |
-| API Name | `Priority_Level__c` |
-| Field Type | Picklist |
-| Written By | Flow — `Update Lead Priority and Score` Update Records element |
-
-| Picklist Value | Condition |
-|---|---|
-| `High` | `varTotalScore` ≥ 12 |
-| `Medium` | `varTotalScore` ≥ 8 and < 12 |
-| `Low` | Default Outcome — `varTotalScore` ≤ 7 |
-
----
-
-## 6. Threshold Boundaries — Score Distribution
-
-| Score | Priority Level | Example Composition |
+| Boundary | Score | Composition |
 |---|---|---|
-| 15 | High | Premium Wine Distributor (5) + Owner (5) + Immediate Need (Contracting) (5) |
-| 13 | High | Premium Wine Distributor (5) + Owner (5) + Short-Term (Within 30 Days) (4) — or other combinations summing to 13 |
-| 12 | High | Threshold minimum — multiple valid compositions |
-| 11 | Medium | Threshold maximum |
-| 8 | Medium | Threshold minimum — multiple valid compositions |
-| 7 | Low | Threshold maximum |
-| 3 | Low | Threshold minimum — Catering & Event Company (1) + Event Coordinator (1) + Information Gathering (1) |
+| Maximum | 15 | `Premium Wine Distributor` (5) + `Owner` (5) + `Immediate Need (Contracting)` (5) |
+| Minimum | 3 | `Catering & Event Company` (1) + `Event Coordinator` (1) + `Information Gathering` (1) |
+
+| Priority Level | Score Range | Width |
+|---|---|---|
+| `High` | 12–15 | 4 points |
+| `Medium` | 8–11 | 4 points |
+| `Low` | 3–7 | 5 points |
 
 ---
 
-## 7. Live Validation
+## 5. Downstream Effect by Priority Level
 
-| Lead | `varTotalScore` | Priority Level Assigned | Path |
+Priority Level determines two downstream outcomes: the value written to `Priority_Level__c` and the `OwnerId` committed to the Lead Record.
+
+| Priority Level | `Priority_Level__c` Written | `OwnerId` Outcome | Escalation Fires |
 |---|---|---|---|
-| Britta Sandoval (L-05) | 3 | Low | Scored — No Escalation |
-| Janelle Harmon (L-04) | 8 | Medium | Scored — No Escalation |
-| Dominic Reyes (L-03) | 9 | Medium | Scored — No Escalation |
-| Renata Voss (L-02) | 13 | High | Scored — Escalated |
-| Marcus Thibodeau (L-01) | 14 | High | Scored — Escalated |
+| `High` | `High` | Sophia Delgado (Flow override) | Yes |
+| `Medium` | `Medium` | Assignment Rule output retained | No |
+| `Low` | `Low` | Assignment Rule output retained | No |
 
-Confirmed via Flow debug logs. All threshold conditions resolved correctly across the score range.
+Priority Level `High` triggers the escalation segment of the Flow. The `Escalate High Priority to Sophia` Decision evaluates `varPriorityLevel` and overwrites `varOwnerID` with Sophia Delgado's User ID. Priority Level `Medium` and `Low` Leads retain the `OwnerId` written by the Assignment Rule unchanged.
+
+Both `Priority_Level__c` and `OwnerId` are committed to the Lead Record by the `Update Lead Priority and Score` Update Records element — the sole DML operation in the Flow.
 
 ---
 
-## 8. Document Status
+## 6. Design Notes
+
+**Priority Level reflects composite commercial value.** It is derived from the sum of all three scoring dimensions — Business Type, Role, and Purchasing Timeline. It is not a measure of contact urgency alone.
+
+**Thresholds are fixed.** The threshold values — 12 for `High`, 8 for `Medium` — are not configurable at runtime. They are hardcoded in the Decision element outcome conditions and require a Flow version increment to modify.
+
+**`varTotalScore` is not written to any Lead field.** The composite score exists only within the Flow interview. `Priority_Level__c` is the only scored output persisted to the Lead Record.
+
+**Every Lead receives a Priority Level.** No Lead that enters the Flow exits without a `varPriorityLevel` value. The Default Outcome ensures `Low` is assigned to any score below the `Medium` threshold.
+
+---
+
+## 7. Document Status
 
 | Attribute | Value |
 |---|---|
