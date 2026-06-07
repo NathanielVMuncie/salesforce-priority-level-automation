@@ -9,7 +9,7 @@ Céleste Vineyards | Automation Logic
 
 This document defines the scoring logic implemented in the `Lead_Scoring_and_Priority_Level_Assignment` Flow. It records the three-tier scoring sequence, every Decision element and its outcomes, every Assignment element and the operator applied, how `varTotalScore` accumulates across all three tiers, and how the composite score maps to a Priority Level.
 
-Every Lead Record that reaches the Flow has already passed the qualification gate at the Wix form level. No disqualification path exists in the Flow. Every Flow interview that fires produces a complete score and a Priority Level.
+Every Lead Record that reaches the Flow is a confirmed B2B submission. The qualification gate is enforced at the Wix form layer before any data is transmitted. No disqualification path exists in the Flow. Every Flow interview that fires produces a complete score and a Priority Level.
 
 This document covers Flow implementation only. Scoring dimension definitions and point values are documented in `docs/03-data-model/scoring-model.md`. Priority threshold logic is documented in `docs/03-data-model/priority-thresholds.md`.
 
@@ -21,7 +21,6 @@ This document covers Flow implementation only. Scoring dimension definitions and
 |---|---|
 | Flow Name | Lead Scoring and Priority Level Assignment |
 | API Name | `Lead_Scoring_and_Priority_Level_Assignment` |
-| Version | V15 |
 | Flow Type | Record-Triggered — After-Save |
 | Object | Lead |
 | Trigger Event | A Record is Created |
@@ -46,7 +45,7 @@ Two Flow variables carry state across the three-tier scoring sequence.
 
 ## 4. Scoring Sequence Overview
 
-The Flow executes scoring across three tiers in a fixed sequence. Each tier is implemented as a Decision element that evaluates one scoring Field, routes to a dedicated Assignment element, and adds that tier's point value to `varTotalScore`. All five outcomes in each tier converge before the next tier's Decision element executes.
+The Flow executes scoring across three tiers in a fixed sequence. Each tier is implemented as a Decision element that evaluates one scoring field, routes to a dedicated Assignment element, and adds that tier's point value to `varTotalScore`. All outcomes in each tier converge before the next tier's Decision element executes.
 
 ```
 Run Immediately
@@ -61,7 +60,7 @@ Run Immediately
         ├── Is Catering & Event Company → Add Catering & Event Company, Add 1 Point (Assignment)
         └── Default Outcome             → End
                     |
-                    ▼ (all five qualified outcomes converge)
+                    ▼ (all five outcomes converge)
 [TIER 2] Determine Role Score (Decision)
         |
         ├── Is Owner                    → Owner, Add 5 Points (Assignment)
@@ -119,7 +118,7 @@ All five Assignment elements in Tier 1 use the **Add** operator: `varTotalScore 
 
 ### 5.4 Default Outcome Behavior
 
-The Default Outcome routes the Flow to End. Because every Lead Record that reaches the Flow was submitted through the Wix form with a valid `Business_Type__c` value, the Default Outcome is a defensive backstop only. It cannot fire under normal pipeline conditions.
+The Default Outcome routes the Flow to End. Because every Lead Record that reaches the Flow is a confirmed B2B submission from the Wix form, the Default Outcome is a defensive backstop only. It cannot fire under normal pipeline conditions.
 
 ---
 
@@ -224,14 +223,14 @@ All three Assignment elements converge at the escalation segment of the Flow.
 
 | Score | Priority Level | Example Composition |
 |---|---|---|
-| 15 | `High` | Premium Wine Distributor (5) + Owner (5) + Immediate Need (Contracting) (5) |
-| 13 | `High` | Premium Wine Distributor (5) + Owner (5) + Short-Term Within 30 Days (4) — or other combinations summing to 13 |
+| 15 | `High` | `Premium Wine Distributor` (5) + `Owner` (5) + `Immediate Need (Contracting)` (5) |
+| 13 | `High` | `Premium Wine Distributor` (5) + `Owner` (5) + `Short-Term (Within 30 Days)` (4) — or other combinations summing to 13 |
 | 12 | `High` | Threshold minimum — multiple valid compositions |
 | 11 | `Medium` | Threshold maximum |
-| 9 | `Medium` | Upscale Restaurant (3) + General Manager (3) + Evaluating Vendors Next 90 Days (3) |
+| 9 | `Medium` | `Upscale Restaurant` (3) + `General Manager` (3) + `Evaluating Vendors (Next 90 Days)` (3) |
 | 8 | `Medium` | Threshold minimum — multiple valid compositions |
 | 7 | `Low` | Threshold maximum |
-| 3 | `Low` | Catering & Event Company (1) + Event Coordinator (1) + Information Gathering (1) |
+| 3 | `Low` | `Catering & Event Company` (1) + `Event Coordinator` (1) + `Information Gathering` (1) |
 
 ---
 
@@ -239,10 +238,11 @@ All three Assignment elements converge at the escalation segment of the Flow.
 
 | Lead | `Business_Type__c` | `Role__c` | `Purchasing_Timeline__c` | `varTotalScore` | `Priority_Level__c` |
 |---|---|---|---|---|---|
-| Tamara Nguyen | `Catering & Event Company` | `Event Coordinator` | `Information Gathering` | 3 | `Low` |
-| Jerome Castillo | `Upscale Restaurant` | `General Manager` | `Evaluating Vendors (Next 90 Days)` | 9 | `Medium` |
-| Vivienne Okafor | `Premium Wine Distributor` | `Owner` | `Short-Term (Within 30 Days)` | 14 | `High` |
-| Kenji Watanabe | `Premium Wine Distributor` | `Purchasing Manager` | `Short-Term (Within 30 Days)` | 13 | `High` |
+| L-01 — Marcus Thibodeau | `Premium Wine Distributor` | `Owner` | `Short-Term (Within 30 Days)` | 14 | `High` |
+| L-02 — Renata Voss | `Premium Wine Distributor` | `Purchasing Manager` | `Short-Term (Within 30 Days)` | 13 | `High` |
+| L-03 — Dominic Reyes | `Upscale Restaurant` | `General Manager` | `Evaluating Vendors (Next 90 Days)` | 9 | `Medium` |
+| L-04 — Janelle Harmon | `High-End Wine Store` | `Sales Manager` | `Budget Planning (Future Quarter)` | 8 | `Medium` |
+| L-05 — Britta Sandoval | `Catering & Event Company` | `Event Coordinator` | `Information Gathering` | 3 | `Low` |
 
 Confirmed via Flow debug logs. All three Priority Level outcomes confirmed operational across the score range.
 
