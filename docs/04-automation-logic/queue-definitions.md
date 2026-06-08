@@ -1,114 +1,83 @@
-# Queue Definitions
+Queue Definitions
 
-**Salesforce Case Study: Lead — Priority Level Automation**
-Céleste Vineyards | Automation Logic
+Salesforce Case Study: Lead — Priority Level Automation Céleste Vineyards | Automation Logic
 
----
+1. Document Purpose
 
-## 1. Document Purpose
-
-This document defines the three regional Queues used in the Céleste Vineyards Lead Priority Level Automation system. It records the confirmed Queue Label, API Name, territory, and design-intent owner for each Queue, and establishes the Queue's role within the broader routing architecture.
+This document defines the three regional Queues used in the Céleste Vineyards Lead Priority Level Automation system. It records the confirmed Queue Label, API Name, territory, and design-intent owner for each Queue, and documents the two operational roles Queues serve within the routing architecture.
 
 Queue Labels confirmed from live org screenshot captured 2026-05-29.
 
----
+2. Queue Summary
 
-## 2. Queue Summary
+| Queue Label | Queue API Name | Assigned By | Design-Intent Owner |
+| :--- | :--- | :--- | :--- |
+| East Coast Region | East_Coast_Region | Rule Entry 1 | Luis Navarro |
+| West Coast Region | West_Coast_Region | Rule Entry 2 | Jordan Chen |
+| Central Region | Central_Region | Rule Entry 3 | Priya Desai |
 
-| Queue Label | API Name | Territory | Design-Intent Owner |
-|---|---|---|---|
-| `East Coast Region` | `East_Coast_Region` | East Coast | Luis Navarro |
-| `West Coast Region` | `West_Coast_Region` | West Coast | Jordan Chen |
-| `Central Region` | `Central_Region` | Central | Priya Desai |
+3. Queue Definitions
 
----
-
-## 3. Queue Definitions
-
-### 3.1 East Coast Region
-
+3.1 East Coast Region
 | Attribute | Value |
-|---|---|
-| Queue Label | `East Coast Region` |
-| Queue API Name | `East_Coast_Region` |
-| Territory | East Coast |
+| :--- | :--- |
+| Queue Label | East Coast Region |
+| Queue API Name | East_Coast_Region |
+| Assigned By | Rule Entry 1 |
 | Design-Intent Owner | Luis Navarro |
 
-**States Covered:**
+States Covered:
 
 Alabama, Connecticut, Delaware, District of Columbia, Florida, Georgia, Maine, Maryland, Massachusetts, New Hampshire, New Jersey, New York, North Carolina, Pennsylvania, Rhode Island, South Carolina, Tennessee, Vermont, Virginia, West Virginia
 
----
-
-### 3.2 West Coast Region
-
+3.2 West Coast Region
 | Attribute | Value |
-|---|---|
-| Queue Label | `West Coast Region` |
-| Queue API Name | `West_Coast_Region` |
-| Territory | West Coast |
+| :--- | :--- |
+| Queue Label | West Coast Region |
+| Queue API Name | West_Coast_Region |
+| Assigned By | Rule Entry 2 |
 | Design-Intent Owner | Jordan Chen |
 
-**States Covered:**
+States Covered:
 
 Alaska, Arizona, California, Colorado, Hawaii, Idaho, Montana, Nevada, New Mexico, Oregon, Utah, Washington, Wyoming
 
----
-
-### 3.3 Central Region
-
+3.3 Central Region
 | Attribute | Value |
-|---|---|
-| Queue Label | `Central Region` |
-| Queue API Name | `Central_Region` |
-| Territory | Central |
+| :--- | :--- |
+| Queue Label | Central Region |
+| Queue API Name | Central_Region |
+| Assigned By | Rule Entry 3 |
 | Design-Intent Owner | Priya Desai |
 
-**States Covered:**
+States Covered:
 
 Arkansas, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana, Michigan, Minnesota, Mississippi, Missouri, Nebraska, North Dakota, Ohio, Oklahoma, South Dakota, Texas, Wisconsin
 
----
+4. Queue Operational Roles
 
-## 4. Queue Role in the System
+Queues serve two operational roles within the routing architecture.
 
-Each regional Queue serves two distinct roles within the DevOrg environment.
+4.1 Error Catch
 
-**License-gap proxy.** The Developer Edition org supports one active Standard User license at a time. When a territory's design-intent owner does not hold the active license, the Assignment Rule assigns the Lead Record to that territory's Queue as a proxy. The Queue holds ownership until the license rotates to the correct representative.
+Each Queue acts as a catch for Lead Records that error out during the Assignment Rule evaluation. A Lead is routed to the Queue that corresponds to its state's region. For example, a Lead originating from a West Coast Region state that errors in the flow is deposited into the West Coast Region Queue.
 
-**Fault-path catch-all.** If no Assignment Rule entry matches a Lead's `State/Province` value — for example, a null or unrecognized state — the Lead is assigned to the default Queue. This ensures no Lead Record is left without an owner.
+4.2 Assignment Rule Placeholder
 
-Queues are not the design-intent routing target for any Lead. Named Sales Representatives are the intended owners for Priority Level Medium and Low Leads. In a production org, all three representatives hold provisioned licenses simultaneously and the Queues are not required as proxies.
+Queues serve as proxy owners on the Lead Assignment Rule when a region's design-intent Sales Representative does not hold an active Salesforce license with full permissions. Because only users with a qualifying license can be listed as an active Assignment Rule target, the regional Queue substitutes for that user until a provisioned license is available.
 
-| Queue | Primary Role in DevOrg | Primary Role in Production |
-|---|---|---|
-| `East Coast Region` | License proxy for Luis Navarro | Fault-path catch-all only |
-| `West Coast Region` | License proxy for Jordan Chen | Fault-path catch-all only |
-| `Central Region` | License proxy for Priya Desai | Fault-path catch-all only |
+This is a Developer Edition org constraint. In a production org, all three Sales Representatives hold active licenses simultaneously and the Queues serve as fault-path catches only.
 
----
+5. Developer Edition Org Context
 
-## 5. Escalation and Queue Interaction
+This system is built in a Salesforce Developer Edition org. The Developer Edition org supports one active Standard User license at a time. At any given time, one Sales Representative holds the active license and receives direct Lead ownership via the Assignment Rule. The remaining two regions are covered by their regional Queue as a proxy owner.
 
-Priority Level High Leads are not routed to a Queue under any license configuration. The Flow escalation segment overrides `OwnerId` with Sophia Delgado's User ID regardless of which Queue the Assignment Rule assigned at Record creation. Sophia Delgado's escalation path is independent of the license-cycling constraint.
+This is a DevOrg constraint, not a design limitation. Queue API names, territory mappings, and Assignment Rule logic are production-equivalent and require no modification for deployment to a production org.
 
-| Priority Level | Assignment Rule Output | Flow Override | Final Owner |
-|---|---|---|---|
-| `High` | Regional Queue or named representative | Yes — Sophia Delgado | Sophia Delgado |
-| `Medium` | Named representative (if licensed) | No | Named representative |
-| `Medium` | Regional Queue (if not licensed) | No | Regional Queue |
-| `Low` | Named representative (if licensed) | No | Named representative |
-| `Low` | Regional Queue (if not licensed) | No | Regional Queue |
-
----
-
-## 6. Document Status
-
+6. Document Status
 | Attribute | Value |
-|---|---|
+| :--- | :--- |
 | Section | Automation Logic |
-| File Path | `docs/04-automation-logic/queue-definitions.md` |
+| File Path | docs/04-automation-logic/queue-definitions.md |
 
----
-
-*Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*
+Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie
