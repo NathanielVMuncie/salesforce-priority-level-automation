@@ -31,25 +31,25 @@ The automation system manages state across multiple components — Wix, Make.com
 
 Salesforce executes Lead Assignment Rules synchronously at Record creation, before After-Save Flow logic runs. The Assignment Rule routes the Lead to a regional Queue and writes that Queue's ID to `OwnerId` before the Flow evaluates Priority Level or applies the escalation override.
 
-**Risk:** If the Flow escalation override fails to execute, High priority Lead Records would be owned by a regional Queue rather than Sophia Delgado.
+**Risk:** If the Flow escalation override fails to execute, Priority Level `High` Lead Records would be owned by a regional Queue rather than Sophia Delgado.
 
 ### 3.2 Assessment
 
 This risk is mitigated by the architecture of the escalation sequence:
 
 - The `Initialize OwnerId (Default)` Assignment element captures `{!$Record.OwnerId}` — the regional Queue value — into `varOwnerID` as the baseline
-- The `Escalate High Priority to Sophia` Decision evaluates `varPriorityLevel` and overwrites `varOwnerID` with Sophia Delgado's User ID only if the Priority Level is High
+- The `Escalate High Priority to Sophia` Decision evaluates `varPriorityLevel` and overwrites `varOwnerID` with Sophia Delgado's User ID only if the Priority Level is `High`
 - The `Update Lead Priority and Score` Update Records element writes `varOwnerID` to `OwnerId` — committing either the regional Queue value or Sophia Delgado's User ID
 
 The escalation override is part of the same Flow interview as scoring and priority assignment. If the Flow completes successfully, the override executes correctly.
 
-**Status:** By design — confirmed safe. Live validation on the Neil Thompson Record confirms the escalation override executed correctly: Assignment Rule routed to `West_Coast_Region` Queue (jchen), Flow overrode `OwnerId` with Sophia Delgado's User ID.
+**Status:** By design — confirmed safe. Live validation on L-02 — Renata Voss confirms the escalation override executed correctly: Assignment Rule routed to the `West Coast Region` Queue (`West_Coast_Region`), Flow overrode `OwnerId` with Sophia Delgado's User ID.
 
 ---
 
 ## 4. State on Each Path — Summary
 
-| Field | Qualified — High | Qualified — Medium / Low |
+| Field | Priority Level High | Priority Level Medium / Low |
 |---|---|---|
 | `OwnerId` | Sophia Delgado (Flow override) | Regional Queue (Assignment Rule — retained by Flow) |
 | `Priority_Level__c` | `High` (Flow) | `Medium` / `Low` (Flow) |
