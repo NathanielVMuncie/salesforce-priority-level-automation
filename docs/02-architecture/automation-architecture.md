@@ -120,7 +120,7 @@ The `Determine Priority Level` Decision evaluates `varTotalScore` against two fi
 | Outcome | Condition | `varPriorityLevel` Set To |
 |---|---|---|
 | `Is Priority Level High` | `varTotalScore` ≥ 12 | `High` |
-| `Ia Priority Level Medium` | `varTotalScore` ≥ 8 | `Medium` |
+| `Is Priority Level Medium` | `varTotalScore` ≥ 8 | `Medium` |
 | `Is Priority Level Low` | Default Outcome | `Low` |
 
 All three Assignment elements converge at Segment 3.
@@ -135,7 +135,7 @@ All three Assignment elements converge at Segment 3.
 
 Segment 3 begins with the `Initialize OwnerId (Default)` Assignment element, which captures `{!$Record.OwnerId}` into `varOwnerID`. At this point in execution, the Assignment Rule has already fired and the Record's `OwnerId` holds either the named Sales Representative or the regional Queue for that territory. This capture establishes the default ownership baseline.
 
-The `Escalate High Priority to Sophia` Decision then evaluates `varPriorityLevel`. If Priority Level High, the `Escalate OwnerId to Sophia` Assignment element overwrites `varOwnerID` with Sophia Delgado's User ID. If Priority Level Medium or Low, the default outcome executes and `varOwnerID` retains the Assignment Rule value.
+The `Escalate High Priority to Sophia` Decision then evaluates `varPriorityLevel`. If Priority Level `High`, the `Escalate OwnerId to Sophia` Assignment element overwrites `varOwnerID` with Sophia Delgado's User ID. If Priority Level `Medium` or `Low`, the default outcome executes and `varOwnerID` retains the Assignment Rule value.
 
 | Outcome | Condition | `varOwnerID` Result |
 |---|---|---|
