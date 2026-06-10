@@ -1,0 +1,58 @@
+<svg width="100%" viewBox="0 0 680 515" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Céleste Vineyards — Lead Pipeline System Architecture</title>
+<desc>Three-layer pipeline: Wix qualification gate, Make.com middleware, Salesforce Sales Cloud automation layer.</desc>
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <style>
+    text { font-family: system-ui, -apple-system, sans-serif; }
+    .th  { font-size: 14px; font-weight: 600; }
+    .ts  { font-size: 12px; font-weight: 400; }
+    .arr { stroke: #999; stroke-width: 1.5; fill: none; stroke-linecap: round; }
+  </style>
+</defs>
+
+<!-- LAYER 1 — WIX -->
+<rect x="40" y="40" width="600" height="110" rx="12" fill="#faece7" stroke="#d85a30" stroke-width="0.8"/>
+<text class="th" x="340" y="66" text-anchor="middle" dominant-baseline="central" fill="#712b13">Wix</text>
+<text class="ts" x="340" y="84" text-anchor="middle" dominant-baseline="central" fill="#993c1d">Frontend · qualification gate</text>
+<rect x="165" y="96" width="350" height="46" rx="8" fill="#fff" stroke="#e8c8bc" stroke-width="0.8"/>
+<text class="th" x="340" y="115" text-anchor="middle" dominant-baseline="central" fill="#1a1a1a">Business Inquiry Form</text>
+<text class="ts" x="340" y="132" text-anchor="middle" dominant-baseline="central" fill="#555">B2B form · personal use blocked at source</text>
+
+<line x1="340" y1="150" x2="340" y2="167" class="arr" marker-end="url(#arr)"/>
+
+<!-- LAYER 2 — MAKE.COM -->
+<rect x="40" y="167" width="600" height="120" rx="12" fill="#faeeda" stroke="#d48c0a" stroke-width="0.8"/>
+<text class="th" x="340" y="193" text-anchor="middle" dominant-baseline="central" fill="#7a5008">Make.com</text>
+<text class="ts" x="340" y="211" text-anchor="middle" dominant-baseline="central" fill="#a06c10">Middleware · single-path automation scenario</text>
+<rect x="90" y="222" width="220" height="58" rx="8" fill="#fff" stroke="#e8d8b0" stroke-width="0.8"/>
+<text class="th" x="200" y="242" text-anchor="middle" dominant-baseline="central" fill="#1a1a1a">Custom Webhook</text>
+<text class="ts" x="200" y="260" text-anchor="middle" dominant-baseline="central" fill="#555">Module 2 · Wix payload</text>
+<line x1="310" y1="251" x2="338" y2="251" class="arr" marker-end="url(#arr)"/>
+<rect x="340" y="222" width="250" height="58" rx="8" fill="#fff" stroke="#e8d8b0" stroke-width="0.8"/>
+<text class="th" x="465" y="242" text-anchor="middle" dominant-baseline="central" fill="#1a1a1a">Create Salesforce Lead</text>
+<text class="ts" x="465" y="260" text-anchor="middle" dominant-baseline="central" fill="#555">Module 12 · writes Lead Record</text>
+
+<line x1="340" y1="287" x2="340" y2="305" class="arr" marker-end="url(#arr)"/>
+
+<!-- LAYER 3 — SALESFORCE -->
+<rect x="40" y="305" width="600" height="170" rx="12" fill="#e6f1fb" stroke="#378add" stroke-width="0.8"/>
+<text class="th" x="340" y="330" text-anchor="middle" dominant-baseline="central" fill="#0c447c">Salesforce Sales Cloud</text>
+<text class="ts" x="340" y="348" text-anchor="middle" dominant-baseline="central" fill="#185fa5">CRM · declarative automation layer</text>
+<rect x="55" y="360" width="175" height="100" rx="8" fill="#fff" stroke="#b8d4f0" stroke-width="0.8"/>
+<text class="th" x="143" y="388" text-anchor="middle" dominant-baseline="central" fill="#1a1a1a">Assignment Rule</text>
+<text class="ts" x="143" y="409" text-anchor="middle" dominant-baseline="central" fill="#555">Territory routing</text>
+<text class="ts" x="143" y="428" text-anchor="middle" dominant-baseline="central" fill="#555">3 regional queues</text>
+<line x1="230" y1="410" x2="252" y2="410" class="arr" marker-end="url(#arr)"/>
+<rect x="253" y="360" width="175" height="100" rx="8" fill="#fff" stroke="#b8d4f0" stroke-width="0.8"/>
+<text class="th" x="341" y="388" text-anchor="middle" dominant-baseline="central" fill="#1a1a1a">Scoring Flow</text>
+<text class="ts" x="341" y="409" text-anchor="middle" dominant-baseline="central" fill="#555">Scoring &amp; Priority</text>
+<text class="ts" x="341" y="428" text-anchor="middle" dominant-baseline="central" fill="#555">Score range 3–15</text>
+<line x1="428" y1="410" x2="449" y2="410" class="arr" marker-end="url(#arr)"/>
+<rect x="450" y="360" width="175" height="100" rx="8" fill="#fff" stroke="#b8d4f0" stroke-width="0.8"/>
+<text class="th" x="538" y="388" text-anchor="middle" dominant-baseline="central" fill="#1a1a1a">Lead Record</text>
+<text class="ts" x="538" y="409" text-anchor="middle" dominant-baseline="central" fill="#555">Priority Level</text>
+<text class="ts" x="538" y="428" text-anchor="middle" dominant-baseline="central" fill="#555">OwnerId written</text>
+</svg>
