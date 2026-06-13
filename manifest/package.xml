@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Lead.Purchasing_Timeline__c</members>
+        <members>Lead.Priority_Score__c</members>
+        <members>Lead.Lead_Value__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>Lead_Priority_Routing_Flow</members>
+        <name>Flow</name>
+    </types>
+    <types>
+        <members>Lead.Celeste_Vineyards_Routing</members>
+        <name>AssignmentRule</name>
+    </types>
+    <types>
+        <members>High_Value_Lead_Queue</members>
+        <name>Queue</name>
+    </types>
+    <version>60.0</version>
+</Package>

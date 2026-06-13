@@ -1,5 +1,5 @@
 {
-    "name": "Wix_To_CelesteProd_B2B_Lead_Engine_v1 scenario",
+    "name": "Wix_Inquiry_To_Salesforce_Lead",
     "flow": [
         {
             "id": 2,
@@ -13,7 +13,8 @@
             "metadata": {
                 "designer": {
                     "x": 0,
-                    "y": 0
+                    "y": 0,
+                    "name": "WH_Wix_Inquiry_To_Make"
                 },
                 "restore": {
                     "parameters": {
@@ -99,18 +100,6 @@
             "parameters": {
                 "__IMTCONN__": 7554406
             },
-            "filter": {
-                "name": "Create Lead: Qualified B2B",
-                "conditions": [
-                    [
-                        {
-                            "a": "{{2.data.business_type}}",
-                            "b": "Personal/Individual (Non-Business)",
-                            "o": "text:notequal"
-                        }
-                    ]
-                ]
-            },
             "mapper": {
                 "fields": {
                     "email": "{{2.data.email}}",
@@ -132,7 +121,8 @@
             "metadata": {
                 "designer": {
                     "x": 300,
-                    "y": 0
+                    "y": 0,
+                    "name": "SF_Make_Lead_To_Salesforce"
                 },
                 "restore": {
                     "expect": {

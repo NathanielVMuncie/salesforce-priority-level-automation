@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Purchasing_Timeline__c</fullName>
+    <description>Captures the Lead&apos;s expected procurement window. Originates from LeadSource Céleste Vineyards - Business Inquiry Form. Primary input for Priority_Level__c calculation logic and Lead scoring.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Indicate Lead&apos;s expected procurement window. Originates from LeadSource Céleste Vineyards - Business Inquiry Form. This value determines the automated Priority_Level__c calculation and Lead scoring.</inlineHelpText>
+    <label>Purchasing Timeline</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Immediate Need (Contracting)</fullName>
+                <default>false</default>
+                <label>Immediate Need (Contracting)</label>
+            </value>
+            <value>
+                <fullName>Short-Term (Within 30 Days)</fullName>
+                <default>false</default>
+                <label>Short-Term (Within 30 Days)</label>
+            </value>
+            <value>
+                <fullName>Evaluating Vendors (Next 90 Days)</fullName>
+                <default>false</default>
+                <label>Evaluating Vendors (Next 90 Days)</label>
+            </value>
+            <value>
+                <fullName>Budget Planning (Future Quarter)</fullName>
+                <default>false</default>
+                <label>Budget Planning (Future Quarter)</label>
+            </value>
+            <value>
+                <fullName>Information Gathering</fullName>
+                <default>false</default>
+                <label>Information Gathering</label>
+            </value>
+            <value>
+                <fullName>Not Applicable</fullName>
+                <default>false</default>
+                <label>Not Applicable</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="540" viewBox="0 0 680 540" role="img">
+<title>Céleste Vineyards — System Architecture</title>
+<desc>Three-layer pipeline: Wix gatekeeper, Make.com middleware, Salesforce Sales Cloud automation.</desc>
+<defs>
+<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M2 1L8 5L2 9" fill="none" stroke="#5F5E5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</marker>
+</defs>
+
+<!-- WIX LAYER -->
+<rect x="25" y="30" width="630" height="118" rx="16" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="45" y="52" font-size="12" font-weight="400" fill="#085041" text-anchor="start" dominant-baseline="central">Wix</text>
+<rect x="130" y="66" width="420" height="62" rx="8" fill="#F8F8F7" stroke="#AAAAAA" stroke-width="0.5"/>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="340" y="88" font-size="14" font-weight="500" fill="#2C2C2A" text-anchor="middle" dominant-baseline="central">Céleste Vineyards — Business Inquiry Form</text>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="340" y="106" font-size="12" font-weight="400" fill="#5F5E5A" text-anchor="middle" dominant-baseline="central">Gatekeeper</text>
+
+<line x1="340" y1="148" x2="340" y2="176" stroke="#5F5E5A" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="352" y="162" font-size="12" font-weight="400" fill="#5F5E5A" text-anchor="start" dominant-baseline="central">B2B payload only</text>
+
+<!-- MAKE.COM LAYER -->
+<rect x="25" y="178" width="630" height="120" rx="16" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="45" y="200" font-size="12" font-weight="400" fill="#3C3489" text-anchor="start" dominant-baseline="central">Make.com</text>
+<rect x="100" y="214" width="195" height="68" rx="8" fill="#F8F8F7" stroke="#AAAAAA" stroke-width="0.5"/>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="197" y="239" font-size="14" font-weight="500" fill="#2C2C2A" text-anchor="middle" dominant-baseline="central">Custom Webhook</text>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="197" y="257" font-size="12" font-weight="400" fill="#5F5E5A" text-anchor="middle" dominant-baseline="central">Receives payload</text>
+<line x1="295" y1="248" x2="335" y2="248" stroke="#5F5E5A" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+<rect x="335" y="214" width="265" height="68" rx="8" fill="#F8F8F7" stroke="#AAAAAA" stroke-width="0.5"/>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="467" y="239" font-size="14" font-weight="500" fill="#2C2C2A" text-anchor="middle" dominant-baseline="central">Salesforce Create Record</text>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="467" y="257" font-size="12" font-weight="400" fill="#5F5E5A" text-anchor="middle" dominant-baseline="central">Maps fields, creates Lead</text>
+
+<line x1="340" y1="298" x2="340" y2="326" stroke="#5F5E5A" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="352" y="312" font-size="12" font-weight="400" fill="#5F5E5A" text-anchor="start" dominant-baseline="central">Lead created via API</text>
+
+<!-- SALESFORCE LAYER -->
+<rect x="25" y="328" width="630" height="170" rx="16" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="45" y="350" font-size="12" font-weight="400" fill="#0C447C" text-anchor="start" dominant-baseline="central">Salesforce Sales Cloud</text>
+
+<!-- Assignment Rule -->
+<rect x="70" y="368" width="240" height="90" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="190" y="397" font-size="14" font-weight="500" fill="#712B13" text-anchor="middle" dominant-baseline="central">Regional Territory</text>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="190" y="413" font-size="14" font-weight="500" fill="#712B13" text-anchor="middle" dominant-baseline="central">Assignment</text>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="190" y="429" font-size="12" font-weight="400" fill="#993C1D" text-anchor="middle" dominant-baseline="central">Assignment Rule</text>
+
+<line x1="310" y1="413" x2="340" y2="413" stroke="#5F5E5A" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+
+<!-- Flow -->
+<rect x="340" y="368" width="275" height="90" rx="8" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="477" y="397" font-size="14" font-weight="500" fill="#633806" text-anchor="middle" dominant-baseline="central">Lead Scoring and</text>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="477" y="413" font-size="14" font-weight="500" fill="#633806" text-anchor="middle" dominant-baseline="central">Priority Level Assignment</text>
+<text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" x="477" y="429" font-size="12" font-weight="400" fill="#854F0B" text-anchor="middle" dominant-baseline="central">After-Save Flow</text>
+
+</svg>
