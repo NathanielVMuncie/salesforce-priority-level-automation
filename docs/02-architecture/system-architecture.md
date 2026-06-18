@@ -101,7 +101,7 @@ Every Lead Record that exists in Salesforce originated from a B2B form submissio
 **Responsibilities:**
 - Enforce the qualification gate via conditional form logic on `Business_Type__c` selection
 - Collect B2B prospect Field values for all submissions that pass the gate
-- Transmit the form payload to Make.com via the Wix Automation `POST_To_Make_Inlet_Webhook` on form submission
+- Transmit the form payload to Make.com via Wix Automation `WA_Inquiry_To_Make` — action label `POST_WH_Wix_Inquiry_To_Make` — on form submission
 
 **Boundaries:**
 - The gate is self-contained within Wix. It does not communicate with Make.com, Salesforce, or any external system to enforce qualification.
@@ -148,13 +148,13 @@ The following sequence defines the order in which every component of the system 
 | Step | Component | Action | Output |
 |---|---|---|---|
 | 1 | Wix — Qualification Gate | Prospect selects B2B business type — gate passes | Form remains active |
-| 2 | Wix — Form Submission | Prospect completes and submits form | Payload transmitted to Make.com via Wix Automation |
+| 2 | Wix — Form Submission | Prospect completes and submits form | Payload transmitted to Make.com via Wix Automation `WA_Inquiry_To_Make` (`POST_WH_Wix_Inquiry_To_Make`) |
 | 3 | Make.com | Payload received, Fields normalized | Salesforce Lead Record created via API |
 | 4 | Salesforce — Assignment Rule | `State/Province` evaluated | Lead Record routed to correct regional Queue |
 | 5 | Salesforce — After-Save Flow | Flow fires on Lead creation | Scoring sequence begins |
 | 6 | Flow — Weighted Scoring | Score calculated across three dimensions | Composite Priority Score accumulated in `varTotalScore` |
 | 7 | Flow — Priority Assignment | `varTotalScore` mapped to threshold | Priority Level written to `varPriorityLevel` |
-| 8 | Flow — Escalation | `varPriorityLevel` evaluated | High: `varOwnerID` set to Sophia Delgado. Medium / Low: regional Queue OwnerId retained. |
+| 8 | Flow — Escalation | `varPriorityLevel` evaluated | High: `varOwnerID` set to Sophia Delgado. Medium / Low: regional Queue `OwnerId` retained. |
 | 9 | Flow — Update Records | Single DML write executes | `OwnerId` and `Priority_Level__c` committed to Lead Record |
 
 ---
