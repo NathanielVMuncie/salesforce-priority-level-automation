@@ -96,7 +96,7 @@ CASE(
 | Default return | Empty string — fires when `State` is null or unrecognized |
 | State coverage | All 50 US states and the District of Columbia |
 
-The default empty-string return does not fire under normal pipeline conditions. Every Lead Record created through this pipeline carries a `State` value sourced from the Wix form payload via Make.com `Module 12`. Null or unrecognized state values are a fault-path condition only.
+The default empty-string return does not fire under normal pipeline conditions. Every Lead Record created through this pipeline carries a `State` value sourced from the Wix form payload via Make.com `SF_Make_Lead_To_Salesforce`. Null or unrecognized state values are a fault-path condition only.
 
 The Flow escalation override does not affect `Region__c`. When `OwnerId` is overridden with Sophia Delgado's User ID for Priority Level `High` Leads, `Region__c` retains the correct territorial value for the originating state. Regional classification is preserved for reporting and pipeline visibility regardless of record ownership.
 

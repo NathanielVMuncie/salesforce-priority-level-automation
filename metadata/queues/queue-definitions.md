@@ -1,19 +1,43 @@
 # Queue Definitions
 
-## Overview
+**Salesforce Case Study: Lead — Priority Level Automation**
+Céleste Vineyards | Routing
 
-This document defines the Salesforce queues used in the priority level automation, including their API names, assignment rule entries, and the territories each queue services.
+---
 
-## Queues
+## 1. Document Purpose
+
+This document defines the three regional Queues used in the Céleste Vineyards Lead Priority Level Automation system. Queues are the routing targets for the Lead Assignment Rule. Each Queue covers a defined set of US states and the District of Columbia.
+
+---
+
+## 2. Queue Inventory
 
 | Queue Label | Queue API Name | Assigned By | Territories Serviced |
-| :--- | :--- | :--- | :--- |
-| East Coast Region | East_Coast_Region | Rule Entry 1 | Alabama, Connecticut, Delaware, District of Columbia, Florida, Georgia, Maine, Maryland, Massachusetts, New Hampshire, New Jersey, New York, North Carolina, Pennsylvania, Rhode Island, South Carolina, Tennessee, Vermont, Virginia, West Virginia |
-| West Coast Region | West_Coast_Region | Rule Entry 2 | Alaska, Arizona, California, Colorado, Hawaii, Idaho, Montana, Nevada, New Mexico, Oregon, Utah, Washington, Wyoming |
-| Central Region | Central_Region | Rule Entry 3 | Arkansas, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana, Michigan, Minnesota, Mississippi, Missouri, Nebraska, North Dakota, Ohio, Oklahoma, South Dakota, Texas, Wisconsin |
+|---|---|---|---|
+| East Coast Region | `East_Coast_Region` | Assignment Rule — Rule Entry 1 | Alabama, Connecticut, Delaware, District of Columbia, Florida, Georgia, Maine, Maryland, Massachusetts, New Hampshire, New Jersey, New York, North Carolina, Pennsylvania, Rhode Island, South Carolina, Tennessee, Vermont, Virginia, West Virginia |
+| West Coast Region | `West_Coast_Region` | Assignment Rule — Rule Entry 2 | Alaska, Arizona, California, Colorado, Hawaii, Idaho, Montana, Nevada, New Mexico, Oregon, Utah, Washington, Wyoming |
+| Central Region | `Central_Region` | Assignment Rule — Rule Entry 3 | Arkansas, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana, Michigan, Minnesota, Mississippi, Missouri, Nebraska, North Dakota, Ohio, Oklahoma, South Dakota, Texas, Wisconsin |
 
-## Notes
+---
 
-**Purpose 1 — Error Catch:** Each queue acts as a catch for Leads that error out in the flow. A Lead is routed to the queue that matches its state's region — for example, a Lead in a West Coast Region state that errors in the flow will be deposited into the West Coast Region queue.
+## 3. Role in the Pipeline
 
-**Purpose 2 — Assignment Rule Placeholder:** Queues serve as placeholders on the Lead Assignment Rules when a region owner does not hold an active Salesforce license with full permissions. Since only users with a qualifying license (e.g., Salesforce license) can be listed on the Lead Assignment Rule, a queue can temporarily replace that user until a licensed user is available.
+Queues serve as the `OwnerId` value written by the Lead Assignment Rule at Record creation. The Assignment Rule fires synchronously when the Lead Record is created by Make.com. It evaluates `State/Province` and assigns ownership to the corresponding regional Queue before the After-Save Flow executes.
+
+The Flow's escalation segment reads the Queue `OwnerId` into `varOwnerID` via `{!$Record.OwnerId}`. For Priority Level `High` Leads, `varOwnerID` is overridden with Sophia Delgado's User ID. For Priority Level `Medium` and `Low` Leads, the Queue value is retained as the final `OwnerId`.
+
+In the DevOrg environment, a single Standard User license constraint means only one named Sales Representative holds an active license at a time. The regional Queue serves as the ownership proxy for territories where the representative does not currently hold the active license. In a production org, each named Sales Representative would hold a provisioned license and be listed directly on the Assignment Rule entry.
+
+---
+
+## 4. Document Status
+
+| Attribute | Value |
+|---|---|
+| Section | Routing |
+| File Path | `metadata/queues/queue-definitions.md` |
+
+---
+
+*Salesforce Case Study: Lead — Priority Level Automation | Built by Nathaniel V. Muncie*
