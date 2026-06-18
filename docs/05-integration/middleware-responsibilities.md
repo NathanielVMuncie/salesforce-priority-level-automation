@@ -25,7 +25,7 @@ Every payload Make.com receives is a confirmed B2B submission. The qualification
 
 ### 3.1 Receive the Wix Payload
 
-Make.com receives the HTTP POST transmitted by the Wix Automation `POST_To_Make_Inlet_Webhook` on form submission. The `WH_Wix_Inquiry_To_Make` module listens for incoming payloads and passes each bundle to the `SF_Make_Lead_To_Salesforce` module.
+Make.com receives the HTTP POST transmitted by the `WA_Inquiry_To_Make` automation via the `POST_WH_Wix_Inquiry_To_Make` action on form submission. The `WH_Wix_Inquiry_To_Make` Custom Webhook module listens for incoming payloads and passes each bundle to `SF_Make_Lead_To_Salesforce`.
 
 ### 3.2 Normalize Field Values
 
@@ -52,8 +52,8 @@ The following are explicitly outside Make.com's scope. These concerns are handle
 | Item | Handled By |
 |---|---|
 | Lead scoring | Salesforce Flow — Scoring Decision elements |
-| Priority Level assignment | Salesforce Flow — `Determine Priority Level` Decision element |
-| Escalation to Sophia Delgado | Salesforce Flow — `Escalate High Priority to Sophia` Decision element |
+| Priority Level assignment | Salesforce Flow — Priority Assignment Decision element |
+| Escalation to Sophia Delgado | Salesforce Flow — Escalation Decision element |
 | Territorial routing | Salesforce Assignment Rule |
 | Queue assignment | Salesforce Assignment Rule |
 | `Region__c` field resolution | Formula field — self-resolving from `State/Province` |
@@ -65,11 +65,11 @@ The following are explicitly outside Make.com's scope. These concerns are handle
 | Attribute | Value |
 |---|---|
 | Scenario Name | `Wix_Inquiry_To_Salesforce_Lead` |
-| Trigger | Custom Webhook — HTTP POST from Wix |
+| Trigger | Custom Webhook — HTTP POST from `WA_Inquiry_To_Make` via `POST_WH_Wix_Inquiry_To_Make` action |
 | Execution Mode | Immediately as data arrives |
 | Total Modules | 2 |
-| Webhook Module | `WH_Wix_Inquiry_To_Make` — receives payload |
-| Salesforce Module | `SF_Make_Lead_To_Salesforce` — maps fields and creates Lead Record |
+| Receiving Module | `WH_Wix_Inquiry_To_Make` — Custom Webhook |
+| Writing Module | `SF_Make_Lead_To_Salesforce` — Salesforce Create Record |
 
 ---
 
