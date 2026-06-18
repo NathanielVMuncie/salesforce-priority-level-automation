@@ -9,7 +9,7 @@ Céleste Vineyards | Validation and Evidence
 
 This document catalogs every screenshot required to provide photographic evidence for the Céleste Vineyards Lead Priority Level Automation portfolio case study. Screenshots span all three pipeline layers — Wix, Make.com, and Salesforce — and the UAT validation set.
 
-Each entry is assigned a unique ID, a canonical filename, and a description of what the screenshot proves. Screenshot files are stored in `test-artifacts/screenshots/`.
+Each entry is assigned a unique ID, a canonical filename, and a description of what the screenshot proves. Screenshot files are stored in `assets/screenshots/`.
 
 ---
 
