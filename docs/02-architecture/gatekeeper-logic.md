@@ -7,7 +7,7 @@ Céleste Vineyards | Architecture
 
 ## 1. Document Purpose
 
-This document defines the qualification gate enforced on the Céleste Vineyards Business Inquiry Form. It records the gate's structural position in the system, the mechanism by which non-business submissions are blocked, the form state transformation that enforces the block, and the outcome paths produced by each Business Type selection.
+This document defines the qualification gate enforced on the Céleste Vineyards Wix inquiry form. It records the gate's structural position in the system, the mechanism by which non-business submissions are blocked, the form state transformation that enforces the block, and the outcome paths produced by each Business Type selection.
 
 The gatekeeper is architectural — it is the outermost wall of the system. It is not automation logic, it is not integration logic, and it has no connection to any external platform. It operates entirely within the Wix inquiry form before any submission occurs, before any Wix Automation fires, and before any data reaches Make.com or Salesforce. No downstream system has any awareness of or responsibility for this gate.
 
@@ -19,10 +19,10 @@ No qualification fields, qualification variables, or qualification logic exist a
 
 The gatekeeper is the first and outermost boundary of the pipeline. It is not a layer within the pipeline — it is the condition that determines whether a prospect enters the pipeline at all.
 
-The Wix Automation `POST_To_Make_Inlet_Webhook` is the integration point between Wix and Make.com. It fires only on form submission. The gatekeeper prevents form submission from occurring for non-business contacts. Because the Wix Automation never fires, no integration with any external platform occurs. The gate is self-contained within Wix.
+Wix Automation `WA_Inquiry_To_Make` — via action `POST_WH_Wix_Inquiry_To_Make` — is the integration point between Wix and Make.com. It fires only on form submission. The gatekeeper prevents form submission from occurring for non-business contacts. Because `WA_Inquiry_To_Make` never fires, no integration with any external platform occurs. The gate is self-contained within Wix.
 
 ```
-Prospect visits Celeste Vineyards Business inquiry form
+Prospect visits Wix inquiry form
         |
         v
 Selects Business Type dropdown value
@@ -70,7 +70,7 @@ When `Personal/Individual (Non-Business)` is selected, the Wix form transitions 
 - The submit control is disabled — no submission is possible regardless of any other action taken by the prospect
 - A message renders in place of the collapsed fields
 - No payload is generated
-- The Wix Automation `POST_To_Make_Inlet_Webhook` does not fire
+- Wix Automation `WA_Inquiry_To_Make` (`POST_WH_Wix_Inquiry_To_Make`) does not fire
 - Make.com receives nothing
 - No Lead Record is created in Salesforce
 - No Flow fires
@@ -80,7 +80,7 @@ When `Personal/Individual (Non-Business)` is selected, the Wix form transitions 
 - All fields remain visible and active
 - The form remains submittable
 - The prospect completes the remaining fields and submits
-- The Wix Automation `POST_To_Make_Inlet_Webhook` fires on submission
+- Wix Automation `WA_Inquiry_To_Make` fires — via `POST_WH_Wix_Inquiry_To_Make` — on submission
 - The payload is transmitted to Make.com
 - The pipeline begins
 
@@ -96,7 +96,7 @@ This message is display-only. It does not generate any record, log any event, or
 
 ## 4. Downstream System State
 
-Because the gatekeeper operates entirely within the Business Inquiry Form, no downstream system contains any record, variable, field, or logic related to non-business contacts or qualification status.
+Because the gatekeeper operates entirely within Wix, no downstream system contains any record, variable, field, or logic related to non-business contacts or qualification status.
 
 | System | Qualification Logic Present | Notes |
 |---|---|---|
@@ -130,7 +130,7 @@ Every Lead Record in Salesforce entered through the B2B path. The presence of a 
 |---|---|
 | Trigger | Any B2B value selected in Business Type dropdown |
 | Form state | Active — all fields visible, form submittable |
-| Wix Automation fires | Yes — `POST_To_Make_Inlet_Webhook` fires on submission |
+| Wix Automation fires | Yes — `WA_Inquiry_To_Make` fires (`POST_WH_Wix_Inquiry_To_Make`) on submission |
 | Payload generated | Yes — on form submission |
 | Make.com reached | Yes — payload received by Custom Webhook module |
 | Salesforce Lead Record created | Yes — via Make.com Salesforce Create Record module |
