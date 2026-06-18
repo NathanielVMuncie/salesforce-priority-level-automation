@@ -20,7 +20,7 @@ Every payload received by `SF_Make_Lead_To_Salesforce` is a confirmed B2B submis
 | Attribute | Value |
 |---|---|
 | Scenario Name | `Wix_Inquiry_To_Salesforce_Lead` |
-| Trigger | Custom Webhook — HTTP POST from Wix Automation `POST_To_Make_Inlet_Webhook` |
+| Trigger | Custom Webhook — HTTP POST from `WA_Inquiry_To_Make` via `POST_WH_Wix_Inquiry_To_Make` action |
 | Execution Mode | Immediately as data arrives |
 | Total Modules | 2 |
 | Receiving Module | `WH_Wix_Inquiry_To_Make` — Custom Webhook |
@@ -30,7 +30,7 @@ Every payload received by `SF_Make_Lead_To_Salesforce` is a confirmed B2B submis
 
 ## 3. Payload Reception — WH_Wix_Inquiry_To_Make
 
-`WH_Wix_Inquiry_To_Make` is a Custom Webhook module that listens for the HTTP POST transmitted by the Wix Automation `POST_To_Make_Inlet_Webhook` on form submission. It parses the incoming payload and passes each key-value pair as a bundle to `SF_Make_Lead_To_Salesforce`.
+`WH_Wix_Inquiry_To_Make` is a Custom Webhook module that listens for the HTTP POST transmitted by the `WA_Inquiry_To_Make` automation via the `POST_WH_Wix_Inquiry_To_Make` action on form submission. It parses the incoming payload and passes each key-value pair as a bundle to `SF_Make_Lead_To_Salesforce`.
 
 `WH_Wix_Inquiry_To_Make` performs no transformation, filtering, or routing. Every key in the Wix payload is passed to `SF_Make_Lead_To_Salesforce` unchanged. The sole transformation in the scenario is the phone normalization formula applied in `SF_Make_Lead_To_Salesforce` before the Salesforce Create Record API call executes.
 
