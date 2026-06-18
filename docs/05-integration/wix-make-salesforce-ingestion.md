@@ -20,8 +20,8 @@ The ingestion pipeline executes in a fixed, linear sequence. No step executes be
 | Step | Layer | Action | Output |
 |---|---|---|---|
 | 1 | Wix | Prospect selects B2B Business Type — qualification gate passes | Form remains active |
-| 2 | Wix | Prospect completes and submits form | Wix Automation `POST_To_Make_Inlet_Webhook` fires |
-| 3 | Wix | Wix Automation transmits HTTP POST to Make.com | Payload delivered to `WH_Wix_Inquiry_To_Make` |
+| 2 | Wix | Prospect completes and submits form | Wix Automation `WA_Inquiry_To_Make` fires |
+| 3 | Wix | `POST_WH_Wix_Inquiry_To_Make` action transmits HTTP POST to Make.com | Payload delivered to `WH_Wix_Inquiry_To_Make` |
 | 4 | Make.com | `WH_Wix_Inquiry_To_Make` receives payload | Bundle passed to `SF_Make_Lead_To_Salesforce` |
 | 5 | Make.com | `SF_Make_Lead_To_Salesforce` normalizes phone, maps fields, hardcodes `LeadSource` | Salesforce Create Record API call prepared |
 | 6 | Make.com | Salesforce Create Record API call executes | Lead Record created in Salesforce |
@@ -42,7 +42,7 @@ Every payload transmitted to Make.com originates from a B2B form submission. The
 
 ### 3.2 Form Submission and Payload Generation
 
-When a B2B prospect submits the form, the Wix Automation `POST_To_Make_Inlet_Webhook` fires and transmits an HTTP POST to the `WH_Wix_Inquiry_To_Make` webhook endpoint. The payload contains all field values collected by the form.
+When a B2B prospect submits the form, the `WA_Inquiry_To_Make` automation fires, executing the `POST_WH_Wix_Inquiry_To_Make` action, which transmits an HTTP POST to the `WH_Wix_Inquiry_To_Make` webhook endpoint. The payload contains all field values collected by the form.
 
 | Payload Key | Source Field |
 |---|---|
@@ -68,7 +68,7 @@ The Wix layer does not transform, filter, or validate payload values beyond the 
 | Attribute | Value |
 |---|---|
 | Scenario Name | `Wix_Inquiry_To_Salesforce_Lead` |
-| Trigger | Custom Webhook — HTTP POST from Wix Automation `POST_To_Make_Inlet_Webhook` |
+| Trigger | Custom Webhook — HTTP POST from `WA_Inquiry_To_Make` via `POST_WH_Wix_Inquiry_To_Make` action |
 | Execution Mode | Immediately as data arrives |
 | Total Modules | 2 |
 
@@ -105,7 +105,7 @@ Three handoff points define the layer boundaries. Each handoff is unidirectional
 
 | Handoff | From | To | Mechanism | Data State |
 |---|---|---|---|---|
-| Wix → Make.com | Wix Automation `POST_To_Make_Inlet_Webhook` | `WH_Wix_Inquiry_To_Make` | HTTP POST | Raw form payload — B2B confirmed |
+| Wix → Make.com | `WA_Inquiry_To_Make` — `POST_WH_Wix_Inquiry_To_Make` | `WH_Wix_Inquiry_To_Make` | HTTP POST | Raw form payload — B2B confirmed |
 | Make.com → Salesforce | `SF_Make_Lead_To_Salesforce` | Salesforce Lead Object | REST API Create Record call | Normalized, mapped payload with hardcoded `LeadSource` |
 | Ingestion → Automation | Salesforce Lead Record created | Assignment Rule + After-Save Flow | Record creation event | Fully populated Lead Record |
 
