@@ -17,7 +17,7 @@ Full architectural context for the Assignment Rule is in `docs/04-automation-log
 
 | Attribute | Value |
 |---|---|
-| Rule Name | Céleste Vineyards — Regional Territory Assignment |
+| Rule Name | Regional Territory Assignment |
 | API Name | `regional_territory_assignment` |
 | Object | Lead |
 | Active Default Rule | Yes |

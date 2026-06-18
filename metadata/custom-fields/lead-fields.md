@@ -24,10 +24,10 @@ Seven custom fields are active on the Lead Object. No additional custom fields e
 | API Name | `Business_Type__c` |
 | Field Type | Picklist |
 | Object | Lead |
-| Required | Yes |
+| Required | No |
 | Track Feed History | No |
-| Description | Primary B2B gatekeeper signal and scoring input. Originates from `LeadSource` `Céleste Vineyards — Business Inquiry Form`. `Personal/Individual (Non-Business)` selection triggers the Wix form gate — the form collapses and no payload is transmitted. Valid B2B business types contribute point values to `varTotalScore` for `Priority_Level__c` calculation. |
-| Inline Help Text | Identifies organizational category. Originates from `LeadSource` `Céleste Vineyards — Business Inquiry Form`. Valid entries contribute to automated `Priority_Level__c`. |
+| Description | Primary B2B gatekeeper signal and scoring input. Originates from `LeadSource` `Céleste Vineyards - Business Inquiry Form`. `Personal/Individual (Non-Business)` selection triggers the Wix form gate — the form collapses and no payload is transmitted. Valid B2B business types contribute point values to `varTotalScore` for `Priority_Level__c` calculation. |
+| Inline Help Text | Identifies organizational category. Originates from `LeadSource` `Céleste Vineyards - Business Inquiry Form`. Valid entries contribute to automated `Priority_Level__c`. |
 | Written By | Make.com — `SF_Make_Lead_To_Salesforce` — from Wix payload key `business_type` |
 
 **Picklist Values:**
@@ -50,7 +50,7 @@ Seven custom fields are active on the Lead Object. No additional custom fields e
 | Full Name | `Lead.Customer_Note__c` |
 | Field Label | Customer Note |
 | API Name | `Customer_Note__c` |
-| Field Type | TextArea |
+| Field Type | Text Area (255) |
 | Object | Lead |
 | Required | No |
 | Track Feed History | No |
@@ -167,7 +167,7 @@ Seven custom fields are active on the Lead Object. No additional custom fields e
 | API Name | `Role__c` |
 | Field Type | Picklist |
 | Object | Lead |
-| Required | Yes |
+| Required | No |
 | Track Feed History | No |
 | Description | Captures purchasing authority and organizational position. Originates from the Wix inquiry form. Scoring input for `Priority_Level__c` — Tier 2. |
 | Inline Help Text | Lead's purchasing authority or organizational position. Originates from the Céleste Vineyards Business Inquiry Form. Contributes to automated `Priority_Level__c` calculation. |
@@ -193,7 +193,7 @@ Seven custom fields are active on the Lead Object. No additional custom fields e
 | Picklist (Restricted) | 1 |
 | Formula (Text) | 1 |
 | Formula (Date) | 1 |
-| TextArea | 1 |
+| Text Area (255) | 1 |
 | **Total Custom Fields** | **7** |
 
 ---
