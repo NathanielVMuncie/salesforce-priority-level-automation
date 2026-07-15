@@ -1,0 +1,18 @@
+{
+  "name": "screenshot-capture",
+  "private": true,
+  "description": "Spec-exact screenshot capture for the Screenshot Index (assets/screenshots/screenshot-index.md)",
+  "dependencies": {
+    "playwright": "^1.61.1",
+    "playwright-core": "^1.49.0"
+  },
+  "version": "1.0.0",
+  "main": "capture-authed.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

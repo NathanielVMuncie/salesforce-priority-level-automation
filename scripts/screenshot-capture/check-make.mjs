@@ -1,0 +1,15 @@
+import { chromium } from 'playwright';
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
+const PROFILE = resolve(dirname(fileURLToPath(import.meta.url)), '.browser-profile');
+const ctx = await chromium.launchPersistentContext(PROFILE, { headless: true, viewport: { width: 1280, height: 800 } });
+const cookies = await ctx.cookies();
+const makeDomains = [...new Set(cookies.filter(c => c.domain.includes('make.com')).map(c => c.domain))];
+console.log('make.com cookie domains:', JSON.stringify(makeDomains));
+const zone = makeDomains.find(d => /(eu|us)\d+\.make\.com/.test(d));
+const page = ctx.pages()[0] ?? (await ctx.newPage());
+const target = zone ? `https://${zone.replace(/^\./, '')}/` : 'https://www.make.com/en/login';
+await page.goto(target, { waitUntil: 'domcontentloaded', timeout: 90000 });
+await page.waitForTimeout(6000);
+console.log('landed at:', page.url());
+await ctx.close();
