@@ -22,8 +22,9 @@ This index covers screenshots across three platforms: Wix (form states, gatekeep
 | Attribute | Specification |
 |---|---|
 | Format | PNG — lossless; required for UI screenshots containing text, labels, and field borders |
-| Browser width | 1280px — locked for all captures; set before first screenshot and held constant across the full session |
-| Height | Variable — cropped to relevant content per shot; no fixed height requirement |
+| Browser viewport width | 1280px — locked for all captures; set before first screenshot and held constant across the full session |
+| Browser viewport height | 800px — locked for all captures; set before first screenshot and held constant across the full session |
+| Output height | Variable — cropped to relevant content per shot; independent of the locked 800px viewport, which governs render/layout, not the final crop |
 | Cropping | Crop tightly to the subject area; omit excess browser chrome unless the URL bar is relevant evidence |
 | Dropdown shots | Crop to show the open dropdown in context; full-page height not required |
 | Make.com canvas | Zoom out until both `WH_Wix_Inquiry_To_Make` and `SF_Make_Lead_To_Salesforce` are visible in a single frame rather than splitting across multiple shots |
