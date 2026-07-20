@@ -145,10 +145,10 @@ Backticks are required for all of the following when they appear in body text, t
 
 - Field API names — `Business_Type__c`, `varTotalScore`, `OwnerId`
 - Picklist values — `Personal/Individual (Non-Business)`, `Not Applicable`, `High`
-- Flow variable names — `varTotalScore`, `varPriorityLevel`, `varOwnerID`, `varQualified`
+- Flow variable names — `varTotalScore`, `varPriorityLevel`, `varOwnerID`
 - Flow element labels — `Determine_Business_Type_Score`, `Update Lead Priority and Score`
 - File paths — `docs/04-automation-logic/scoring-logic.md`
-- Make.com module references — `Module 12`, `Module 13`
+- Make.com module display labels — `WA_Inquiry_To_Make`, `POST_WH_Wix_Inquiry_To_Make`
 - Salesforce object API names — `Lead`, `Opportunity`
 
 ### 5.2 Not Required
@@ -186,12 +186,10 @@ Hyphen (`-`) must not substitute for em dash in the project name or footer. Anyw
 | Scoring variable | `varTotalScore` | "total score", "score variable" |
 | Priority output variable | `varPriorityLevel` | "priority variable" |
 | Owner variable | `varOwnerID` | "owner ID variable" |
-| Qualification variable | `varQualified` | "qualified variable" |
-| Gatekeeper element | `Determine_Business_Type_Score` | "gatekeeper element", "gate" in isolation |
+| Business Type scoring element | `Determine_Business_Type_Score` | "gatekeeper element", "gate" in isolation |
 | Escalation target | Sophia Delgado | "the National Sales Director" as a substitute for her name |
 | DevOrg constraint | "DevOrg constraint" | "limitation", "gap", "shortfall" |
-| Qualified Lead | ✅ Qualified | "qualified", "eligible", "valid" without visual indicator |
-| Not Qualified Lead | ❌ Not Qualified | "disqualified", "unqualified", "ineligible" without visual indicator |
+| Not Qualified submission (Wix layer) | Not Qualified | "disqualified", "unqualified", "ineligible" |
 
 ### 7.2 Field References
 
