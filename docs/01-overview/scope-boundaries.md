@@ -25,25 +25,20 @@ The following components are in scope for this case study and are fully document
 ### 2.2 Make.com
 
 - Scenario `Wix_To_CelesteProd_B2B_Lead_Engine_v1` — full configuration
-- Custom Webhook module receiving Wix form payloads
-- Router module enforcing the two-path qualified and non-qualified architecture
-- Salesforce Create Record module — qualified path (Module 12) including field mapping and phone normalization formula
-- Salesforce Create Record module — non-qualified path (Module 13) including placeholder field mapping
+- Custom Webhook module — `WA_Inquiry_To_Make` — receiving the qualified B2B payload from Wix
+- Salesforce Create Record module — `POST_WH_Wix_Inquiry_To_Make` — including field mapping and phone normalization formula
 
 ### 2.3 Salesforce — Data Model
 
 - Custom field design on the Lead object
 - Picklist value sets for `Business_Type__c`, `Role__c`, `Purchasing_Timeline__c`, `Priority_Level__c`
-- Formula field `Qualification_Status__c`
-- Checkbox field `Qualified__c` including default value configuration
 - Custom fields `Customer_Note__c`, `Region__c`, `Lead_Created__c`
 
 ### 2.4 Salesforce — Automation
 
 - Record-Triggered After-Save Flow — `Lead_Scoring_and_Priority_Level_Assignment`
-- Flow variables — `varTotalScore`, `varPriorityLevel`, `varOwnerID`, `varQualified`
-- Flow formula resource — `Qualification_Status_Aesthetic`
-- Gatekeeper Decision element — dual-purpose qualification gate and Business Type scoring
+- Flow variables — `varTotalScore`, `varPriorityLevel`, `varOwnerID`
+- Business Type scoring Decision element — `Determine Business Type Score`
 - Role scoring Decision element
 - Purchasing Timeline scoring Decision element
 - Priority Level assignment Decision element
