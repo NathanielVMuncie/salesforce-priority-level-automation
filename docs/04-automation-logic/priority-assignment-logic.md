@@ -147,22 +147,20 @@ All three Assignment elements converge at Segment 4 — Escalation.
 
 ## 8. Priority_Level__c Field
 
-`Priority_Level__c` is the Picklist Field on the Lead Object that stores the assigned Priority Level. It is written exclusively by the `Update Lead Priority and Score` Update Records element for qualified Leads. On the non-qualified path, Make.com `Module 13` writes `Not Applicable` to this Field before the Record is created.
+`Priority_Level__c` is the Picklist Field on the Lead Object that stores the assigned Priority Level. It is written exclusively by the `Update Lead Priority and Score` Update Records element. No other automation layer writes this Field.
 
 | Attribute | Value |
 |---|---|
 | Field Label | Priority Level |
 | API Name | `Priority_Level__c` |
 | Field Type | Picklist |
-| Written By (qualified path) | Flow — `Update Lead Priority and Score` |
-| Written By (non-qualified path) | Make.com `Module 13` — hardcoded `Not Applicable` |
+| Written By | Flow — `Update Lead Priority and Score` |
 
 | Picklist Value | Source | Condition |
 |---|---|---|
 | `High` | Flow — `Update Lead Priority and Score` | `varTotalScore` ≥ 12 |
 | `Medium` | Flow — `Update Lead Priority and Score` | `varTotalScore` ≥ 8 and < 12 |
 | `Low` | Flow — `Update Lead Priority and Score` | `varTotalScore` 3–7 (Default Outcome) |
-| `Not Applicable` | Make.com `Module 13` | Non-qualified path — pre-Record creation |
 
 ---
 
@@ -185,10 +183,11 @@ All three Assignment elements converge at Segment 4 — Escalation.
 
 | Lead | `varTotalScore` | Outcome Matched | `varPriorityLevel` | `Priority_Level__c` |
 |---|---|---|---|---|
-| Tamara Nguyen (S-03) | 3 | `Is Priority Level Low` (Default) | `Low` | `Low` |
-| Jerome Castillo (S-04) | 9 | `Is Priority Level Medium` | `Medium` | `Medium` |
-| Vivienne Okafor (S-05) | 13 | `Is Priority Level High` | `High` | `High` |
-| Kenji Watanabe (S-06) | 13 | `Is Priority Level High` | `High` | `High` |
+| Marcus Thibodeau (L-01) | 14 | `Is Priority Level High` | `High` | `High` |
+| Renata Voss (L-02) | 13 | `Is Priority Level High` | `High` | `High` |
+| Dominic Reyes (L-03) | 9 | `Is Priority Level Medium` | `Medium` | `Medium` |
+| Janelle Harmon (L-04) | 8 | `Is Priority Level Medium` | `Medium` | `Medium` |
+| Britta Sandoval (L-05) | 3 | `Is Priority Level Low` (Default) | `Low` | `Low` |
 
 Confirmed via Flow debug logs. All three Priority Level outcomes resolved correctly across the score range.
 
