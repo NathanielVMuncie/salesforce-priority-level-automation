@@ -28,7 +28,7 @@ Three layers:
    `WA_Inquiry_To_Make` → `POST_WH_Wix_Inquiry_To_Make`.
    No router. No Module 13.
 3. **Salesforce** — After-Save Record-Triggered Flow:
-   `Lead_Scoring_and_Priority_Level_Assignment` (V26, 26 elements,
+   `Lead_Scoring_and_Priority_Level_Assignment` (V26, 31 elements,
    5 Decisions, single-DML write pattern).
 
 ---
@@ -139,7 +139,7 @@ override, or extend them.
 |---------------------|-----------------------------------------------------|
 | Flow name           | `Lead_Scoring_and_Priority_Level_Assignment`        |
 | Flow version        | V26                                                 |
-| Flow element count  | 26                                                  |
+| Flow element count  | 31                                                  |
 | Flow variables      | `varTotalScore` · `varPriorityLevel` · `varOwnerID` |
 | Score range         | 3–15                                                |
 | Priority High       | `varTotalScore` ≥ 12                                |
